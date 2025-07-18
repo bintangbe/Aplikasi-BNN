@@ -1,0 +1,630 @@
+import 'package:flutter/material.dart';
+import '../../constants/colors.dart';
+
+class AdminAjukanRehabScreen extends StatefulWidget {
+  const AdminAjukanRehabScreen({super.key});
+
+  @override
+  State<AdminAjukanRehabScreen> createState() => _AdminAjukanRehabScreenState();
+}
+
+class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
+  final _namaController = TextEditingController();
+  final _nomorIdentitasController = TextEditingController();
+  final _alamatController = TextEditingController();
+  String? _selectedLembaga;
+  bool _isLoading = false;
+
+  final List<String> _lembagaOptions = [
+    'Lembaga Rehabilitasi A',
+    'Lembaga Rehabilitasi B',
+    'Lembaga Rehabilitasi C',
+    'Lembaga Rehabilitasi D',
+    'Lembaga Rehabilitasi E',
+    'Lembaga Rehabilitasi F',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF063CA8), // Exact from Figma
+              Color(0xFF00AEEF), // Exact from Figma
+            ],
+          ),
+        ),
+        child: Column(
+          children: [
+            // Status bar area
+            SafeArea(
+              bottom: false,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Time
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Text(
+                        '20.11',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 13,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    // Status icons
+                    Row(
+                      children: [
+                        Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                          child: const Icon(Icons.signal_cellular_4_bar, size: 16),
+                        ),
+                        const SizedBox(width: 4),
+                        Container(
+                          width: 24,
+                          height: 24,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFFD9D9D9),
+                          ),
+                          child: const Icon(Icons.battery_full, size: 20),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            
+            // Header Section
+            _buildHeader(),
+            
+            // Main Content
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Color(0xFFEFEFEF),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(35),
+                    topRight: Radius.circular(35),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    // Form Content
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.all(24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Title
+                            const Text(
+                              'Formulir Pengajuan Rehab',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 24,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w700,
+                                height: 1.34,
+                              ),
+                            ),
+                            
+                            const SizedBox(height: 24),
+                            
+                            // Form Fields
+                            _buildTextField(
+                              label: 'Nama Lengkap',
+                              controller: _namaController,
+                              hintText: 'Masukkan nama lengkap',
+                            ),
+                            
+                            const SizedBox(height: 16),
+                            
+                            _buildTextField(
+                              label: 'Nomor Identitas',
+                              controller: _nomorIdentitasController,
+                              hintText: 'Masukkan nomor KTP/NIK',
+                              keyboardType: TextInputType.number,
+                            ),
+                            
+                            const SizedBox(height: 16),
+                            
+                            _buildTextField(
+                              label: 'Alamat',
+                              controller: _alamatController,
+                              hintText: 'Masukkan alamat lengkap',
+                              maxLines: 2,
+                            ),
+                            
+                            const SizedBox(height: 16),
+                            
+                            // Dropdown Lembaga
+                            _buildDropdownField(),
+                            
+                            const SizedBox(height: 32),
+                            
+                            // Submit Button
+                            SizedBox(
+                              width: double.infinity,
+                              height: 48,
+                              child: ElevatedButton(
+                                onPressed: _isLoading ? null : _handleSubmit,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF2563EB),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 0,
+                                ),
+                                child: _isLoading
+                                    ? const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                        ),
+                                      )
+                                    : const Text(
+                                        'Kirim Pengajuan',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontFamily: 'Inter',
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    
+                    // Bottom Navigation
+                    _buildBottomNavigation(),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      child: Row(
+        children: [
+          // Logo BNN
+          Container(
+            width: 86,
+            height: 86,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withOpacity(0.9),
+            ),
+            child: Image.asset(
+              'assets/images/logo_bnn.png',
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return const Center(
+                  child: Text(
+                    'BNN',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF063CA8),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          
+          const SizedBox(width: 16),
+          
+          // Kota Surabaya text
+          const Expanded(
+            child: Text(
+              'KOTA\nSURABAYA',
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w400,
+                height: 1.2,
+              ),
+            ),
+          ),
+          
+          // Admin Profile
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Admin',
+                  style: TextStyle(
+                    color: Color(0xFF0540B0),
+                    fontSize: 16,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Icon(
+                    Icons.person,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required String label,
+    required TextEditingController controller,
+    required String hintText,
+    TextInputType? keyboardType,
+    int maxLines = 1,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 15,
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w400,
+            height: 1.57,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0x3F000000),
+                blurRadius: 4,
+                offset: const Offset(0, 4),
+                spreadRadius: 0,
+              ),
+            ],
+          ),
+          child: TextField(
+            controller: controller,
+            keyboardType: keyboardType,
+            maxLines: maxLines,
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: const TextStyle(
+                color: Color(0xFF9CA3AF),
+                fontSize: 14,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w400,
+              ),
+              filled: true,
+              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  width: 1,
+                  color: Color(0xFFE5E7EB),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  width: 1,
+                  color: Color(0xFFE5E7EB),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                  width: 2,
+                  color: Color(0xFF2563EB),
+                ),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDropdownField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Lembaga Tujuan',
+          style: TextStyle(
+            color: Color(0xFF333333),
+            fontSize: 15,
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0x19000000),
+                blurRadius: 14,
+                offset: const Offset(0, 4),
+                spreadRadius: 0,
+              ),
+            ],
+          ),
+          child: DropdownButtonFormField<String>(
+            value: _selectedLembaga,
+            decoration: InputDecoration(
+              hintText: 'Pilih lembaga',
+              hintStyle: const TextStyle(
+                color: Color(0xFF333333),
+                fontSize: 15,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w400,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
+            ),
+            items: _lembagaOptions.map((String lembaga) {
+              return DropdownMenuItem<String>(
+                value: lembaga,
+                child: Text(
+                  lembaga,
+                  style: const TextStyle(
+                    color: Color(0xFF333333),
+                    fontSize: 15,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedLembaga = newValue;
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBottomNavigation() {
+    return Container(
+      height: 65,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+      decoration: const BoxDecoration(
+        color: Color(0xFF063CA8),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildNavItem('Beranda', false, Icons.home),
+          _buildNavItem('Pesebaran', false, Icons.map),
+          _buildNavItem('Pengajuan', true, Icons.assignment),
+          _buildNavItem('Riwayat', false, Icons.history),
+          _buildNavItem('Akun', false, Icons.person),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNavItem(String label, bool isActive, IconData icon) {
+    return Container(
+      width: 65,
+      decoration: isActive ? BoxDecoration(
+        color: const Color(0xFF062766),
+        borderRadius: BorderRadius.circular(12),
+      ) : null,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: Colors.white,
+            size: 20,
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: TextStyle(
+              color: isActive ? Colors.white : const Color(0xFFEBEDF0),
+              fontSize: 12,
+              fontFamily: 'Segoe UI Symbol',
+              fontWeight: FontWeight.w400,
+              height: 1.43,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _handleSubmit() async {
+    // Validation
+    if (_namaController.text.isEmpty) {
+      _showErrorSnackBar('Nama lengkap tidak boleh kosong');
+      return;
+    }
+
+    if (_nomorIdentitasController.text.isEmpty) {
+      _showErrorSnackBar('Nomor identitas tidak boleh kosong');
+      return;
+    }
+
+    if (_alamatController.text.isEmpty) {
+      _showErrorSnackBar('Alamat tidak boleh kosong');
+      return;
+    }
+
+    if (_selectedLembaga == null) {
+      _showErrorSnackBar('Silakan pilih lembaga tujuan');
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    // Simulate API call
+    await Future.delayed(const Duration(seconds: 2));
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    // Show success dialog
+    _showSuccessDialog();
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: const Color(0xFFEF4444),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 60,
+                height: 60,
+                decoration: const BoxDecoration(
+                  color: Color(0xFF10B981),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.check,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Pengajuan Berhasil!',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF1F2937),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Pengajuan rehabilitasi untuk ${_namaController.text} telah berhasil dikirim ke $_selectedLembaga.',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Color(0xFF6B7280),
+                ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close dialog
+                    Navigator.of(context).pop(); // Back to dashboard
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF2563EB),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text(
+                    'Kembali ke Dashboard',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _namaController.dispose();
+    _nomorIdentitasController.dispose();
+    _alamatController.dispose();
+    super.dispose();
+  }
+}
