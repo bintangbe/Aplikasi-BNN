@@ -1,70 +1,77 @@
 import 'package:flutter/material.dart';
-import '../../constants/colors.dart';
 import 'admin_ajukan_rehab_screen.dart';
 import 'riwayat_pengajuan_screen.dart';
 import 'detail_lembaga_screen.dart';
-import 'profile_screen.dart';
+import 'unified_bottom_navigation.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
 
   @override
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    resizeToAvoidBottomInset: false,
-    body: Stack(
-      children: [
-        Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
-            ),
-          ),
-        ),
-        SafeArea(
-          bottom: false,
-          child: Column(
-            children: [
-              _buildHeader(),
-              Expanded(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFEFEFEF),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(35),
-                      topRight: Radius.circular(35),
-                    ),
-                  ),
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.only(
-                        left: 24, right: 24, top: 24, bottom: 100),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildActionButtons(context),
-                        const SizedBox(height: 24),
-                        _buildLembagaSection(context),
-                      ],
-                    ),
-                  ),
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false, // Prevent back navigation
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
                 ),
               ),
-            ],
-          ),
+            ),
+            SafeArea(
+              bottom: false,
+              child: Column(
+                children: [
+                  _buildHeader(),
+                  Expanded(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFEFEFEF),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(35),
+                          topRight: Radius.circular(35),
+                        ),
+                      ),
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.only(
+                          left: 24,
+                          right: 24,
+                          top: 24,
+                          bottom: 100,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildActionButtons(context),
+                            const SizedBox(height: 24),
+                            _buildLembagaSection(context),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: UnifiedBottomNavigation(
+                currentIndex: 0, // Beranda
+              ),
+            ),
+          ],
         ),
-        Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: _buildBottomNavigation(context),
-        ),
-      ],
-    ),
-  );
-}
+      ),
+    );
+  }
 
   Widget _buildHeader() {
     return Padding(
@@ -133,7 +140,11 @@ Widget build(BuildContext context) {
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: const Icon(Icons.person, color: Colors.white, size: 20),
+                  child: const Icon(
+                    Icons.person,
+                    color: Colors.white,
+                    size: 20,
+                  ),
                 ),
               ],
             ),
@@ -152,8 +163,12 @@ Widget build(BuildContext context) {
             color: const Color(0xFF0050FF),
             icon: Icons.medical_services,
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const AdminAjukanRehabScreen()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const AdminAjukanRehabScreen(),
+                ),
+              );
             },
           ),
         ),
@@ -164,8 +179,12 @@ Widget build(BuildContext context) {
             color: const Color(0xFF22C55E),
             icon: Icons.history,
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const RiwayatPengajuanScreen()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const RiwayatPengajuanScreen(),
+                ),
+              );
             },
           ),
         ),
@@ -173,7 +192,7 @@ Widget build(BuildContext context) {
     );
   }
 
-   Widget _buildActionCard({
+  Widget _buildActionCard({
     required String title,
     required Color color,
     required IconData icon,
@@ -191,7 +210,7 @@ Widget build(BuildContext context) {
             clipBehavior: Clip.none,
             children: [
               Positioned(
-                bottom: -8, // posisi strip agar tidak memicu overflow
+                bottom: -8,
                 left: 0,
                 right: 0,
                 child: ClipRRect(
@@ -253,21 +272,23 @@ Widget build(BuildContext context) {
         'fasilitas': 'Ruang rawat inap, ruang terapi, konseling',
       },
       {
-        'name': 'Rumah Sakit Jiwa Menur',
+        'name': 'Yayasan Orbit Surabaya',
         'location': 'Surabaya Timur',
         'type': 'Rawat Inap',
         'capacity': '50 tempat tidur',
-        'alamatLengkap': 'Jl. Tentara Genie Pelajar No.1, Menur Pumpungan',
+        'alamatLengkap':
+            'Jl. BarataJaya XII A No.6, RT.001/RW.004, Baratajaya, Kec. Gubeng, Surabaya',
         'nomorTelepon': '(031) 5928587',
         'jamOperasional': '24 Jam',
         'fasilitas': 'Ruang rawat inap, ruang terapi, laboratorium, apotek',
       },
       {
-        'name': 'Puskesmas Sukolilo',
+        'name': 'Yayasan Plato Surabaya',
         'location': 'Surabaya Timur',
         'type': 'Rawat Jalan',
-        'capacity': '100 pasien/hari',
-        'alamatLengkap': 'Jl. Raya Sukolilo No.100, Sukolilo Baru',
+        'capacity': '25 tempat tidur',
+        'alamatLengkap':
+            'Jl. Cipta Mananggal v No. 16, RT 011 RW 005, Kelurahan Menanggal, Kecamatan Gayungan',
         'nomorTelepon': '(031) 5947890',
         'jamOperasional': '08.00 - 16.00 WIB',
         'fasilitas': 'Poliklinik umum, ruang konseling, farmasi',
@@ -282,10 +303,7 @@ Widget build(BuildContext context) {
           children: [
             const Text(
               'Daftar Lembaga Rehabilitasi',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
             ),
             TextButton(
               onPressed: () {},
@@ -301,10 +319,12 @@ Widget build(BuildContext context) {
           ],
         ),
         const SizedBox(height: 16),
-        ...lembagaList.map((lembaga) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: _buildLembagaItem(context, lembaga),
-            )),
+        ...lembagaList.map(
+          (lembaga) => Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: _buildLembagaItem(context, lembaga),
+          ),
+        ),
       ],
     );
   }
@@ -335,8 +355,10 @@ Widget build(BuildContext context) {
                   ),
                 ),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: _getTypeColor(lembaga['type']!).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
@@ -378,8 +400,7 @@ Widget build(BuildContext context) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) =>
-                          DetailLembagaScreen(lembagaData: lembaga),
+                      builder: (_) => DetailLembagaScreen(lembagaData: lembaga),
                     ),
                   );
                 },
@@ -407,72 +428,4 @@ Widget build(BuildContext context) {
         return const Color(0xFF6B7280);
     }
   }
-
-  Widget _buildBottomNavigation(BuildContext context) {
-  return Container(
-    height: 65,
-    decoration: const BoxDecoration(
-      color: Color(0xFF063CA8),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black26,
-          blurRadius: 8,
-          offset: Offset(0, -2),
-        ),
-      ],
-    ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _buildNavItem('Beranda', true, Icons.home, () {}),
-        _buildNavItem('Pesebaran', false, Icons.map, () {
-          // TODO: Navigasi ke halaman pesebaran
-        }),
-        _buildNavItem('Pengajuan', false, Icons.assignment, () {
-          // TODO: Navigasi ke halaman pengajuan
-        }),
-        _buildNavItem('Riwayat', false, Icons.history, () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const RiwayatPengajuanScreen()),
-          );
-        }),
-        _buildNavItem('Akun', false, Icons.person, () {
-          // ✅ Ini bagian yang perlu kamu tambahkan
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ProfileScreen()),
-          );
-        }),
-      ],
-    ),
-  );
 }
-
- Widget _buildNavItem(String label, bool isActive, IconData icon, VoidCallback onTap) {
-  return Expanded(
-    child: InkWell(
-      onTap: onTap, // ← Pastikan ini ada!
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: isActive ? Colors.white : Colors.white70, size: 22),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                color: isActive ? Colors.white : Colors.white70,
-                fontSize: 11,
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-}
-

@@ -14,63 +14,11 @@ class AdminDashboardScreen extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF063CA8),
-              Color(0xFF00AEEF),
-            ],
+            colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
           ),
         ),
         child: Column(
           children: [
-            SafeArea(
-              bottom: false,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: const Text(
-                        '20.11',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 13,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                          child: const Icon(Icons.signal_cellular_4_bar, size: 16),
-                        ),
-                        const SizedBox(width: 4),
-                        Container(
-                          width: 24,
-                          height: 24,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFFD9D9D9),
-                          ),
-                          child: const Icon(Icons.battery_full, size: 20),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
             _buildHeader(),
             Expanded(
               child: Container(
@@ -260,11 +208,7 @@ class AdminDashboardScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              color: Colors.white,
-              size: 24,
-            ),
+            Icon(icon, color: Colors.white, size: 24),
             const SizedBox(height: 8),
             Text(
               title,
@@ -355,10 +299,12 @@ class AdminDashboardScreen extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        ...lembagaList.map((lembaga) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: _buildLembagaItem(lembaga),
-            )),
+        ...lembagaList.map(
+          (lembaga) => Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: _buildLembagaItem(lembaga),
+          ),
+        ),
       ],
     );
   }
@@ -422,32 +368,18 @@ class AdminDashboardScreen extends StatelessWidget {
           const SizedBox(height: 8),
           Row(
             children: [
-              Icon(
-                Icons.location_on,
-                size: 16,
-                color: Colors.grey[600],
-              ),
+              Icon(Icons.location_on, size: 16, color: Colors.grey[600]),
               const SizedBox(width: 4),
               Text(
                 lembaga['location']!,
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: Colors.grey[600], fontSize: 14),
               ),
               const SizedBox(width: 16),
-              Icon(
-                Icons.people,
-                size: 16,
-                color: Colors.grey[600],
-              ),
+              Icon(Icons.people, size: 16, color: Colors.grey[600]),
               const SizedBox(width: 4),
               Text(
                 lembaga['capacity']!,
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: Colors.grey[600], fontSize: 14),
               ),
             ],
           ),
@@ -499,9 +431,7 @@ class AdminDashboardScreen extends StatelessWidget {
     return Container(
       height: 65,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
-      decoration: const BoxDecoration(
-        color: Color(0xFF063CA8),
-      ),
+      decoration: const BoxDecoration(color: Color(0xFF063CA8)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -530,7 +460,12 @@ class AdminDashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(String label, bool isActive, IconData icon, VoidCallback onTap) {
+  Widget _buildNavItem(
+    String label,
+    bool isActive,
+    IconData icon,
+    VoidCallback onTap,
+  ) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -545,11 +480,7 @@ class AdminDashboardScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              color: Colors.white,
-              size: 20,
-            ),
+            Icon(icon, color: Colors.white, size: 20),
             const SizedBox(height: 2),
             Text(
               label,

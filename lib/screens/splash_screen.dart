@@ -33,22 +33,22 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             // SEMANGGI Logo - Real Asset atau Fallback
             _buildLogo(),
-            
+
             const SizedBox(height: 40),
-            
+
             // SEMANGGI Text
             const Text(
-              'SEMANGGI',
+              'Semangat Menggapai Asa untuk Memulai Rehabilitasi',
               style: TextStyle(
-                fontSize: 32,
+                fontSize: 20,
                 fontWeight: FontWeight.w900,
                 color: AppColors.textPrimary,
                 letterSpacing: 2,
               ),
             ),
-            
+
             const SizedBox(height: 60),
-            
+
             // Welcome Text
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 40),
@@ -63,9 +63,9 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 40),
-            
+
             // Loading indicator
             const CircularProgressIndicator(
               color: AppColors.logoBlue,
@@ -76,7 +76,7 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
-  
+
   Widget _buildLogo() {
     return SizedBox(
       width: 120,
@@ -93,10 +93,7 @@ class _SplashScreenState extends State<SplashScreen> {
             height: 120,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                color: AppColors.logoBlue,
-                width: 3,
-              ),
+              border: Border.all(color: AppColors.logoBlue, width: 3),
             ),
             child: Stack(
               alignment: Alignment.center,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../constants/colors.dart';
+import 'unified_bottom_navigation.dart';
 
 class AdminAjukanRehabScreen extends StatefulWidget {
   const AdminAjukanRehabScreen({super.key});
@@ -26,276 +26,238 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF063CA8), // Exact from Figma
-              Color(0xFF00AEEF), // Exact from Figma
-            ],
-          ),
-        ),
-        child: Column(
-          children: [
-            // Status bar area
-            SafeArea(
-              bottom: false,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Time
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: const Text(
-                        '20.11',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 13,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    // Status icons
-                    Row(
-                      children: [
-                        Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                          child: const Icon(Icons.signal_cellular_4_bar, size: 16),
-                        ),
-                        const SizedBox(width: 4),
-                        Container(
-                          width: 24,
-                          height: 24,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFFD9D9D9),
-                          ),
-                          child: const Icon(Icons.battery_full, size: 20),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+    return PopScope(
+      canPop: false, // Prevent back navigation
+      child: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFF063CA8), // Exact from Figma
+                Color(0xFF00AEEF), // Exact from Figma
+              ],
             ),
-            
-            // Header Section
-            _buildHeader(),
-            
-            // Main Content
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Color(0xFFEFEFEF),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(35),
-                    topRight: Radius.circular(35),
+          ),
+          child: Column(
+            children: [
+              // Header Section
+              _buildHeader(),
+
+              // Main Content
+              Expanded(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFEFEFEF),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(35),
+                      topRight: Radius.circular(35),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      // Form Content
+                      Expanded(
+                        child: SingleChildScrollView(
+                          padding: const EdgeInsets.only(
+                            left: 24,
+                            right: 24,
+                            top: 24,
+                            bottom: 100, // Space for bottom navigation
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Title
+                              const Text(
+                                'Formulir Pengajuan Rehab',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 24,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w700,
+                                  height: 1.34,
+                                ),
+                              ),
+
+                              const SizedBox(height: 24),
+
+                              // Form Fields
+                              _buildTextField(
+                                label: 'Nama Lengkap',
+                                controller: _namaController,
+                                hintText: 'Masukkan nama lengkap',
+                              ),
+
+                              const SizedBox(height: 16),
+
+                              _buildTextField(
+                                label: 'Nomor Identitas',
+                                controller: _nomorIdentitasController,
+                                hintText: 'Masukkan nomor KTP/NIK',
+                                keyboardType: TextInputType.number,
+                              ),
+
+                              const SizedBox(height: 16),
+
+                              _buildTextField(
+                                label: 'Alamat',
+                                controller: _alamatController,
+                                hintText: 'Masukkan alamat lengkap',
+                                maxLines: 2,
+                              ),
+
+                              const SizedBox(height: 16),
+
+                              // Dropdown Lembaga
+                              _buildDropdownField(),
+
+                              const SizedBox(height: 32),
+
+                              // Submit Button
+                              SizedBox(
+                                width: double.infinity,
+                                height: 48,
+                                child: ElevatedButton(
+                                  onPressed: _isLoading ? null : _handleSubmit,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF2563EB),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    elevation: 0,
+                                  ),
+                                  child: _isLoading
+                                      ? const SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                  Colors.white,
+                                                ),
+                                          ),
+                                        )
+                                      : const Text(
+                                          'Kirim Pengajuan',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontFamily: 'Inter',
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      // Bottom Navigation
+                      UnifiedBottomNavigation(
+                        currentIndex: 2, // Pengajuan
+                      ),
+                    ],
                   ),
                 ),
-                child: Column(
-                  children: [
-                    // Form Content
-                    Expanded(
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.all(24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Title
-                            const Text(
-                              'Formulir Pengajuan Rehab',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 24,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w700,
-                                height: 1.34,
-                              ),
-                            ),
-                            
-                            const SizedBox(height: 24),
-                            
-                            // Form Fields
-                            _buildTextField(
-                              label: 'Nama Lengkap',
-                              controller: _namaController,
-                              hintText: 'Masukkan nama lengkap',
-                            ),
-                            
-                            const SizedBox(height: 16),
-                            
-                            _buildTextField(
-                              label: 'Nomor Identitas',
-                              controller: _nomorIdentitasController,
-                              hintText: 'Masukkan nomor KTP/NIK',
-                              keyboardType: TextInputType.number,
-                            ),
-                            
-                            const SizedBox(height: 16),
-                            
-                            _buildTextField(
-                              label: 'Alamat',
-                              controller: _alamatController,
-                              hintText: 'Masukkan alamat lengkap',
-                              maxLines: 2,
-                            ),
-                            
-                            const SizedBox(height: 16),
-                            
-                            // Dropdown Lembaga
-                            _buildDropdownField(),
-                            
-                            const SizedBox(height: 32),
-                            
-                            // Submit Button
-                            SizedBox(
-                              width: double.infinity,
-                              height: 48,
-                              child: ElevatedButton(
-                                onPressed: _isLoading ? null : _handleSubmit,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF2563EB),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  elevation: 0,
-                                ),
-                                child: _isLoading
-                                    ? const SizedBox(
-                                        width: 20,
-                                        height: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                        ),
-                                      )
-                                    : const Text(
-                                        'Kirim Pengajuan',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontFamily: 'Inter',
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    
-                    // Bottom Navigation
-                    _buildBottomNavigation(),
-                  ],
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: Row(
-        children: [
-          // Logo BNN
-          Container(
-            width: 86,
-            height: 86,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.9),
-            ),
-            child: Image.asset(
-              'assets/images/logo_bnn.png',
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) {
-                return const Center(
-                  child: Text(
-                    'BNN',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF063CA8),
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        child: Row(
+          children: [
+            // Logo BNN
+            Container(
+              width: 86,
+              height: 86,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.9),
+              ),
+              child: Image.asset(
+                'assets/images/logo_bnn.png',
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Center(
+                    child: Text(
+                      'BNN',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF063CA8),
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
-          ),
-          
-          const SizedBox(width: 16),
-          
-          // Kota Surabaya text
-          const Expanded(
-            child: Text(
-              'KOTA\nSURABAYA',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.w400,
-                height: 1.2,
+                  );
+                },
               ),
             ),
-          ),
-          
-          // Admin Profile
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'Admin',
-                  style: TextStyle(
-                    color: Color(0xFF0540B0),
-                    fontSize: 16,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                  ),
+
+            const SizedBox(width: 16),
+
+            // Kota Surabaya text
+            const Expanded(
+              child: Text(
+                'KOTA\nSURABAYA',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.w400,
+                  height: 1.2,
                 ),
-                const SizedBox(width: 8),
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: const Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+
+            // Admin Profile
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Admin',
+                    style: TextStyle(
+                      color: Color(0xFF0540B0),
+                      fontSize: 16,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Icon(
+                      Icons.person,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -449,57 +411,6 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
     );
   }
 
-  Widget _buildBottomNavigation() {
-    return Container(
-      height: 65,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
-      decoration: const BoxDecoration(
-        color: Color(0xFF063CA8),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem('Beranda', false, Icons.home),
-          _buildNavItem('Pesebaran', false, Icons.map),
-          _buildNavItem('Pengajuan', true, Icons.assignment),
-          _buildNavItem('Riwayat', false, Icons.history),
-          _buildNavItem('Akun', false, Icons.person),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(String label, bool isActive, IconData icon) {
-    return Container(
-      width: 65,
-      decoration: isActive ? BoxDecoration(
-        color: const Color(0xFF062766),
-        borderRadius: BorderRadius.circular(12),
-      ) : null,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            color: Colors.white,
-            size: 20,
-          ),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: TextStyle(
-              color: isActive ? Colors.white : const Color(0xFFEBEDF0),
-              fontSize: 12,
-              fontFamily: 'Segoe UI Symbol',
-              fontWeight: FontWeight.w400,
-              height: 1.43,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _handleSubmit() async {
     // Validation
     if (_namaController.text.isEmpty) {
@@ -566,11 +477,7 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
                   color: Color(0xFF10B981),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
-                  Icons.check,
-                  color: Colors.white,
-                  size: 30,
-                ),
+                child: const Icon(Icons.check, color: Colors.white, size: 30),
               ),
               const SizedBox(height: 16),
               const Text(
@@ -585,10 +492,7 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
               Text(
                 'Pengajuan rehabilitasi untuk ${_namaController.text} telah berhasil dikirim ke $_selectedLembaga.',
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFF6B7280),
-                ),
+                style: const TextStyle(fontSize: 14, color: Color(0xFF6B7280)),
               ),
               const SizedBox(height: 20),
               SizedBox(

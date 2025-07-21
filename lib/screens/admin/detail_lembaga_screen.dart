@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 
 class DetailLembagaScreen extends StatelessWidget {
   final Map<String, String> lembagaData;
-  
-  const DetailLembagaScreen({
-    super.key,
-    required this.lembagaData,
-  });
+
+  const DetailLembagaScreen({super.key, required this.lembagaData});
 
   @override
   Widget build(BuildContext context) {
@@ -16,68 +13,14 @@ class DetailLembagaScreen extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF063CA8),
-              Color(0xFF00AEEF),
-            ],
+            colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
           ),
         ),
         child: Column(
           children: [
-            // Status Bar
-            SafeArea(
-              bottom: false,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: const Text(
-                        '20.11',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 13,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                          child: const Icon(Icons.signal_cellular_4_bar, size: 16),
-                        ),
-                        const SizedBox(width: 4),
-                        Container(
-                          width: 24,
-                          height: 24,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFFD9D9D9),
-                          ),
-                          child: const Icon(Icons.battery_full, size: 20),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            
             // Header
             _buildHeader(),
-            
+
             // Main Content
             Expanded(
               child: Container(
@@ -90,18 +33,27 @@ class DetailLembagaScreen extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    // Content Header with Back Button
-                    _buildContentHeader(context),
-                    
-                    // Lembaga Info Card
-                    _buildLembagaInfoCard(),
-                    
-                    // Detail Kapasitas
-                    _buildDetailKapasitasCard(),
-                    
-                    // Spacer
-                    const Spacer(),
-                    
+                    // Scrollable Content
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            // Content Header with Back Button
+                            _buildContentHeader(context),
+
+                            // Lembaga Info Card
+                            _buildLembagaInfoCard(),
+
+                            // Detail Kapasitas
+                            _buildDetailKapasitasCard(),
+
+                            // Extra space at bottom
+                            const SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
+                    ),
+
                     // Bottom Navigation
                     _buildBottomNavigation(context),
                   ],
@@ -115,124 +67,155 @@ class DetailLembagaScreen extends StatelessWidget {
   }
 
   Widget _buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: Row(
-        children: [
-          // Logo BNN
-          Container(
-            width: 86,
-            height: 86,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        child: Row(
+          children: [
+            // Logo BNN
+            Container(
+              width: 86,
+              height: 86,
+              child: Image.asset(
+                'assets/images/logo_bnn.png',
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'BNN',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF063CA8),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
-            child: const Center(
-              child: Text(
-                'BNN',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF063CA8),
+            const SizedBox(width: 16),
+
+            // Kota Surabaya
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: const Text(
+                  'KOTA\nSURABAYA',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.2,
+                    height: 1.2,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(width: 16),
-          
-          // Kota Surabaya
-          const Expanded(
-            child: Text(
-              'KOTA\nSURABAYA',
-              textAlign: TextAlign.center,
-              style: TextStyle(
+
+            // Admin Profile
+            Container(
+              width: 140,
+              height: 70,
+              decoration: BoxDecoration(
                 color: Colors.white,
-                fontSize: 16,
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.w400,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
-            ),
-          ),
-          
-          // Admin Profile
-          Container(
-            width: 132,
-            height: 65,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: Row(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 12),
-                  child: Text(
-                    'Admin',
-                    style: TextStyle(
-                      color: Color(0xFF0540B0),
-                      fontSize: 16,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(left: 16),
+                    child: Text(
+                      'Admin',
+                      style: TextStyle(
+                        color: Color(0xFF0540B0),
+                        fontSize: 16,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                ),
-                const Spacer(),
-                Container(
-                  margin: const EdgeInsets.only(right: 12),
-                  width: 45,
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(100),
+                  const Spacer(),
+                  Container(
+                    margin: const EdgeInsets.only(right: 12),
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
+                      ),
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: const Icon(
+                      Icons.person,
+                      color: Colors.white,
+                      size: 24,
+                    ),
                   ),
-                  child: const Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildContentHeader(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
       child: Row(
         children: [
           // Back Button
           GestureDetector(
             onTap: () => Navigator.pop(context),
             child: Container(
-              width: 40,
-              height: 40,
-              decoration: const BoxDecoration(
-                color: Color(0xFFEBEBEB),
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: Colors.white,
                 shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: const Icon(
-                Icons.arrow_back_ios,
+                Icons.arrow_back_ios_new,
                 color: Color(0xFF063CA8),
                 size: 20,
               ),
             ),
           ),
           const SizedBox(width: 16),
-          
+
           // Title
           const Expanded(
             child: Text(
               'Detail Lembaga Rehabilitasi',
               style: TextStyle(
-                color: Colors.black,
-                fontSize: 23.44,
+                color: Color(0xFF1A1A1A),
+                fontSize: 20,
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w700,
-                height: 1.37,
+                height: 1.3,
               ),
             ),
           ),
@@ -243,16 +226,16 @@ class DetailLembagaScreen extends StatelessWidget {
 
   Widget _buildLembagaInfoCard() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0x19181320),
-            blurRadius: 35.32,
-            offset: const Offset(0, 35.32),
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
         ],
       ),
@@ -263,22 +246,49 @@ class DetailLembagaScreen extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Icon
+              // Yayasan Image
               Container(
-                width: 48,
-                height: 48,
+                width: 90,
+                height: 90,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF063CA8).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.15),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
-                child: const Icon(
-                  Icons.home_work,
-                  color: Color(0xFF063CA8),
-                  size: 24,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.asset(
+                    'assets/images/yayasan_rumah_kita.jpeg',
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      // Fallback icon if image fails to load
+                      return Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              const Color(0xFF063CA8).withOpacity(0.1),
+                              const Color(0xFF00AEEF).withOpacity(0.1),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: const Icon(
+                          Icons.home_work,
+                          color: Color(0xFF063CA8),
+                          size: 36,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
               const SizedBox(width: 16),
-              
+
               // Lembaga Details
               Expanded(
                 child: Column(
@@ -287,56 +297,115 @@ class DetailLembagaScreen extends StatelessWidget {
                     Text(
                       lembagaData['name'] ?? 'Yayasan Rumah Kita',
                       style: const TextStyle(
-                        color: Color(0xFF211A2C),
-                        fontSize: 14,
+                        color: Color(0xFF1A1A1A),
+                        fontSize: 16,
                         fontFamily: 'Mulish',
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w800,
+                        height: 1.3,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      lembagaData['alamatLengkap'] ?? 'Jl. Ngagel Madya II / 9 Surabaya',
-                      style: const TextStyle(
-                        color: Color(0xFF28293F),
-                        fontSize: 10,
-                        fontFamily: 'Mulish',
-                        fontWeight: FontWeight.w700,
-                      ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.location_on_outlined,
+                          size: 16,
+                          color: Color(0xFF666666),
+                        ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            lembagaData['alamatLengkap'] ??
+                                'Jl. Ngagel Madya II / 9 Surabaya',
+                            style: const TextStyle(
+                              color: Color(0xFF666666),
+                              fontSize: 12,
+                              fontFamily: 'Mulish',
+                              fontWeight: FontWeight.w600,
+                              height: 1.4,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      lembagaData['nomorTelepon'] ?? '088102367299',
-                      style: const TextStyle(
-                        color: Color(0xFF28293F),
-                        fontSize: 10,
-                        fontFamily: 'Mulish',
-                        fontWeight: FontWeight.w700,
-                      ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.phone_outlined,
+                          size: 16,
+                          color: Color(0xFF666666),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          lembagaData['nomorTelepon'] ?? '088102367299',
+                          style: const TextStyle(
+                            color: Color(0xFF666666),
+                            fontSize: 12,
+                            fontFamily: 'Mulish',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
             ],
           ),
-          
-          const SizedBox(height: 16),
-          
+
+          const SizedBox(height: 20),
+
           // Divider
           Container(
             height: 1,
-            color: const Color(0xFFDFDFDF),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.transparent,
+                  const Color(0xFFDFDFDF),
+                  Colors.transparent,
+                ],
+              ),
+            ),
           ),
-          
+
           const SizedBox(height: 16),
-          
-          // Kapasitas Info
-          Text(
-            'Kapasitas : ${_getKapasitasTotal()}     | Sisa : ${_getSisaKapasitas()}',
-            style: const TextStyle(
-              color: Color(0xFF28293F),
-              fontSize: 10,
-              fontFamily: 'Mulish',
-              fontWeight: FontWeight.w700,
+
+          // Kapasitas Info with improved styling
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  const Color(0xFF063CA8).withOpacity(0.05),
+                  const Color(0xFF00AEEF).withOpacity(0.05),
+                ],
+              ),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Kapasitas Total: ${_getKapasitasTotal()}',
+                  style: const TextStyle(
+                    color: Color(0xFF063CA8),
+                    fontSize: 12,
+                    fontFamily: 'Mulish',
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Text(
+                  'Sisa: ${_getSisaKapasitas()}',
+                  style: const TextStyle(
+                    color: Color(0xFF00AEEF),
+                    fontSize: 12,
+                    fontFamily: 'Mulish',
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -346,135 +415,203 @@ class DetailLembagaScreen extends StatelessWidget {
 
   Widget _buildDetailKapasitasCard() {
     return Container(
-      margin: const EdgeInsets.all(24),
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Title
-          const Center(
+          // Title with icon
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.analytics_outlined,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Text(
+                'Detail Kapasitas Rehab',
+                style: TextStyle(
+                  color: Color(0xFF1A1A1A),
+                  fontSize: 16,
+                  fontFamily: 'Mulish',
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 24),
+
+          // Keterangan
+          const Text(
+            'Keterangan Kapasitas:',
+            style: TextStyle(
+              color: Color(0xFF666666),
+              fontSize: 14,
+              fontFamily: 'Mulish',
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Kapasitas Details with better styling
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF8F9FA),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: const Color(0xFFE9ECEF), width: 1),
+            ),
+            child: Column(
+              children: [
+                _buildKapasitasRow('Rawat Inap Laki-laki', '3 / 17', true),
+                const SizedBox(height: 12),
+                _buildKapasitasRow('Rawat Inap Perempuan', '1 / 5', true),
+                const SizedBox(height: 12),
+                _buildKapasitasRow('Rawat Jalan', '2', false),
+                const SizedBox(height: 12),
+                _buildKapasitasRow('Pasca Rehab', '2', false),
+                const SizedBox(height: 12),
+                _buildKapasitasRow('SKSR', '2', false),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildKapasitasRow(
+    String label,
+    String value, [
+    bool hasCapacity = false,
+  ]) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFFE9ECEF), width: 0.5),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
             child: Text(
-              'Detail Kapasitas Rehab',
+              label,
+              style: const TextStyle(
+                color: Color(0xFF1A1A1A),
+                fontSize: 13,
+                fontFamily: 'Mulish',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: hasCapacity
+                  ? const Color(0xFF063CA8).withOpacity(0.1)
+                  : const Color(0xFF00AEEF).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Text(
+              value,
               style: TextStyle(
-                color: Color(0xFF211A2C),
-                fontSize: 14,
+                color: hasCapacity
+                    ? const Color(0xFF063CA8)
+                    : const Color(0xFF00AEEF),
+                fontSize: 13,
                 fontFamily: 'Mulish',
                 fontWeight: FontWeight.w700,
               ),
             ),
           ),
-          
-          const SizedBox(height: 20),
-          
-          // Keterangan
-          const Text(
-            'Keterangan :',
-            style: TextStyle(
-              color: Color(0xFF211A2C),
-              fontSize: 12,
-              fontFamily: 'Mulish',
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          
-          const SizedBox(height: 15),
-          
-          // Kapasitas Details
-          Column(
-            children: [
-              _buildKapasitasRow('Rawat Inap Laki-laki', '3 / 17'),
-              const SizedBox(height: 8),
-              _buildKapasitasRow('Rawat Inap Perempuan', '1 / 5'),
-              const SizedBox(height: 8),
-              _buildKapasitasRow('Rawat Jalan', '2'),
-              const SizedBox(height: 8),
-              _buildKapasitasRow('Pasca Rehab', '2'),
-              const SizedBox(height: 8),
-              _buildKapasitasRow('SKSR', '2'),
-            ],
-          ),
-          
-          const SizedBox(height: 20),
-          
-          // Divider
-          Container(
-            height: 1,
-            color: const Color(0xFFDFDFDF),
-          ),
         ],
       ),
-    );
-  }
-
-  Widget _buildKapasitasRow(String label, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Color(0xFF211A2C),
-            fontSize: 12,
-            fontFamily: 'Mulish',
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        Text(
-          value,
-          style: const TextStyle(
-            color: Color(0xFF211A2C),
-            fontSize: 12,
-            fontFamily: 'Mulish',
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ],
     );
   }
 
   Widget _buildBottomNavigation(BuildContext context) {
     return Container(
-      height: 65,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
-      decoration: const BoxDecoration(
-        color: Color(0xFF063CA8),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem('Beranda', Icons.home, false, () {
-            Navigator.popUntil(context, (route) => route.isFirst);
-          }),
-          _buildNavItem('Pesebaran', Icons.map, false, () {
-            // TODO: Navigate to Pesebaran
-          }),
-          _buildNavItem('Pengajuan', Icons.assignment, false, () {
-            // TODO: Navigate to Pengajuan
-          }),
-          _buildNavItem('Riwayat', Icons.history, false, () {
-            // TODO: Navigate to Riwayat
-          }),
-          _buildNavItem('Akun', Icons.person, false, () {
-            // TODO: Navigate to Akun
-          }),
+      decoration: BoxDecoration(
+        color: const Color(0xFF063CA8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, -2),
+          ),
         ],
+      ),
+      child: SafeArea(
+        top: false,
+        child: Container(
+          height: 70,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavItem('Beranda', Icons.home_outlined, false, () {
+                Navigator.popUntil(context, (route) => route.isFirst);
+              }),
+              _buildNavItem('Pesebaran', Icons.map_outlined, false, () {
+                // TODO: Navigate to Pesebaran
+              }),
+              _buildNavItem('Pengajuan', Icons.assignment_outlined, false, () {
+                // TODO: Navigate to Pengajuan
+              }),
+              _buildNavItem('Riwayat', Icons.history, false, () {
+                // TODO: Navigate to Riwayat
+              }),
+              _buildNavItem('Akun', Icons.person_outline, false, () {
+                // TODO: Navigate to Akun
+              }),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildNavItem(String label, IconData icon, bool isActive, VoidCallback onTap) {
+  Widget _buildNavItem(
+    String label,
+    IconData icon,
+    bool isActive,
+    VoidCallback onTap,
+  ) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 65,
+        width: 60,
         padding: const EdgeInsets.symmetric(vertical: 8),
         decoration: isActive
             ? BoxDecoration(
-                color: const Color(0xFF062766),
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF00AEEF), Color(0xFF063CA8)],
+                ),
                 borderRadius: BorderRadius.circular(12),
               )
             : null,
@@ -483,18 +620,18 @@ class DetailLembagaScreen extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: isActive ? Colors.white : const Color(0xFFEBEDF0),
-              size: 20,
+              color: isActive ? Colors.white : const Color(0xFFB0C4DE),
+              size: 22,
             ),
-            const SizedBox(height: 2),
+            const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
-                color: isActive ? Colors.white : const Color(0xFFEBEDF0),
-                fontSize: 12,
-                fontFamily: 'Segoe UI Symbol',
-                fontWeight: FontWeight.w400,
-                height: 1.43,
+                color: isActive ? Colors.white : const Color(0xFFB0C4DE),
+                fontSize: 11,
+                fontFamily: 'Poppins',
+                fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                height: 1.2,
               ),
             ),
           ],

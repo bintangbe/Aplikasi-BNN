@@ -37,12 +37,12 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                
+
                 // Header dengan logo BNN
                 _buildHeader(),
-                
+
                 const SizedBox(height: 40),
-                
+
                 // Form Login Card
                 _buildLoginCard(),
               ],
@@ -81,9 +81,9 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
             },
           ),
         ),
-        
+
         const SizedBox(height: 20),
-        
+
         // KOTA SURABAYA text
         const Text(
           'KOTA\nSURABAYA',
@@ -144,9 +144,9 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
             padding: EdgeInsets.zero,
             alignment: Alignment.centerLeft,
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Welcome text
           const Center(
             child: Text(
@@ -161,9 +161,9 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
               ),
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Subtitle
           const Center(
             child: Text(
@@ -178,23 +178,23 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
               ),
             ),
           ),
-          
+
           const SizedBox(height: 32),
-          
+
           // Username field
           _buildTextField(
             label: 'Username',
             controller: _usernameController,
             hintText: 'admin_bnn',
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Password field
           _buildPasswordField(),
-          
+
           const SizedBox(height: 24),
-          
+
           // Login button
           SizedBox(
             width: double.infinity,
@@ -219,9 +219,9 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
               ),
             ),
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Forgot password
           Center(
             child: TextButton(
@@ -244,7 +244,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
               ),
             ),
           ),
-          
+
           const SizedBox(height: 15),
         ],
       ),
@@ -283,24 +283,15 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
             fillColor: Colors.white,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                width: 1,
-                color: Color(0xFFD1D5DB),
-              ),
+              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                width: 1,
-                color: Color(0xFFD1D5DB),
-              ),
+              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                width: 2,
-                color: Color(0xFF2563EB),
-              ),
+              borderSide: const BorderSide(width: 2, color: Color(0xFF2563EB)),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 17,
@@ -341,24 +332,15 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
             fillColor: Colors.white,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                width: 1,
-                color: Color(0xFFD1D5DB),
-              ),
+              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                width: 1,
-                color: Color(0xFFD1D5DB),
-              ),
+              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                width: 2,
-                color: Color(0xFF2563EB),
-              ),
+              borderSide: const BorderSide(width: 2, color: Color(0xFF2563EB)),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 17,
@@ -383,11 +365,13 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
   }
 
   void _handleLogin() {
-    if (_usernameController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
+    if (_usernameController.text.isNotEmpty &&
+        _passwordController.text.isNotEmpty) {
       // TODO: Implement actual login logic
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const AdminDashboardScreen()),
+        (route) => false, // Remove all previous routes
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
