@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // SEMANGGI Logo - Real Asset atau Fallback
+            // SEMANGGI Logo - Real Asset atau Fallback (diperbesar)
             _buildLogo(),
 
             const SizedBox(height: 40),
@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
             const Text(
               'Semangat Menggapai Asa untuk Memulai Rehabilitasi',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 16,
                 fontWeight: FontWeight.w900,
                 color: AppColors.textPrimary,
                 letterSpacing: 2,
@@ -78,71 +78,73 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Widget _buildLogo() {
-    return SizedBox(
-      width: 120,
-      height: 120,
-      child: Image.asset(
-        'assets/images/logo_semanggi.png',
-        width: 120,
-        height: 120,
-        fit: BoxFit.contain,
-        errorBuilder: (context, error, stackTrace) {
-          // Fallback jika asset belum ada
-          return Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: AppColors.logoBlue, width: 3),
-            ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // Background circle
-                Container(
-                  width: 100,
-                  height: 100,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.white,
-                  ),
-                ),
-                // Person icon (simplified)
-                const Positioned(
-                  bottom: 30,
-                  child: Icon(
-                    Icons.person,
-                    color: AppColors.logoBlue,
-                    size: 40,
-                  ),
-                ),
-                // Clover icon (using favorite icon as approximation)
-                const Positioned(
-                  top: 20,
-                  right: 25,
-                  child: Icon(
-                    Icons.local_florist,
-                    color: AppColors.logoGreen,
-                    size: 30,
-                  ),
-                ),
-                // Green arc (simplified with container)
-                Positioned(
-                  bottom: 10,
-                  right: 10,
-                  child: Container(
-                    width: 50,
-                    height: 25,
-                    decoration: BoxDecoration(
-                      color: AppColors.logoGreen,
-                      borderRadius: BorderRadius.circular(25),
+    return Center(
+      child: SizedBox(
+        width: 280, // Diperbesar dari 180 ke 280
+        height: 280, // Diperbesar dari 180 ke 280
+        child: Image.asset(
+          'assets/images/logo_semanggi.png',
+          width: 280,
+          height: 280,
+          fit: BoxFit.contain,
+          errorBuilder: (context, error, stackTrace) {
+            // Fallback jika asset belum ada (diperbesar proporsional)
+            return Container(
+              width: 280,
+              height: 280,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.logoBlue, width: 4),
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Background circle
+                  Container(
+                    width: 240,
+                    height: 240,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.white,
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
+                  // Person icon (diperbesar)
+                  const Positioned(
+                    bottom: 70,
+                    child: Icon(
+                      Icons.person,
+                      color: AppColors.logoBlue,
+                      size: 90,
+                    ),
+                  ),
+                  // Clover icon (diperbesar)
+                  const Positioned(
+                    top: 50,
+                    right: 65,
+                    child: Icon(
+                      Icons.local_florist,
+                      color: AppColors.logoGreen,
+                      size: 65,
+                    ),
+                  ),
+                  // Green arc (diperbesar)
+                  Positioned(
+                    bottom: 25,
+                    right: 25,
+                    child: Container(
+                      width: 110,
+                      height: 55,
+                      decoration: BoxDecoration(
+                        color: AppColors.logoGreen,
+                        borderRadius: BorderRadius.circular(35),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
