@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import 'admin/admin_login_screen.dart';
+import 'user/login_user.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -101,7 +102,12 @@ class LoginScreen extends StatelessWidget {
                                 'Login Masyarakat',
                                 AppColors.buttonMasyarakat,
                                 () {
-                                  // Navigate to Masyarakat
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginUserScreen(),
+                                    )
+                                  );
                                 },
                               ),
                               
