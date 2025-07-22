@@ -84,6 +84,7 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
           'Ruang rawat inap, laboratorium, farmasi, ruang terapi musik',
       'image': 'assets/images/yayasan_omah_sehat_bersinar.jpeg',
     },
+    
   ];
 
   List<Map<String, String>> get filteredLembaga {
