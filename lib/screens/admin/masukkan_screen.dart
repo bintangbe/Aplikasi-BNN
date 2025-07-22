@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'balas_screen.dart';
 import 'profile_screen.dart';
+import 'unified_bottom_navigation.dart';
 
 class MasukkanScreen extends StatelessWidget {
   const MasukkanScreen({super.key});
@@ -10,7 +12,7 @@ class MasukkanScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Background biru atas
+          // Background gradient
           Container(
             height: MediaQuery.of(context).size.height * 0.3,
             decoration: const BoxDecoration(
@@ -22,19 +24,31 @@ class MasukkanScreen extends StatelessWidget {
             ),
           ),
 
-          // Isi halaman
+          // Content
           SingleChildScrollView(
             child: Column(
               children: [
                 const SizedBox(height: 40),
 
-                // Logo di tengah
+                // Logo and City Name
                 Center(
                   child: Column(
                     children: [
-                      Image.asset(
-                        'assets/images/logo_bnn.png',
-                        height: 100,
+                      GestureDetector(
+                        onTap: () async {
+                          final Uri url = Uri.parse('https://surabayakota.bnn.go.id');
+                          if (!await launchUrl(url)) {
+                            throw Exception('Could not launch $url');
+                          }
+                        },
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          child: Image.asset(
+                            'assets/images/logo_bnn.png',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 6),
                       const Text(
@@ -42,7 +56,7 @@ class MasukkanScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -52,7 +66,7 @@ class MasukkanScreen extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // Kontainer putih isi
+                // Main content container
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -63,7 +77,7 @@ class MasukkanScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Tombol kembali & judul
+                      // Back button & title
                       Row(
                         children: [
                           InkWell(
@@ -98,7 +112,7 @@ class MasukkanScreen extends StatelessWidget {
 
                       const SizedBox(height: 20),
 
-                      // List masukan
+                      // Feedback cards
                       MasukanCard(
                         nama: 'Diana Cantika',
                         email: 'dianacanci123@gmail.com',

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'admin_ajukan_rehab_screen.dart';
 import 'riwayat_pengajuan_screen.dart';
 import 'detail_lembaga_screen.dart';
@@ -15,6 +16,7 @@ class AdminDashboardScreen extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
+            // Background gradient
             Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
@@ -59,6 +61,7 @@ class AdminDashboardScreen extends StatelessWidget {
                 ],
               ),
             ),
+            // Bottom Navigation
             Positioned(
               left: 0,
               right: 0,
@@ -78,28 +81,36 @@ class AdminDashboardScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: Row(
         children: [
-          Container(
-            width: 86,
-            height: 86,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.9),
-            ),
-            child: Image.asset(
-              'assets/images/logo_bnn.png',
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) {
-                return const Center(
-                  child: Text(
-                    'BNN',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF063CA8),
+          GestureDetector(
+            onTap: () async {
+              final Uri url = Uri.parse('https://surabayakota.bnn.go.id');
+              if (!await launchUrl(url)) {
+                throw Exception('Could not launch $url');
+              }
+            },
+            child: Container(
+              width: 86,
+              height: 86,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.9),
+              ),
+              child: Image.asset(
+                'assets/images/logo_bnn.png',
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Center(
+                    child: Text(
+                      'BNN',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF063CA8),
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
           const SizedBox(width: 16),
@@ -129,6 +140,7 @@ class AdminDashboardScreen extends StatelessWidget {
                   style: TextStyle(
                     color: Color(0xFF0540B0),
                     fontSize: 16,
+                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -276,8 +288,7 @@ class AdminDashboardScreen extends StatelessWidget {
         'location': 'Surabaya Timur',
         'type': 'Rawat Inap',
         'capacity': '50 tempat tidur',
-        'alamatLengkap':
-            'Jl. BarataJaya XII A No.6, RT.001/RW.004, Baratajaya, Kec. Gubeng, Surabaya',
+        'alamatLengkap': 'Jl. BarataJaya XII A No.6, RT.001/RW.004, Baratajaya, Kec. Gubeng, Surabaya',
         'nomorTelepon': '(031) 5928587',
         'jamOperasional': '24 Jam',
         'fasilitas': 'Ruang rawat inap, ruang terapi, laboratorium, apotek',
@@ -287,8 +298,7 @@ class AdminDashboardScreen extends StatelessWidget {
         'location': 'Surabaya Timur',
         'type': 'Rawat Jalan',
         'capacity': '25 tempat tidur',
-        'alamatLengkap':
-            'Jl. Cipta Mananggal v No. 16, RT 011 RW 005, Kelurahan Menanggal, Kecamatan Gayungan',
+        'alamatLengkap': 'Jl. Cipta Mananggal v No. 16, RT 011 RW 005, Kelurahan Menanggal, Kecamatan Gayungan',
         'nomorTelepon': '(031) 5947890',
         'jamOperasional': '08.00 - 16.00 WIB',
         'fasilitas': 'Poliklinik umum, ruang konseling, farmasi',
@@ -344,21 +354,18 @@ class AdminDashboardScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  lembaga['name']!,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Color(0xFF1D4ED8),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
+                Expanded(
+                  child: Text(
+                    lembaga['name']!,
+                    style: const TextStyle(
+                      color: Color(0xFF1D4ED8),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: _getTypeColor(lembaga['type']!).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
@@ -406,6 +413,9 @@ class AdminDashboardScreen extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF3B82F6),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
                 child: const Text('Lihat Detail'),
               ),

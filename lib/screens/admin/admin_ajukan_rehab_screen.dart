@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'unified_bottom_navigation.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AdminAjukanRehabScreen extends StatefulWidget {
   const AdminAjukanRehabScreen({super.key});
@@ -171,14 +172,20 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
     );
   }
 
-  Widget _buildHeader() {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        child: Row(
-          children: [
-            // Logo BNN
-            Container(
+Widget _buildHeader() {
+  return SafeArea(
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () async {
+              final Uri url = Uri.parse('https://surabayakota.bnn.go.id');
+              if (!await launchUrl(url)) {
+                throw Exception('Could not launch $url');
+              }
+            },
+            child: Container(
               width: 86,
               height: 86,
               decoration: BoxDecoration(
@@ -202,65 +209,63 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
                 },
               ),
             ),
-
-            const SizedBox(width: 16),
-
-            // Kota Surabaya text
-            const Expanded(
-              child: Text(
-                'KOTA\nSURABAYA',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontFamily: 'Roboto',
-                  fontWeight: FontWeight.w400,
-                  height: 1.2,
-                ),
-              ),
-            ),
-
-            // Admin Profile
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
+          ),
+          const SizedBox(width: 16),
+          // Kota Surabaya text
+          const Expanded(
+            child: Text(
+              'KOTA\nSURABAYA',
+              textAlign: TextAlign.left,
+              style: TextStyle(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(18),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'Admin',
-                    style: TextStyle(
-                      color: Color(0xFF0540B0),
-                      fontSize: 16,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
-                ],
+                fontSize: 16,
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.w400,
+                height: 1.2,
               ),
             ),
-          ],
-        ),
+          ),
+          // Admin Profile
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Admin',
+                  style: TextStyle(
+                    color: Color(0xFF0540B0),
+                    fontSize: 16,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Icon(
+                    Icons.person,
+                    color: Colors.white,
+                    size: 20,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildTextField({
     required String label,
