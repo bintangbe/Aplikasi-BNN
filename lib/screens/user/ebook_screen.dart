@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'beranda_user.dart';
 import 'persebaran_screen.dart';
 import 'masukkan_screen.dart';
@@ -24,14 +25,15 @@ class _EbookScreenState extends State<EbookScreen> {
 
   final List<Map<String, dynamic>> _ebooks = [
     {
-      'title': 'Panduan Pencegahan Narkoba untuk Remaja',
+      'title': 'Pedoman Pelaksanaan Reformasi Birokrasi',
       'author': 'BNN Republik Indonesia',
       'category': 'Pencegahan',
       'pages': 45,
       'downloadCount': 1250,
-      'image': 'https://via.placeholder.com/120x160?text=Pencegahan',
+      'image': 'assets/images/BK0338.jpg',
       'description':
-          'Panduan lengkap untuk memahami bahaya narkoba dan cara pencegahannya khusus untuk kalangan remaja.',
+          'Pedoman Pelaksanaan Reformasi Birokrasi.',
+      'url': 'https://perpustakaan.bnn.go.id/id/pedoman-pelaksanaan-reformasi-birokrasi',
     },
     {
       'title': 'Modul Rehabilitasi Narkoba',
@@ -42,6 +44,7 @@ class _EbookScreenState extends State<EbookScreen> {
       'image': 'https://via.placeholder.com/120x160?text=Rehabilitasi',
       'description':
           'Modul komprehensif tentang proses rehabilitasi dan pemulihan dari ketergantungan narkoba.',
+      'url': 'https://bnn.go.id/modul-rehabilitasi',
     },
     {
       'title': 'Undang-Undang Narkotika Terbaru',
@@ -52,6 +55,7 @@ class _EbookScreenState extends State<EbookScreen> {
       'image': 'https://via.placeholder.com/120x160?text=UU+Narkotika',
       'description':
           'Kompilasi lengkap peraturan perundang-undangan terkait narkotika dan psikotropika.',
+      'url': 'https://jdih.kemenkumham.go.id/peraturan-narkotika',
     },
     {
       'title': 'Edukasi Bahaya Narkoba',
@@ -62,16 +66,18 @@ class _EbookScreenState extends State<EbookScreen> {
       'image': 'https://via.placeholder.com/120x160?text=Edukasi',
       'description':
           'Materi edukasi tentang jenis-jenis narkoba dan dampaknya bagi kesehatan.',
+      'url': 'https://bnn.go.id/edukasi-bahaya-narkoba',
     },
     {
-      'title': 'Strategi P4GN di Lingkungan Keluarga',
+      'title': 'Modul Pembelajaran Rehabilitasi dan Konseling Dasar bagi Pecandu dan Korban Penyalahgunaan Narkotika Pada Layanan Rawat Jalan',
       'author': 'BNN Kota Surabaya',
       'category': 'Pencegahan',
       'pages': 28,
       'downloadCount': 945,
-      'image': 'https://via.placeholder.com/120x160?text=P4GN',
+      'image': 'assets/images/Cover_2.jpg',
       'description':
-          'Panduan praktis penerapan Program Pencegahan dan Pemberantasan Penyalahgunaan dan Peredaran Gelap Narkoba di lingkungan keluarga.',
+          'Modul Pembelajaran Rehabilitasi dan Konseling Dasar bagi Pecandu dan Korban Penyalahgunaan Narkotika Pada Layanan Rawat Jalan.',
+      'url': 'https://perpustakaan.bnn.go.id/id/modul-pembelajaran-rehabilitasi-dan-konseling-dasar-bagi-pecandu-dan-korban',
     },
     {
       'title': 'Deteksi Dini Penyalahgunaan Narkoba',
@@ -82,6 +88,7 @@ class _EbookScreenState extends State<EbookScreen> {
       'image': 'https://via.placeholder.com/120x160?text=Deteksi+Dini',
       'description':
           'Panduan mengenali tanda-tanda awal penyalahgunaan narkoba dan langkah-langkah yang harus diambil.',
+      'url': 'https://bnn.go.id/deteksi-dini-narkoba',
     },
   ];
 
@@ -280,8 +287,8 @@ class _EbookScreenState extends State<EbookScreen> {
 
   Widget _buildCategoryFilter() {
     return Container(
-      height: 60,
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      height: 100,
+      padding: const EdgeInsets.symmetric(vertical: 20),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -297,24 +304,38 @@ class _EbookScreenState extends State<EbookScreen> {
               });
             },
             child: Container(
-              margin: const EdgeInsets.only(right: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              margin: const EdgeInsets.only(right: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 18),
               decoration: BoxDecoration(
                 color: isSelected ? const Color(0xFF2563EB) : Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(30),
                 border: Border.all(
                   color: isSelected
                       ? const Color(0xFF2563EB)
-                      : Colors.grey[300]!,
+                      : Colors.grey[500]!,
+                  width: 2.0,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.15),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
-              child: Text(
-                category,
-                style: TextStyle(
-                  color: isSelected ? Colors.white : Colors.black87,
-                  fontSize: 14,
-                  fontFamily: 'Inter',
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+              child: Center(
+                child: Text(
+                  category,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: isSelected ? Colors.white : Colors.black87,
+                    fontSize: 16,
+                    fontFamily: 'Inter',
+                    fontWeight: isSelected ? FontWeight.w800 : FontWeight.w700,
+                    letterSpacing: 0.5,
+                    height: 1.2,
+                  ),
                 ),
               ),
             ),
@@ -354,13 +375,50 @@ class _EbookScreenState extends State<EbookScreen> {
       child: Row(
         children: [
           Container(
-            width: 80,
-            height: 100,
+            width: 100,
+            height: 120,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              image: DecorationImage(
-                image: NetworkImage(ebook['image']),
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.grey[200],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 3,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                ebook['image'],
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.book,
+                      size: 40,
+                      color: Colors.grey,
+                    ),
+                  );
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -412,37 +470,19 @@ class _EbookScreenState extends State<EbookScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Icon(Icons.description, size: 14, color: Colors.grey[600]),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${ebook['pages']} hal',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 12,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
                   ],
                 ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    Icon(Icons.download, size: 14, color: Colors.grey[600]),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${ebook['downloadCount']} unduhan',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 12,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
                     const Spacer(),
                     ElevatedButton(
-                      onPressed: () => _showEbookDetail(ebook),
+                      onPressed: () async {
+                        final Uri url = Uri.parse(ebook['url']);
+                        if (!await launchUrl(url)) {
+                          throw Exception('Could not launch ${ebook['url']}');
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2563EB),
                         minimumSize: const Size(80, 32),
@@ -470,209 +510,4 @@ class _EbookScreenState extends State<EbookScreen> {
     );
   }
 
-  void _showEbookDetail(Map<String, dynamic> ebook) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.7,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-        ),
-        child: Column(
-          children: [
-            Container(
-              width: 40,
-              height: 4,
-              margin: const EdgeInsets.only(top: 12),
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 100,
-                          height: 130,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            image: DecorationImage(
-                              image: NetworkImage(ebook['image']),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                ebook['title'],
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                ebook['author'],
-                                style: const TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 14,
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: const Color(
-                                        0xFF3B82F6,
-                                      ).withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Text(
-                                      ebook['category'],
-                                      style: const TextStyle(
-                                        color: Color(0xFF3B82F6),
-                                        fontSize: 12,
-                                        fontFamily: 'Inter',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                '${ebook['pages']} halaman • ${ebook['downloadCount']} unduhan',
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: 12,
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    const Text(
-                      'Deskripsi',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      ebook['description'],
-                      style: const TextStyle(
-                        color: Colors.black87,
-                        fontSize: 14,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w400,
-                        height: 1.5,
-                      ),
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    '${ebook['title']} berhasil diunduh!',
-                                  ),
-                                  backgroundColor: const Color(0xFF10B981),
-                                ),
-                              );
-                            },
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: Color(0xFF2563EB)),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                            ),
-                            child: const Text(
-                              'Unduh PDF',
-                              style: TextStyle(
-                                color: Color(0xFF2563EB),
-                                fontSize: 14,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Membuka ${ebook['title']}...'),
-                                  backgroundColor: const Color(0xFF2563EB),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF2563EB),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                            ),
-                            child: const Text(
-                              'Baca Online',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
