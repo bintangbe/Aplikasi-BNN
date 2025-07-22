@@ -3,6 +3,10 @@ import 'beranda_user.dart';
 import 'persebaran_screen.dart';
 import 'masukkan_screen.dart';
 import 'ebook_screen.dart';
+import 'profil_bnnk_screen.dart';
+import 'notifikasi_screen.dart';
+import 'ubah_password_user_screen.dart';
+import '../login_screen.dart';
 
 class AkunScreen extends StatefulWidget {
   const AkunScreen({super.key});
@@ -177,6 +181,9 @@ class _AkunScreenState extends State<AkunScreen> {
   }
 
   Widget _buildProfileSection() {
+    // Dummy data, ganti dengan data user dari backend jika ada
+    const String namaUser = 'Oktavian';
+    const String emailUser = 'oktavian@email.com';
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.all(24),
@@ -205,9 +212,9 @@ class _AkunScreenState extends State<AkunScreen> {
             child: const Icon(Icons.person, color: Colors.white, size: 40),
           ),
           const SizedBox(height: 16),
-          const Text(
-            'User BNN',
-            style: TextStyle(
+          Text(
+            namaUser,
+            style: const TextStyle(
               color: Colors.black,
               fontSize: 20,
               fontFamily: 'Inter',
@@ -215,30 +222,13 @@ class _AkunScreenState extends State<AkunScreen> {
             ),
           ),
           const SizedBox(height: 4),
-          const Text(
-            'Pengguna Aplikasi BNN Surabaya',
-            style: TextStyle(
+          Text(
+            emailUser,
+            style: const TextStyle(
               color: Colors.black54,
               fontSize: 14,
               fontFamily: 'Inter',
               fontWeight: FontWeight.w400,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: const Color(0xFF10B981).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: const Text(
-              'Akun Terverifikasi',
-              style: TextStyle(
-                color: Color(0xFF10B981),
-                fontSize: 12,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w600,
-              ),
             ),
           ),
         ],
@@ -252,52 +242,92 @@ class _AkunScreenState extends State<AkunScreen> {
       child: Column(
         children: [
           _buildMenuCard(
-            'Profil Saya',
+            'Profil BNNK Surabaya',
             Icons.person_outline,
-            'Edit informasi pribadi dan data akun',
-            () => _showComingSoon('Edit Profil'),
-          ),
-          const SizedBox(height: 12),
-          _buildMenuCard(
-            'Riwayat Laporan',
-            Icons.history,
-            'Lihat riwayat pengaduan dan permintaan bantuan',
-            () => _showComingSoon('Riwayat Laporan'),
+            'Lihat informasi profil BNNK Surabaya',
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ProfilBNNKScreen(),
+              ),
+            ),
           ),
           const SizedBox(height: 12),
           _buildMenuCard(
             'Notifikasi',
             Icons.notifications_outlined,
-            'Kelola pengaturan notifikasi aplikasi',
-            () => _showComingSoon('Pengaturan Notifikasi'),
+            'Pesan dari admin',
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NotifikasiScreen(),
+              ),
+            ),
           ),
           const SizedBox(height: 12),
           _buildMenuCard(
             'Keamanan',
             Icons.security,
-            'Ubah password dan pengaturan keamanan',
-            () => _showComingSoon('Pengaturan Keamanan'),
-          ),
-          const SizedBox(height: 12),
-          _buildMenuCard(
-            'Bantuan & FAQ',
-            Icons.help_outline,
-            'Pusat bantuan dan pertanyaan yang sering diajukan',
-            () => _showHelpDialog(),
-          ),
-          const SizedBox(height: 12),
-          _buildMenuCard(
-            'Tentang Aplikasi',
-            Icons.info_outline,
-            'Informasi aplikasi dan versi terbaru',
-            () => _showAboutDialog(),
+            'Ubah password',
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const UbahPasswordUserScreen(),
+              ),
+            ),
           ),
           const SizedBox(height: 12),
           _buildMenuCard(
             'Keluar',
             Icons.logout,
             'Keluar dari akun dan kembali ke halaman login',
-            () => _showLogoutDialog(),
+            () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  title: const Text(
+                    'Konfirmasi Keluar',
+                    style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w700),
+                  ),
+                  content: const Text(
+                    'Apakah Anda yakin ingin keluar dari aplikasi?',
+                    style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w400),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text(
+                        'Batal',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context); // Tutup dialog
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => const LoginScreen()),
+                          (route) => false,
+                        );
+                      },
+                      child: const Text(
+                        'Keluar',
+                        style: TextStyle(
+                          color: Color(0xFFEF4444),
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
             isLogout: true,
           ),
         ],
