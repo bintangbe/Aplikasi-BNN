@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'unified_bottom_navigation.dart';
 import 'profile_screen.dart';
 
@@ -61,7 +62,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false, // Prevent back navigation to login
+      canPop: false,
       child: Scaffold(
         body: Container(
           decoration: const BoxDecoration(
@@ -73,10 +74,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
           ),
           child: Column(
             children: [
-              // Header
               _buildHeader(context),
-
-              // Main Content
               Expanded(
                 child: Container(
                   decoration: const BoxDecoration(
@@ -88,10 +86,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
                   ),
                   child: Column(
                     children: [
-                      // Content Header with Search
                       _buildContentHeader(),
-
-                      // Riwayat List
                       Expanded(
                         child: SingleChildScrollView(
                           padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
@@ -110,7 +105,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
           ),
         ),
         bottomNavigationBar: UnifiedBottomNavigation(
-          currentIndex: 3, // Riwayat
+          currentIndex: 3,
         ),
       ),
     );
@@ -119,55 +114,48 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
   Widget _buildHeader(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         child: Row(
           children: [
-            // Logo BNN
-            Container(
-              width: 86,
-              height: 86,
-              child: Image.asset(
-                'assets/images/logo_bnn.png',
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'BNN',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF063CA8),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(width: 16),
-
-            // Kota Surabaya
-            const Expanded(
-              child: Text(
-                'KOTA\nSURABAYA',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontFamily: 'Roboto',
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.2,
-                  height: 1.2,
+            GestureDetector(
+              onTap: () async {
+                final Uri url = Uri.parse('https://surabayakota.bnn.go.id');
+                if (!await launchUrl(url)) {
+                  throw Exception('Could not launch $url');
+                }
+              },
+              child: Container(
+                width: 100,
+                height: 100,
+                child: Image.asset(
+                  'assets/images/logo_bnn.png',
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
-
-            // Admin Profile
+            const SizedBox(width: 16),
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'KOTA',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  'SURABAYA',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -197,7 +185,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
                       width: 32,
                       height: 32,
                       decoration: BoxDecoration(
-                        color: Colors.black,
+                        color: const Color(0xFF063CA8),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: const Icon(
