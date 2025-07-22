@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'admin_ajukan_rehab_screen.dart';
 import 'riwayat_pengajuan_screen.dart';
 import 'detail_lembaga_screen.dart';
+import 'daftar_lembaga_screen.dart';
+import 'profile_screen.dart';
 import 'unified_bottom_navigation.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
@@ -28,7 +30,7 @@ class AdminDashboardScreen extends StatelessWidget {
               bottom: false,
               child: Column(
                 children: [
-                  _buildHeader(),
+                  _buildHeader(context),
                   Expanded(
                     child: Container(
                       decoration: const BoxDecoration(
@@ -73,7 +75,7 @@ class AdminDashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: Row(
@@ -115,38 +117,46 @@ class AdminDashboardScreen extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'Admin',
-                  style: TextStyle(
-                    color: Color(0xFF0540B0),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ProfileScreen()),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Admin',
+                    style: TextStyle(
+                      color: Color(0xFF0540B0),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(16),
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Icon(
+                      Icons.person,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                   ),
-                  child: const Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
@@ -306,7 +316,14 @@ class AdminDashboardScreen extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const DaftarLembagaScreen(),
+                  ),
+                );
+              },
               child: const Text(
                 'Lihat Semua',
                 style: TextStyle(

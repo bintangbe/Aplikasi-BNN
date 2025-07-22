@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'unified_bottom_navigation.dart';
+import 'profile_screen.dart';
 
 class AdminRiwayatScreen extends StatefulWidget {
   const AdminRiwayatScreen({super.key});
@@ -73,7 +74,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
           child: Column(
             children: [
               // Header
-              _buildHeader(),
+              _buildHeader(context),
 
               // Main Content
               Expanded(
@@ -115,7 +116,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -167,52 +168,46 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
             ),
 
             // Admin Profile
-            Container(
-              width: 140,
-              height: 70,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 16),
-                    child: Text(
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
                       'Admin',
                       style: TextStyle(
                         color: Color(0xFF0540B0),
                         fontSize: 16,
-                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ),
-                  const Spacer(),
-                  Container(
-                    margin: const EdgeInsets.only(right: 12),
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
+                    const SizedBox(width: 8),
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      borderRadius: BorderRadius.circular(24),
+                      child: const Icon(
+                        Icons.person,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
-                    child: const Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 24,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

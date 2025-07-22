@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'unified_bottom_navigation.dart';
+import 'profile_screen.dart';
 
 class AdminAjukanRehabScreen extends StatefulWidget {
   const AdminAjukanRehabScreen({super.key});
@@ -43,7 +44,7 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
           child: Column(
             children: [
               // Header Section
-              _buildHeader(),
+              _buildHeader(context),
 
               // Main Content
               Expanded(
@@ -171,7 +172,7 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -221,39 +222,47 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
             ),
 
             // Admin Profile
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(18),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'Admin',
-                    style: TextStyle(
-                      color: Color(0xFF0540B0),
-                      fontSize: 16,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'Admin',
+                      style: TextStyle(
+                        color: Color(0xFF0540B0),
+                        fontSize: 16,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(16),
+                    const SizedBox(width: 8),
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const Icon(
+                        Icons.person,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
-                    child: const Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],
