@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'admin_ajukan_rehab_screen.dart';
 import 'riwayat_pengajuan_screen.dart';
 import 'detail_lembaga_screen.dart';
+import 'daftar_lembaga_screen.dart';
+import 'profile_screen.dart';
 import 'unified_bottom_navigation.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
@@ -10,7 +13,7 @@ class AdminDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false, // Prevent back navigation
+      canPop: false,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(
@@ -28,7 +31,7 @@ class AdminDashboardScreen extends StatelessWidget {
               bottom: false,
               child: Column(
                 children: [
-                  _buildHeader(),
+                  _buildHeader(context),
                   Expanded(
                     child: Container(
                       decoration: const BoxDecoration(
@@ -59,13 +62,12 @@ class AdminDashboardScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Positioned(
+            // Bottom Navigation
+            const Positioned(
               left: 0,
               right: 0,
               bottom: 0,
-              child: UnifiedBottomNavigation(
-                currentIndex: 0, // Beranda
-              ),
+              child: UnifiedBottomNavigation(currentIndex: 0),
             ),
           ],
         ),
@@ -73,80 +75,91 @@ class AdminDashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: Row(
         children: [
-          Container(
-            width: 86,
-            height: 86,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.9),
-            ),
-            child: Image.asset(
-              'assets/images/logo_bnn.png',
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) {
-                return const Center(
-                  child: Text(
-                    'BNN',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF063CA8),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(width: 16),
-          const Expanded(
-            child: Text(
-              'KOTA\nSURABAYA',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.w400,
+          // Updated Logo Section
+          GestureDetector(
+            onTap: () async {
+              final Uri url = Uri.parse('https://surabayakota.bnn.go.id');
+              if (!await launchUrl(url)) {
+                throw Exception('Could not launch $url');
+              }
+            },
+            child: Container(
+              width: 100,
+              height: 100,
+              child: Image.asset(
+                'assets/images/logo_bnn.png',
+                fit: BoxFit.contain,
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'Admin',
-                  style: TextStyle(
-                    color: Color(0xFF0540B0),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+          const SizedBox(width: 16),
+          const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'KOTA',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
                 ),
-                const SizedBox(width: 8),
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: const Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 20,
-                  ),
+              ),
+              Text(
+                'SURABAYA',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
                 ),
-              ],
+              ),
+            ],
+          ),
+          const Spacer(),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ProfileScreen()),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Admin',
+                    style: TextStyle(
+                      color: Color(0xFF0540B0),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF063CA8),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Icon(
+                      Icons.person,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -306,7 +319,14 @@ class AdminDashboardScreen extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const DaftarLembagaScreen(),
+                  ),
+                );
+              },
               child: const Text(
                 'Lihat Semua',
                 style: TextStyle(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'profile_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RiwayatPengajuanScreen extends StatefulWidget {
   const RiwayatPengajuanScreen({super.key});
@@ -59,7 +61,7 @@ class _RiwayatPengajuanScreenState extends State<RiwayatPengajuanScreen> {
           children: [
             // Header
             _buildHeader(),
-            
+
             // Main Content
             Expanded(
               child: Container(
@@ -75,16 +77,14 @@ class _RiwayatPengajuanScreenState extends State<RiwayatPengajuanScreen> {
                   children: [
                     // Content Header
                     _buildContentHeader(),
-                    
+
                     // List Pengajuan
-                    Expanded(
-                      child: _buildPengajuanList(),
-                    ),
+                    Expanded(child: _buildPengajuanList()),
                   ],
                 ),
               ),
             ),
-            
+
             // Bottom Navigation
             _buildBottomNavigation(),
           ],
@@ -93,78 +93,89 @@ class _RiwayatPengajuanScreenState extends State<RiwayatPengajuanScreen> {
     );
   }
 
-  Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Back Button dan Logo
-          Row(
-            children: [
-              GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 15),
-              Container(
-                width: 60,
-                height: 60,
+ Widget _buildHeader() {
+  return Container(
+    padding: const EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 20),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        // Back Button dan Logo
+        Row(
+          children: [
+            GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Colors.white.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(
-                  Icons.location_city,
-                  color: Color(0xFF063CA8),
-                  size: 30,
+                  Icons.arrow_back,
+                  color: Colors.white,
+                  size: 24,
                 ),
               ),
-              const SizedBox(width: 15),
-              const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'KOTA',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    'SURABAYA',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
+            ),
+            const SizedBox(width: 15),
+            GestureDetector(
+              onTap: () async {
+                final Uri url = Uri.parse('https://surabayakota.bnn.go.id');
+                if (!await launchUrl(url)) {
+                  throw Exception('Could not launch $url');
+                }
+              },
+              child: Container(
+                width: 100,
+                height: 100,
+                child: Image.asset(
+                  'assets/images/logo_bnn.png',
+                  fit: BoxFit.contain,
+                ),
               ),
-            ],
-          ),
-          
-          // Admin Profile
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            ),
+            const SizedBox(width: 15),
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'KOTA',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  'SURABAYA',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+
+        // Admin Profile section remains unchanged
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const ProfileScreen()),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(18),
             ),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
                   'Admin',
@@ -176,11 +187,11 @@ class _RiwayatPengajuanScreenState extends State<RiwayatPengajuanScreen> {
                 ),
                 const SizedBox(width: 8),
                 Container(
-                  width: 35,
-                  height: 35,
+                  width: 32,
+                  height: 32,
                   decoration: BoxDecoration(
                     color: const Color(0xFF063CA8),
-                    borderRadius: BorderRadius.circular(100),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   child: const Icon(
                     Icons.person,
@@ -191,10 +202,11 @@ class _RiwayatPengajuanScreenState extends State<RiwayatPengajuanScreen> {
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _buildContentHeader() {
     return Container(
@@ -244,9 +256,7 @@ class _RiwayatPengajuanScreenState extends State<RiwayatPengajuanScreen> {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 3,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: InkWell(
         onTap: () => _showDetailDialog(pengajuan),
         borderRadius: BorderRadius.circular(8),
@@ -256,10 +266,7 @@ class _RiwayatPengajuanScreenState extends State<RiwayatPengajuanScreen> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(8),
             border: Border(
-              left: BorderSide(
-                color: pengajuan.statusColor,
-                width: 4,
-              ),
+              left: BorderSide(color: pengajuan.statusColor, width: 4),
             ),
           ),
           child: Column(
@@ -278,7 +285,10 @@ class _RiwayatPengajuanScreenState extends State<RiwayatPengajuanScreen> {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: pengajuan.statusColor.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(12),
@@ -294,16 +304,16 @@ class _RiwayatPengajuanScreenState extends State<RiwayatPengajuanScreen> {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 12),
-              
+
               // Detail Pengajuan (hanya tampilkan beberapa field utama)
               _buildDetailRow('Alamat', pengajuan.alamat),
               _buildDetailRow('Lembaga Rehab', pengajuan.lembagaRehab),
               _buildDetailRow('Tanggal Masuk', pengajuan.tanggalMasuk),
-              
+
               const SizedBox(height: 16),
-              
+
               // Action Buttons
               Row(
                 children: [
@@ -359,10 +369,7 @@ class _RiwayatPengajuanScreenState extends State<RiwayatPengajuanScreen> {
             width: 120,
             child: Text(
               '$label:',
-              style: const TextStyle(
-                color: Colors.grey,
-                fontSize: 14,
-              ),
+              style: const TextStyle(color: Colors.grey, fontSize: 14),
             ),
           ),
           Expanded(
@@ -407,17 +414,18 @@ class _RiwayatPengajuanScreenState extends State<RiwayatPengajuanScreen> {
     );
   }
 
-  Widget _buildNavItem(String label, IconData icon, bool isActive, VoidCallback onTap) {
+  Widget _buildNavItem(
+    String label,
+    IconData icon,
+    bool isActive,
+    VoidCallback onTap,
+  ) {
     return GestureDetector(
       onTap: onTap,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            color: isActive ? Colors.white : Colors.white70,
-            size: 24,
-          ),
+          Icon(icon, color: isActive ? Colors.white : Colors.white70, size: 24),
           const SizedBox(height: 4),
           Text(
             label,
@@ -446,7 +454,10 @@ class _RiwayatPengajuanScreenState extends State<RiwayatPengajuanScreen> {
               _buildDialogDetailRow('Jenis Kelamin', pengajuan.jenisKelamin),
               _buildDialogDetailRow('Lembaga Rehab', pengajuan.lembagaRehab),
               _buildDialogDetailRow('Tanggal Masuk', pengajuan.tanggalMasuk),
-              _buildDialogDetailRow('Tanggal Selesai', pengajuan.tanggalSelesai),
+              _buildDialogDetailRow(
+                'Tanggal Selesai',
+                pengajuan.tanggalSelesai,
+              ),
             ],
           ),
         ),
@@ -477,10 +488,7 @@ class _RiwayatPengajuanScreenState extends State<RiwayatPengajuanScreen> {
           const SizedBox(height: 4),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.black87,
-            ),
+            style: const TextStyle(fontSize: 14, color: Colors.black87),
           ),
         ],
       ),
@@ -489,7 +497,7 @@ class _RiwayatPengajuanScreenState extends State<RiwayatPengajuanScreen> {
 
   void _showUpdateStatusDialog(PengajuanData pengajuan) {
     String selectedStatus = pengajuan.status;
-    
+
     showDialog(
       context: context,
       builder: (context) => StatefulBuilder(
@@ -544,7 +552,9 @@ class _RiwayatPengajuanScreenState extends State<RiwayatPengajuanScreen> {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Status pengajuan #${pengajuan.id} berhasil diupdate ke: $selectedStatus'),
+                    content: Text(
+                      'Status pengajuan #${pengajuan.id} berhasil diupdate ke: $selectedStatus',
+                    ),
                     backgroundColor: Colors.green,
                   ),
                 );

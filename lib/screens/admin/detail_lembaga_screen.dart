@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'unified_bottom_navigation.dart';
+import 'profile_screen.dart';
 
 class DetailLembagaScreen extends StatelessWidget {
   final Map<String, String> lembagaData;
@@ -19,7 +21,7 @@ class DetailLembagaScreen extends StatelessWidget {
         child: Column(
           children: [
             // Header
-            _buildHeader(),
+            _buildHeader(context),
 
             // Main Content
             Expanded(
@@ -55,7 +57,9 @@ class DetailLembagaScreen extends StatelessWidget {
                     ),
 
                     // Bottom Navigation
-                    _buildBottomNavigation(context),
+                    UnifiedBottomNavigation(
+                      currentIndex: -1, // No active item for detail page
+                    ),
                   ],
                 ),
               ),
@@ -66,7 +70,7 @@ class DetailLembagaScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -121,52 +125,62 @@ class DetailLembagaScreen extends StatelessWidget {
             ),
 
             // Admin Profile
-            Container(
-              width: 140,
-              height: 70,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProfileScreen(),
                   ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 16),
-                    child: Text(
-                      'Admin',
-                      style: TextStyle(
-                        color: Color(0xFF0540B0),
-                        fontSize: 16,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600,
+                );
+              },
+              child: Container(
+                width: 140,
+                height: 70,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 16),
+                      child: Text(
+                        'Admin',
+                        style: TextStyle(
+                          color: Color(0xFF0540B0),
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                  ),
-                  const Spacer(),
-                  Container(
-                    margin: const EdgeInsets.only(right: 12),
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
+                    const Spacer(),
+                    Container(
+                      margin: const EdgeInsets.only(right: 12),
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
+                        ),
+                        borderRadius: BorderRadius.circular(24),
                       ),
-                      borderRadius: BorderRadius.circular(24),
+                      child: const Icon(
+                        Icons.person,
+                        color: Colors.white,
+                        size: 24,
+                      ),
                     ),
-                    child: const Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 24,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],
@@ -550,92 +564,6 @@ class DetailLembagaScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildBottomNavigation(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFF063CA8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        top: false,
-        child: Container(
-          height: 70,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavItem('Beranda', Icons.home_outlined, false, () {
-                Navigator.popUntil(context, (route) => route.isFirst);
-              }),
-              _buildNavItem('Pesebaran', Icons.map_outlined, false, () {
-                // TODO: Navigate to Pesebaran
-              }),
-              _buildNavItem('Pengajuan', Icons.assignment_outlined, false, () {
-                // TODO: Navigate to Pengajuan
-              }),
-              _buildNavItem('Riwayat', Icons.history, false, () {
-                // TODO: Navigate to Riwayat
-              }),
-              _buildNavItem('Akun', Icons.person_outline, false, () {
-                // TODO: Navigate to Akun
-              }),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(
-    String label,
-    IconData icon,
-    bool isActive,
-    VoidCallback onTap,
-  ) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 60,
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        decoration: isActive
-            ? BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF00AEEF), Color(0xFF063CA8)],
-                ),
-                borderRadius: BorderRadius.circular(12),
-              )
-            : null,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              color: isActive ? Colors.white : const Color(0xFFB0C4DE),
-              size: 22,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                color: isActive ? Colors.white : const Color(0xFFB0C4DE),
-                fontSize: 11,
-                fontFamily: 'Poppins',
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-                height: 1.2,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

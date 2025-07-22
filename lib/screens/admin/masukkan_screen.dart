@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'balas_screen.dart';
 import 'profile_screen.dart';
+import 'unified_bottom_navigation.dart';
 
 class MasukkanScreen extends StatelessWidget {
   const MasukkanScreen({super.key});
@@ -9,7 +12,7 @@ class MasukkanScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Background biru atas
+          // Background gradient
           Container(
             height: MediaQuery.of(context).size.height * 0.3,
             decoration: const BoxDecoration(
@@ -21,19 +24,31 @@ class MasukkanScreen extends StatelessWidget {
             ),
           ),
 
-          // Isi halaman
+          // Content
           SingleChildScrollView(
             child: Column(
               children: [
                 const SizedBox(height: 40),
 
-                // Logo di tengah
+                // Logo and City Name
                 Center(
                   child: Column(
                     children: [
-                      Image.asset(
-                        'assets/images/logo_bnn.png',
-                        height: 100,
+                      GestureDetector(
+                        onTap: () async {
+                          final Uri url = Uri.parse('https://surabayakota.bnn.go.id');
+                          if (!await launchUrl(url)) {
+                            throw Exception('Could not launch $url');
+                          }
+                        },
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          child: Image.asset(
+                            'assets/images/logo_bnn.png',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 6),
                       const Text(
@@ -41,7 +56,7 @@ class MasukkanScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -51,7 +66,7 @@ class MasukkanScreen extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // Kontainer putih isi
+                // Main content container
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -62,7 +77,7 @@ class MasukkanScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Tombol kembali & judul
+                      // Back button & title
                       Row(
                         children: [
                           InkWell(
@@ -97,15 +112,26 @@ class MasukkanScreen extends StatelessWidget {
 
                       const SizedBox(height: 20),
 
-                      // Masukan pengguna
+                      // Feedback cards
                       MasukanCard(
                         nama: 'Diana Cantika',
                         email: 'dianacanci123@gmail.com',
                         judul: 'Kurangnya Privasi Saat Konsultasi di Tempat Rehabilitasi',
-                        isi:
-                            'Halo BNN, saya mau sampaikan sedikit unek-unek waktu dampingi teman saya konsultasi ke salah satu tempat rehabilitasi. '
+                        isi: 'Halo BNN, saya mau sampaikan sedikit unek-unek waktu dampingi teman saya konsultasi ke salah satu tempat rehabilitasi. '
                             'Pas sesi konsultasi berlangsung, ruangannya ternyata terbuka dan ada beberapa orang lain yang bisa dengar pembicaraan. '
                             'Padahal menurut saya, untuk hal sensitif kayak gini, privasi itu penting banget.',
+                        tanggal: '20 Juli 2025',
+                        status: 'Belum Dibalas',
+                      ),
+
+                      MasukanCard(
+                        nama: 'Budi Santoso',
+                        email: 'budisantoso@gmail.com',
+                        judul: 'Saran Untuk Program Pencegahan di Sekolah',
+                        isi: 'Selamat siang BNN, saya ingin memberikan saran terkait program pencegahan narkoba di sekolah. '
+                            'Mungkin bisa ditambahkan sesi interaktif atau games yang lebih menarik agar siswa lebih antusias dalam mengikuti program.',
+                        tanggal: '19 Juli 2025',
+                        status: 'Sudah Dibalas',
                       ),
 
                       const SizedBox(height: 100),
@@ -143,12 +169,13 @@ class MasukkanScreen extends StatelessWidget {
   }
 }
 
-// Komponen kartu masukan
 class MasukanCard extends StatelessWidget {
   final String nama;
   final String email;
   final String judul;
   final String isi;
+  final String tanggal;
+  final String status;
 
   const MasukanCard({
     super.key,
@@ -156,6 +183,8 @@ class MasukanCard extends StatelessWidget {
     required this.email,
     required this.judul,
     required this.isi,
+    required this.tanggal,
+    required this.status,
   });
 
   @override
@@ -179,13 +208,32 @@ class MasukanCard extends StatelessWidget {
                 child: Icon(Icons.person, color: Colors.black),
               ),
               const SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(nama, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  Text(email, style: const TextStyle(color: Colors.grey)),
-                ],
-              )
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(nama, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(email, style: const TextStyle(color: Colors.grey)),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: status == 'Sudah Dibalas' 
+                      ? Colors.green.withOpacity(0.2) 
+                      : Colors.orange.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  status,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: status == 'Sudah Dibalas' ? Colors.green : Colors.orange,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 10),
@@ -216,14 +264,38 @@ class MasukanCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: TextButton(
-              onPressed: () {
-                // TODO: Navigasi ke balas_screen
-              },
-              child: const Text('< Balas >'),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                tanggal,
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 12,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BalasScreen(
+                        nama: nama,
+                        email: email,
+                        judul: judul,
+                        isi: isi,
+                      ),
+                    ),
+                  );
+                },
+                child: Text(
+                  status == 'Sudah Dibalas' ? '< Lihat Balasan >' : '< Balas >',
+                  style: const TextStyle(
+                    color: Color(0xFF0062F3),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -231,7 +303,6 @@ class MasukanCard extends StatelessWidget {
   }
 }
 
-// Footer item navigasi
 class FooterItem extends StatelessWidget {
   final IconData icon;
   final String label;

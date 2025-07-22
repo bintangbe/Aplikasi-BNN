@@ -30,13 +30,14 @@ class UnifiedBottomNavigation extends StatelessWidget {
       child: SafeArea(
         top: false,
         child: Container(
-          height: 60, // Further reduced from 65 to 60
+          height: 65, // Consistent height
           padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 4,
-          ), // Reduced vertical from 6 to 4
+            horizontal: 16,
+            vertical: 8,
+          ), // Consistent padding
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment
+                .spaceEvenly, // Changed to spaceEvenly for better distribution
             children: [
               _buildNavItem(
                 context,
@@ -89,41 +90,45 @@ class UnifiedBottomNavigation extends StatelessWidget {
   ) {
     final bool isActive = currentIndex == index;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 60,
-        padding: const EdgeInsets.symmetric(
-          vertical: 4,
-        ), // Further reduced from 6 to 4
-        decoration: isActive
-            ? BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF00AEEF), Color(0xFF063CA8)],
-                ),
-                borderRadius: BorderRadius.circular(12),
-              )
-            : null,
-        child: ClipRect(
-          // Added ClipRect to prevent overflow
+    return Expanded(
+      // Use Expanded to ensure equal width distribution
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: 48, // Fixed height for consistent appearance
+          padding: const EdgeInsets.symmetric(
+            vertical: 6,
+          ), // Consistent vertical padding
+          decoration: isActive
+              ? BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF00AEEF), Color(0xFF063CA8)],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                )
+              : null,
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 icon,
                 color: isActive ? Colors.white : const Color(0xFFB0C4DE),
-                size: 18, // Further reduced from 20 to 18
+                size: 20, // Consistent icon size
               ),
-              const SizedBox(height: 1), // Further reduced from 2 to 1
+              const SizedBox(height: 2), // Consistent spacing
               Text(
                 label,
                 style: TextStyle(
                   color: isActive ? Colors.white : const Color(0xFFB0C4DE),
-                  fontSize: 9, // Further reduced from 10 to 9
+                  fontSize: 10, // Consistent font size
                   fontFamily: 'Poppins',
                   fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-                  height: 1.0, // Further reduced from 1.1 to 1.0
+                  height: 1.1, // Consistent line height
                 ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
@@ -152,15 +157,24 @@ class UnifiedBottomNavigation extends StatelessWidget {
         targetScreen = const AdminRiwayatScreen();
         break;
       case 4:
-        targetScreen = const ProfileScreen();
+        targetScreen =
+            const ProfileScreen(); // Navigate to Profile/Account screen
         break;
       default:
         return;
     }
 
+    // Use pushReplacement to replace current screen
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => targetScreen),
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => targetScreen,
+        transitionDuration: const Duration(milliseconds: 300),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          // Smooth fade transition
+          return FadeTransition(opacity: animation, child: child);
+        },
+      ),
     );
   }
 }
