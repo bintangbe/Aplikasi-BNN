@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../constants/colors.dart';
 import 'register_user.dart';
+import 'beranda_user.dart';
 
 class LoginUserScreen extends StatefulWidget {
   const LoginUserScreen({super.key});
@@ -24,10 +25,7 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF063CA8),
-              Color(0xFF2563EB),
-            ],
+            colors: [Color(0xFF063CA8), Color(0xFF2563EB)],
           ),
         ),
         child: SafeArea(
@@ -339,12 +337,19 @@ class _LoginUserScreenState extends State<LoginUserScreen> {
   void _handleLogin() {
     if (_usernameController.text.isNotEmpty &&
         _passwordController.text.isNotEmpty) {
-      // TODO: Implement actual login logic
+      // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Login berhasil (dummy)!'),
+          content: Text('Login berhasil!'),
           backgroundColor: Color(0xFF10B981),
+          duration: Duration(seconds: 2),
         ),
+      );
+
+      // Navigate to beranda user and replace current screen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const BerandaUserScreen()),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
