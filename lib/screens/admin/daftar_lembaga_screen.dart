@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'detail_lembaga_screen.dart';
+import 'unified_bottom_navigation.dart';
 
 class DaftarLembagaScreen extends StatefulWidget {
   const DaftarLembagaScreen({super.key});
@@ -192,45 +193,60 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
+                ),
               ),
             ),
-          ),
-          SafeArea(
-            child: Column(
-              children: [
-                _buildAppBar(context),
-                Expanded(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFF8FAFC),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(25),
-                        topRight: Radius.circular(25),
+            SafeArea(
+              bottom: false,
+              child: Column(
+                children: [
+                  _buildAppBar(context),
+                  Expanded(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFF8FAFC),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(25),
+                          topRight: Radius.circular(25),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          _buildSearchAndFilter(),
+                          _buildStatistics(),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 100),
+                              child: _buildLembagaList(),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        _buildSearchAndFilter(),
-                        _buildStatistics(),
-                        Expanded(child: _buildLembagaList()),
-                        _buildBottomNavigation(),
-                      ],
-                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+            // Unified Bottom Navigation
+            const Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: UnifiedBottomNavigation(currentIndex: 0),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -485,7 +501,6 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
     // Null safety untuk semua field
     final name = lembaga['name'] ?? 'Nama tidak tersedia';
     final location = lembaga['location'] ?? 'Lokasi tidak tersedia';
-    final type = lembaga['type'] ?? 'Tipe tidak tersedia';
     final capacity = lembaga['capacity'] ?? 'Kapasitas tidak tersedia';
     final jamOperasional = lembaga['jamOperasional'] ?? 'Jam tidak tersedia';
     final image = lembaga['image'] ?? 'assets/images/placeholder.jpeg';
@@ -560,29 +575,6 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
                           Colors.transparent,
                           Colors.black.withOpacity(0.3),
                         ],
-                      ),
-                    ),
-                  ),
-                  // Type badge
-                  Positioned(
-                    top: 12,
-                    right: 12,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: _getTypeColor(type),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        type,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
                       ),
                     ),
                   ),
@@ -714,153 +706,6 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
                       ),
                     ),
                   ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Color _getTypeColor(String type) {
-    switch (type) {
-      case 'Rawat Inap':
-        return const Color(0xFFF59E0B);
-      case 'Rawat Jalan':
-        return const Color(0xFF3B82F6);
-      case 'Rawat Inap & Jalan':
-        return const Color(0xFF22C55E);
-      default:
-        return const Color(0xFF6B7280);
-    }
-  }
-
-  Widget _buildBottomNavigation() {
-    return Container(
-      height: 80,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/beranda-user');
-            },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.home_outlined, color: Colors.grey[400], size: 24),
-                const SizedBox(height: 4),
-                Text(
-                  'Beranda',
-                  style: TextStyle(
-                    color: Colors.grey[400],
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/persebaran');
-            },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.map_outlined, color: Colors.grey[400], size: 24),
-                const SizedBox(height: 4),
-                Text(
-                  'Persebaran',
-                  style: TextStyle(
-                    color: Colors.grey[400],
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/masukkan');
-            },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.report_outlined, color: Colors.grey[400], size: 24),
-                const SizedBox(height: 4),
-                Text(
-                  'Masukkan',
-                  style: TextStyle(
-                    color: Colors.grey[400],
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/ebook');
-            },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.book_outlined, color: Colors.grey[400], size: 24),
-                const SizedBox(height: 4),
-                Text(
-                  'E-Book',
-                  style: TextStyle(
-                    color: Colors.grey[400],
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/akun');
-            },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 16,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  'Akun',
-                  style: TextStyle(
-                    color: Color(0xFF063CA8),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
                 ),
               ],
             ),

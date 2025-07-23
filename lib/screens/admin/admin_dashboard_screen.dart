@@ -188,9 +188,9 @@ class AdminDashboardScreen extends StatelessWidget {
         const SizedBox(width: 16),
         Expanded(
           child: _buildActionCard(
-            title: 'Riwayat\nPengajuan',
+            title: 'Update\nPengajuan',
             color: const Color(0xFF22C55E),
-            icon: Icons.history,
+            icon: Icons.edit_document,
             onTap: () {
               Navigator.push(
                 context,
@@ -213,56 +213,35 @@ class AdminDashboardScreen extends StatelessWidget {
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: IntrinsicHeight(
-        child: Container(
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Stack(
-            clipBehavior: Clip.none,
+      child: Container(
+        height: 120, // Fixed height for consistency
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Positioned(
-                bottom: -8,
-                left: 0,
-                right: 0,
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(12),
-                    bottomRight: Radius.circular(12),
-                  ),
-                  child: SizedBox(
-                    height: 8,
-                    child: Row(
-                      children: List.generate(
-                        20,
-                        (index) => Expanded(
-                          child: Container(
-                            color: index.isEven ? Colors.yellow : Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(icon, color: Colors.white, size: 30),
-                    const SizedBox(height: 8),
-                    Text(
-                      title,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
+              Icon(icon, color: Colors.white, size: 32),
+              const SizedBox(height: 12),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  height: 1.2,
                 ),
               ),
             ],
@@ -409,24 +388,6 @@ class AdminDashboardScreen extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: _getTypeColor(lembaga['type']!).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    lembaga['type']!,
-                    style: TextStyle(
-                      color: _getTypeColor(lembaga['type']!),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
               ],
             ),
             const SizedBox(height: 8),
@@ -488,18 +449,5 @@ class AdminDashboardScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Color _getTypeColor(String type) {
-    switch (type) {
-      case 'Rawat Inap':
-        return const Color(0xFFFACC15);
-      case 'Rawat Jalan':
-        return const Color(0xFF60A5FA);
-      case 'Rawat Inap & Jalan':
-        return const Color(0xFF22C55E);
-      default:
-        return const Color(0xFF6B7280);
-    }
   }
 }

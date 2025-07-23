@@ -15,6 +15,7 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
   final _nomorIdentitasController = TextEditingController();
   final _alamatController = TextEditingController();
   String? _selectedLembaga;
+  String? _selectedKecamatan;
   bool _isLoading = false;
 
   final List<String> _lembagaOptions = [
@@ -25,6 +26,40 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
     'Yayasan Rumah Merah Putih Surabaya',
     'RS Menur Surabaya',
     'Omah Sehat Bersinar',
+  ];
+
+  final List<String> _kecamatanOptions = [
+    'Asemrowo',
+    'Benowo',
+    'Bubutan',
+    'Bulak',
+    'Dukuh Pakis',
+    'Gayungan',
+    'Genteng',
+    'Gubeng',
+    'Gunung Anyar',
+    'Jambangan',
+    'Karang Pilang',
+    'Kenjeran',
+    'Krembangan',
+    'Lakarsantri',
+    'Mulyorejo',
+    'Pabean Cantian',
+    'Pakal',
+    'Rungkut',
+    'Sambikerep',
+    'Sawahan',
+    'Semampir',
+    'Simokerto',
+    'Sukolilo',
+    'Sukomanunggal',
+    'Tambaksari',
+    'Tandes',
+    'Tegalsari',
+    'Tenggilis Mejoyo',
+    'Wiyung',
+    'Wonocolo',
+    'Wonokromo',
   ];
 
   @override
@@ -104,10 +139,16 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
 
                               const SizedBox(height: 16),
 
+                              // Dropdown Kecamatan
+                              _buildKecamatanDropdownField(),
+
+                              const SizedBox(height: 16),
+
                               _buildTextField(
-                                label: 'Alamat',
+                                label: 'Alamat Detail',
                                 controller: _alamatController,
-                                hintText: 'Masukkan alamat lengkap',
+                                hintText:
+                                    'Masukkan alamat detail (jalan, RT/RW, dll)',
                                 maxLines: 2,
                               ),
 
@@ -416,6 +457,77 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
     );
   }
 
+  Widget _buildKecamatanDropdownField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Kecamatan',
+          style: TextStyle(
+            color: Color(0xFF333333),
+            fontSize: 15,
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0x19000000),
+                blurRadius: 14,
+                offset: const Offset(0, 4),
+                spreadRadius: 0,
+              ),
+            ],
+          ),
+          child: DropdownButtonFormField<String>(
+            value: _selectedKecamatan,
+            decoration: InputDecoration(
+              hintText: 'Pilih kecamatan di Surabaya',
+              hintStyle: const TextStyle(
+                color: Color(0xFF333333),
+                fontSize: 15,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w400,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
+            ),
+            items: _kecamatanOptions.map((String kecamatan) {
+              return DropdownMenuItem<String>(
+                value: kecamatan,
+                child: Text(
+                  kecamatan,
+                  style: const TextStyle(
+                    color: Color(0xFF333333),
+                    fontSize: 15,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedKecamatan = newValue;
+              });
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
   void _handleSubmit() async {
     // Validation
     if (_namaController.text.isEmpty) {
@@ -428,8 +540,13 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
       return;
     }
 
+    if (_selectedKecamatan == null) {
+      _showErrorSnackBar('Silakan pilih kecamatan');
+      return;
+    }
+
     if (_alamatController.text.isEmpty) {
-      _showErrorSnackBar('Alamat tidak boleh kosong');
+      _showErrorSnackBar('Alamat detail tidak boleh kosong');
       return;
     }
 
