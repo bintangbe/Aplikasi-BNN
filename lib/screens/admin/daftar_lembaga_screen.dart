@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'detail_lembaga_screen.dart';
+import 'unified_bottom_navigation.dart';
 
 class DaftarLembagaScreen extends StatefulWidget {
   const DaftarLembagaScreen({super.key});
@@ -13,7 +14,7 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
   String searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
 
-  final List<Map<String, String>> allLembaga = [
+  final List<Map<String, dynamic>> allLembaga = [
     {
       'name': 'Yayasan Rumah Kita Surabaya',
       'location': 'Surabaya Timur',
@@ -24,6 +25,16 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
       'jamOperasional': '24 Jam',
       'fasilitas': 'Ruang rawat inap, ruang terapi, konseling',
       'image': 'assets/images/yayasan_rumah_kita.jpeg',
+      'deskripsi':
+          'Yayasan Rumah Kita adalah salah satu lembaga rehabilitasi narkoba terbaik di Surabaya yang telah berpengalaman dalam membantu para korban narkoba untuk sembuh total.',
+      'layanan': [
+        'Rehabilitasi Rawat Inap',
+        'Terapi Kelompok',
+        'Konseling Individual',
+        'Program Reintegrasi Sosial',
+        'Pendampingan Keluarga',
+      ],
+      'email': 'info@rumahkita.org',
     },
     {
       'name': 'Yayasan Orbit Surabaya',
@@ -35,7 +46,17 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
       'nomorTelepon': '(031) 5928587',
       'jamOperasional': '24 Jam',
       'fasilitas': 'Ruang rawat inap, ruang terapi, laboratorium, apotek',
-      'image': 'assets/images/yayasan_omah_sehat_bersinar.jpeg',
+      'image': 'assets/images/yayasan_orbit_surabaya.jpeg',
+      'deskripsi':
+          'Yayasan Orbit Surabaya berkomitmen memberikan layanan rehabilitasi narkoba yang komprehensif dengan fasilitas modern dan tenaga profesional berpengalaman.',
+      'layanan': [
+        'Rehabilitasi Rawat Inap',
+        'Detoksifikasi Medis',
+        'Terapi Kelompok',
+        'Konseling Psikologi',
+        'Program Vocational Training',
+      ],
+      'email': 'info@orbitsurabaya.org',
     },
     {
       'name': 'Yayasan Plato Surabaya',
@@ -47,54 +68,123 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
       'nomorTelepon': '(031) 5947890',
       'jamOperasional': '08.00 - 16.00 WIB',
       'fasilitas': 'Poliklinik umum, ruang konseling, farmasi',
-      'image': 'assets/images/yayasan_rumah_kita.jpeg',
+      'image': 'assets/images/yayasan_plato_surabaya.jpeg',
+      'deskripsi':
+          'Yayasan Plato Surabaya mengkhususkan diri dalam layanan rawat jalan dengan pendekatan terapi yang inovatif dan personal untuk setiap pasien.',
+      'layanan': [
+        'Rehabilitasi Rawat Jalan',
+        'Konseling Individual dan Keluarga',
+        'Terapi Kelompok',
+        'Program Relapse Prevention',
+        'Konsultasi Medis',
+      ],
+      'email': 'contact@platosurabaya.org',
     },
     {
-      'name': 'Yayasan Sehat Jiwa Surabaya',
-      'location': 'Surabaya Barat',
+      'name': 'Yayasan LRPPN-BI Surabaya',
+      'location': 'Surabaya Selatan',
       'type': 'Rawat Inap & Jalan',
       'capacity': '35 tempat tidur',
-      'alamatLengkap': 'Jl. Raya Darmo No. 123, Surabaya Barat',
-      'nomorTelepon': '(031) 7654321',
-      'jamOperasional': '24 Jam',
+      'alamatLengkap':
+          'Jl. Khairil Anwar No.23, Darmo, Kec. Wonokromo, Surabaya',
+      'nomorTelepon': '0889-8900-7635',
+      'jamOperasional': '09.00 - 17.00 WIB',
       'fasilitas':
           'Ruang rawat inap, poliklinik, terapi kelompok, konseling individu',
-      'image': 'assets/images/yayasan_omah_sehat_bersinar.jpeg',
+      'image': 'assets/images/yayasan_lrppn_surabaya.jpeg',
+      'deskripsi':
+          'Yayasan LRPPN-BI Surabaya menyediakan layanan rehabilitasi komprehensif untuk korban narkoba dengan program rawat inap dan rawat jalan.',
+      'layanan': [
+        'Rehabilitasi Rawat Inap & Jalan',
+        'Terapi Kelompok',
+        'Konseling Individual',
+        'Program Reintegrasi Sosial',
+        'Poliklinik Umum',
+      ],
+      'email': 'info@lrppnsurabaya.org',
     },
     {
-      'name': 'Yayasan Harapan Baru',
-      'location': 'Surabaya Selatan',
+      'name': 'Yayasan Rumah Merah Putih Surabaya',
+      'location': 'Sidoarjo',
       'type': 'Rawat Jalan',
       'capacity': '15 tempat tidur',
-      'alamatLengkap': 'Jl. Ahmad Yani No. 456, Surabaya Selatan',
-      'nomorTelepon': '(031) 9876543',
-      'jamOperasional': '07.00 - 15.00 WIB',
+      'alamatLengkap': 'Jl. Blimbing I No.18, Ngipa, Wadungasri, Kec. Waru',
+      'nomorTelepon': 'Tidak tersedia',
+      'jamOperasional': '09.00 - 15.00 WIB',
       'fasilitas': 'Konseling, terapi kelompok, program rehabilitasi sosial',
-      'image': 'assets/images/yayasan_rumah_kita.jpeg',
+      'image': 'assets/images/yayasan_rumah_merah_putih.jpeg',
+      'deskripsi':
+          'Yayasan Rumah Merah Putih fokus pada program rehabilitasi sosial dengan pendekatan komunitas untuk membantu pemulihan korban narkoba.',
+      'layanan': [
+        'Rehabilitasi Rawat Jalan',
+        'Konseling Psikologi',
+        'Terapi Kelompok',
+        'Program Rehabilitasi Sosial',
+        'Pendampingan Keluarga',
+      ],
+      'email': 'info@rumahmerahputih.org',
     },
     {
-      'name': 'Yayasan Cahaya Bangsa',
-      'location': 'Surabaya Utara',
+      'name': 'Yayasan Griya Ashefa Pusaka Surabaya',
+      'location': 'Surabaya',
       'type': 'Rawat Inap',
-      'capacity': '40 tempat tidur',
-      'alamatLengkap': 'Jl. Kenjeran No. 789, Surabaya Utara',
-      'nomorTelepon': '(031) 1234567',
-      'jamOperasional': '24 Jam',
-      'fasilitas':
-          'Ruang rawat inap, laboratorium, farmasi, ruang terapi musik',
+      'capacity': 'Coming Soon',
+      'alamatLengkap': 'Coming Soon',
+      'nomorTelepon': 'Coming Soon',
+      'jamOperasional': 'Coming Soon',
+      'fasilitas': 'Coming Soon',
+      'image': 'assets/images/placeholder.jpeg',
+      'deskripsi': 'Yayasan Griya Ashefa Pusaka akan segera hadir di Surabaya.',
+      'layanan': ['Coming Soon'],
+      'email': 'info@ashefasurabaya.org',
+    },
+    {
+      'name': 'RS Menur Surabaya',
+      'location': 'Surabaya Pusat',
+      'type': 'Rawat Jalan',
+      'capacity': '20 tempat tidur',
+      'alamatLengkap':
+          'Jl.Raya Menur No.120, Kelurahan Kertajaya, Kecamatan Airlagga, Kota Surabaya',
+      'nomorTelepon': '0811-3633-120',
+      'jamOperasional': 'Buka 24 jam',
+      'fasilitas': 'Konseling, terapi seni, program rehabilitasi keluarga',
+      'image': 'assets/images/rs_menur_surabaya.jpeg',
+      'deskripsi':
+          'RS Menur Surabaya menyediakan layanan medis dan rehabilitasi dengan pendekatan holistik untuk pemulihan korban narkoba.',
+      'layanan': [
+        'Rehabilitasi Rawat Jalan',
+        'Konseling Individual dan Keluarga',
+        'Terapi Seni',
+        'Program Rehabilitasi Keluarga',
+        'Layanan Medis 24 Jam',
+      ],
+      'email': 'info@rsmenur.co.id',
+    },
+    {
+      'name': 'Omah Sehat Bersinar',
+      'location': 'Surabaya Pusat',
+      'type': 'Rawat Inap',
+      'capacity': '30 tempat tidur',
+      'alamatLengkap': 'Jl. Jemur Andayani No.50 Surabaya',
+      'nomorTelepon': 'Tidak tersedia',
+      'jamOperasional': '08.00 - 17.00 WIB',
+      'fasilitas': 'Ruang rawat inap, ruang terapi, konseling keluarga',
       'image': 'assets/images/yayasan_omah_sehat_bersinar.jpeg',
     },
   ];
 
-  List<Map<String, String>> get filteredLembaga {
+  List<Map<String, dynamic>> get filteredLembaga {
     var filtered = allLembaga.where((lembaga) {
-      final matchesFilter =
-          selectedFilter == 'Semua' || lembaga['type'] == selectedFilter;
+      // Null safety checks
+      final name = lembaga['name'] ?? '';
+      final location = lembaga['location'] ?? '';
+      final type = lembaga['type'] ?? '';
+
+      final matchesFilter = selectedFilter == 'Semua' || type == selectedFilter;
       final matchesSearch =
-          lembaga['name']!.toLowerCase().contains(searchQuery.toLowerCase()) ||
-          lembaga['location']!.toLowerCase().contains(
-            searchQuery.toLowerCase(),
-          );
+          name.toLowerCase().contains(searchQuery.toLowerCase()) ||
+          location.toLowerCase().contains(searchQuery.toLowerCase());
+
       return matchesFilter && matchesSearch;
     }).toList();
 
@@ -103,44 +193,60 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
+                ),
               ),
             ),
-          ),
-          SafeArea(
-            child: Column(
-              children: [
-                _buildAppBar(context),
-                Expanded(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFF8FAFC),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(25),
-                        topRight: Radius.circular(25),
+            SafeArea(
+              bottom: false,
+              child: Column(
+                children: [
+                  _buildAppBar(context),
+                  Expanded(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFF8FAFC),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(25),
+                          topRight: Radius.circular(25),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          _buildSearchAndFilter(),
+                          _buildStatistics(),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 100),
+                              child: _buildLembagaList(),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        _buildSearchAndFilter(),
-                        _buildStatistics(),
-                        Expanded(child: _buildLembagaList()),
-                      ],
-                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+            // Unified Bottom Navigation
+            const Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: UnifiedBottomNavigation(currentIndex: 0),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -290,10 +396,10 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
     final filteredCount = filteredLembaga.length;
     final totalCount = allLembaga.length;
     final rawatInapCount = allLembaga
-        .where((l) => l['type']!.contains('Rawat Inap'))
+        .where((l) => (l['type'] ?? '').contains('Rawat Inap'))
         .length;
     final rawatJalanCount = allLembaga
-        .where((l) => l['type']!.contains('Rawat Jalan'))
+        .where((l) => (l['type'] ?? '').contains('Rawat Jalan'))
         .length;
 
     return Container(
@@ -391,7 +497,14 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
     );
   }
 
-  Widget _buildLembagaCard(Map<String, String> lembaga) {
+  Widget _buildLembagaCard(Map<String, dynamic> lembaga) {
+    // Null safety untuk semua field
+    final name = lembaga['name'] ?? 'Nama tidak tersedia';
+    final location = lembaga['location'] ?? 'Lokasi tidak tersedia';
+    final capacity = lembaga['capacity'] ?? 'Kapasitas tidak tersedia';
+    final jamOperasional = lembaga['jamOperasional'] ?? 'Jam tidak tersedia';
+    final image = lembaga['image'] ?? 'assets/images/placeholder.jpeg';
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -416,45 +529,52 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
-              image: DecorationImage(
-                image: AssetImage(lembaga['image']!),
-                fit: BoxFit.cover,
-                onError: (exception, stackTrace) {},
-              ),
+              color: Colors.grey[200], // Fallback color
             ),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                ),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, Colors.black.withOpacity(0.3)],
-                ),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
               ),
               child: Stack(
                 children: [
-                  Positioned(
-                    top: 12,
-                    right: 12,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
+                  // Image with error handling
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(image),
+                        fit: BoxFit.cover,
+                        onError: (exception, stackTrace) {
+                          debugPrint('Error loading image: $image');
+                        },
                       ),
-                      decoration: BoxDecoration(
-                        color: _getTypeColor(lembaga['type']!),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        lembaga['type']!,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    ),
+                    // Fallback when image fails to load
+                    child: image.contains('placeholder') || image.isEmpty
+                        ? Container(
+                            color: Colors.grey[300],
+                            child: Center(
+                              child: Icon(
+                                Icons.image_not_supported,
+                                size: 40,
+                                color: Colors.grey[500],
+                              ),
+                            ),
+                          )
+                        : null,
+                  ),
+                  // Gradient overlay
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withOpacity(0.3),
+                        ],
                       ),
                     ),
                   ),
@@ -469,12 +589,14 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  lembaga['name']!,
+                  name,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF1D4ED8),
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 8),
                 Row(
@@ -483,8 +605,10 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
                     const SizedBox(width: 4),
                     Expanded(
                       child: Text(
-                        lembaga['location']!,
+                        location,
                         style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
@@ -496,8 +620,10 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
                     const SizedBox(width: 4),
                     Expanded(
                       child: Text(
-                        lembaga['capacity']!,
+                        capacity,
                         style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
@@ -509,8 +635,10 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
                     const SizedBox(width: 4),
                     Expanded(
                       child: Text(
-                        lembaga['jamOperasional']!,
+                        jamOperasional,
                         style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
@@ -585,19 +713,6 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
         ],
       ),
     );
-  }
-
-  Color _getTypeColor(String type) {
-    switch (type) {
-      case 'Rawat Inap':
-        return const Color(0xFFF59E0B);
-      case 'Rawat Jalan':
-        return const Color(0xFF3B82F6);
-      case 'Rawat Inap & Jalan':
-        return const Color(0xFF22C55E);
-      default:
-        return const Color(0xFF6B7280);
-    }
   }
 
   @override

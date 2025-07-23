@@ -275,20 +275,6 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              TextButton(
-                onPressed: () {
-                  // TODO: Navigate to all news
-                },
-                child: const Text(
-                  'Lihat Semua',
-                  style: TextStyle(
-                    color: Color(0xFF3B82F6),
-                    fontSize: 14,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
             ],
           ),
           const SizedBox(height: 16),

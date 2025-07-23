@@ -3,7 +3,7 @@ import 'unified_bottom_navigation.dart';
 import 'profile_screen.dart';
 
 class DetailLembagaScreen extends StatelessWidget {
-  final Map<String, String> lembagaData;
+  final Map<String, dynamic> lembagaData;
 
   const DetailLembagaScreen({super.key, required this.lembagaData});
 
@@ -277,7 +277,7 @@ class DetailLembagaScreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Image.asset(
-                    'assets/images/yayasan_rumah_kita.jpeg',
+                    lembagaData['image'] ?? 'assets/images/placeholder.jpeg',
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       // Fallback icon if image fails to load
@@ -309,7 +309,7 @@ class DetailLembagaScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      lembagaData['name'] ?? 'Yayasan Rumah Kita',
+                      lembagaData['name'] ?? 'Nama Lembaga',
                       style: const TextStyle(
                         color: Color(0xFF1A1A1A),
                         fontSize: 16,
@@ -330,7 +330,7 @@ class DetailLembagaScreen extends StatelessWidget {
                         Expanded(
                           child: Text(
                             lembagaData['alamatLengkap'] ??
-                                'Jl. Ngagel Madya II / 9 Surabaya',
+                                'Alamat tidak tersedia',
                             style: const TextStyle(
                               color: Color(0xFF666666),
                               fontSize: 12,
@@ -352,12 +352,35 @@ class DetailLembagaScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          lembagaData['nomorTelepon'] ?? '088102367299',
+                          lembagaData['nomorTelepon'] ?? 'Tidak tersedia',
                           style: const TextStyle(
                             color: Color(0xFF666666),
                             fontSize: 12,
                             fontFamily: 'Mulish',
                             fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.access_time_outlined,
+                          size: 16,
+                          color: Color(0xFF666666),
+                        ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            lembagaData['jamOperasional'] ??
+                                'Jam operasional tidak tersedia',
+                            style: const TextStyle(
+                              color: Color(0xFF666666),
+                              fontSize: 12,
+                              fontFamily: 'Mulish',
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ],
@@ -507,8 +530,6 @@ class DetailLembagaScreen extends StatelessWidget {
                 _buildKapasitasRow('Rawat Jalan', '2', false),
                 const SizedBox(height: 12),
                 _buildKapasitasRow('Pasca Rehab', '2', false),
-                const SizedBox(height: 12),
-                _buildKapasitasRow('SKSR', '2', false),
               ],
             ),
           ),

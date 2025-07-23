@@ -188,9 +188,9 @@ class AdminDashboardScreen extends StatelessWidget {
         const SizedBox(width: 16),
         Expanded(
           child: _buildActionCard(
-            title: 'Riwayat\nPengajuan',
+            title: 'Update\nPengajuan',
             color: const Color(0xFF22C55E),
-            icon: Icons.history,
+            icon: Icons.edit_document,
             onTap: () {
               Navigator.push(
                 context,
@@ -213,56 +213,35 @@ class AdminDashboardScreen extends StatelessWidget {
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: IntrinsicHeight(
-        child: Container(
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Stack(
-            clipBehavior: Clip.none,
+      child: Container(
+        height: 120, // Fixed height for consistency
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Positioned(
-                bottom: -8,
-                left: 0,
-                right: 0,
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(12),
-                    bottomRight: Radius.circular(12),
-                  ),
-                  child: SizedBox(
-                    height: 8,
-                    child: Row(
-                      children: List.generate(
-                        20,
-                        (index) => Expanded(
-                          child: Container(
-                            color: index.isEven ? Colors.yellow : Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(icon, color: Colors.white, size: 30),
-                    const SizedBox(height: 8),
-                    Text(
-                      title,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
+              Icon(icon, color: Colors.white, size: 32),
+              const SizedBox(height: 12),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  height: 1.2,
                 ),
               ),
             ],
@@ -283,6 +262,17 @@ class AdminDashboardScreen extends StatelessWidget {
         'nomorTelepon': '088102367299',
         'jamOperasional': '24 Jam',
         'fasilitas': 'Ruang rawat inap, ruang terapi, konseling',
+        'image': 'assets/images/yayasan_rumah_kita.jpeg',
+        'deskripsi':
+            'Yayasan Rumah Kita adalah salah satu lembaga rehabilitasi narkoba terbaik di Surabaya yang telah berpengalaman dalam membantu para korban narkoba untuk sembuh total.',
+        'layanan': [
+          'Rehabilitasi Rawat Inap',
+          'Terapi Kelompok',
+          'Konseling Individual',
+          'Program Reintegrasi Sosial',
+          'Pendampingan Keluarga',
+        ],
+        'email': 'info@rumahkita.org',
       },
       {
         'name': 'Yayasan Orbit Surabaya',
@@ -294,6 +284,17 @@ class AdminDashboardScreen extends StatelessWidget {
         'nomorTelepon': '(031) 5928587',
         'jamOperasional': '24 Jam',
         'fasilitas': 'Ruang rawat inap, ruang terapi, laboratorium, apotek',
+        'image': 'assets/images/yayasan_orbit_surabaya.jpeg',
+        'deskripsi':
+            'Yayasan Orbit Surabaya berkomitmen memberikan layanan rehabilitasi narkoba yang komprehensif dengan fasilitas modern dan tenaga profesional berpengalaman.',
+        'layanan': [
+          'Rehabilitasi Rawat Inap',
+          'Detoksifikasi Medis',
+          'Terapi Kelompok',
+          'Konseling Psikologi',
+          'Program Vocational Training',
+        ],
+        'email': 'info@orbitsurabaya.org',
       },
       {
         'name': 'Yayasan Plato Surabaya',
@@ -305,6 +306,17 @@ class AdminDashboardScreen extends StatelessWidget {
         'nomorTelepon': '(031) 5947890',
         'jamOperasional': '08.00 - 16.00 WIB',
         'fasilitas': 'Poliklinik umum, ruang konseling, farmasi',
+        'image': 'assets/images/yayasan_plato_surabaya.jpeg',
+        'deskripsi':
+            'Yayasan Plato Surabaya mengkhususkan diri dalam layanan rawat jalan dengan pendekatan terapi yang inovatif dan personal untuk setiap pasien.',
+        'layanan': [
+          'Rehabilitasi Rawat Jalan',
+          'Konseling Individual dan Keluarga',
+          'Terapi Kelompok',
+          'Program Relapse Prevention',
+          'Konsultasi Medis',
+        ],
+        'email': 'contact@platosurabaya.org',
       },
     ];
 
@@ -349,7 +361,7 @@ class AdminDashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLembagaItem(BuildContext context, Map<String, String> lembaga) {
+  Widget _buildLembagaItem(BuildContext context, Map<String, dynamic> lembaga) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Container(
@@ -364,32 +376,16 @@ class AdminDashboardScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  lembaga['name']!,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Color(0xFF1D4ED8),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: _getTypeColor(lembaga['type']!).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                Expanded(
                   child: Text(
-                    lembaga['type']!,
-                    style: TextStyle(
-                      color: _getTypeColor(lembaga['type']!),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
+                    lembaga['name']!,
+                    style: const TextStyle(
+                      color: Color(0xFF1D4ED8),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
@@ -399,16 +395,24 @@ class AdminDashboardScreen extends StatelessWidget {
               children: [
                 const Icon(Icons.location_on, size: 16, color: Colors.grey),
                 const SizedBox(width: 4),
-                Text(
-                  lembaga['location']!,
-                  style: const TextStyle(color: Colors.grey, fontSize: 14),
+                Expanded(
+                  child: Text(
+                    lembaga['location']!,
+                    style: const TextStyle(color: Colors.grey, fontSize: 14),
+                  ),
                 ),
-                const SizedBox(width: 16),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
                 const Icon(Icons.people, size: 16, color: Colors.grey),
                 const SizedBox(width: 4),
-                Text(
-                  lembaga['capacity']!,
-                  style: const TextStyle(color: Colors.grey, fontSize: 14),
+                Expanded(
+                  child: Text(
+                    lembaga['capacity']!,
+                    style: const TextStyle(color: Colors.grey, fontSize: 14),
+                  ),
                 ),
               ],
             ),
@@ -426,26 +430,24 @@ class AdminDashboardScreen extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF3B82F6),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
-                child: const Text('Lihat Detail'),
+                child: const Text(
+                  'Lihat Detail',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                ),
               ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  Color _getTypeColor(String type) {
-    switch (type) {
-      case 'Rawat Inap':
-        return const Color(0xFFFACC15);
-      case 'Rawat Jalan':
-        return const Color(0xFF60A5FA);
-      case 'Rawat Inap & Jalan':
-        return const Color(0xFF22C55E);
-      default:
-        return const Color(0xFF6B7280);
-    }
   }
 }
