@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
-import '../constants/text_styles.dart';
+import 'user/beranda_user.dart';
+import 'admin/admin_dashboard_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -31,7 +32,7 @@ class LoginScreen extends StatelessWidget {
                 // BNN Logo & Title
                 Column(
                   children: [
-                    // BNN Logo (placeholder circle)
+                    // BNN Logo
                     Container(
                       width: 100,
                       height: 100,
@@ -39,14 +40,22 @@ class LoginScreen extends StatelessWidget {
                         shape: BoxShape.circle,
                         color: AppColors.white,
                       ),
-                      child: const Center(
-                        child: Text(
-                          'BNN',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.logoBlue,
-                          ),
+                      child: ClipOval(
+                        child: Image.asset(
+                          'assets/images/logo_bnn.png',
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Center(
+                              child: Text(
+                                'BNN',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.logoBlue,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -118,7 +127,12 @@ class LoginScreen extends StatelessWidget {
                                 'Login Masyarakat',
                                 AppColors.buttonMasyarakat,
                                 () {
-                                  // Navigate to Masyarakat
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const BerandaUserScreen(),
+                                    ),
+                                  );
                                 },
                               ),
                               
@@ -128,7 +142,12 @@ class LoginScreen extends StatelessWidget {
                                 'Login Lembaga',
                                 AppColors.buttonLembaga,
                                 () {
-                                  // Navigate to Lembaga
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const BerandaUserScreen(),
+                                    ),
+                                  );
                                 },
                               ),
                               
@@ -138,7 +157,12 @@ class LoginScreen extends StatelessWidget {
                                 'Login Penyidik',
                                 AppColors.buttonPenyidik,
                                 () {
-                                  // Navigate to Penyidik
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const AdminDashboardScreen(),
+                                    ),
+                                  );
                                 },
                               ),
                               
@@ -148,7 +172,12 @@ class LoginScreen extends StatelessWidget {
                                 'Login Admin',
                                 AppColors.buttonAdmin,
                                 () {
-                                  // Navigate to Admin
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const AdminDashboardScreen(),
+                                    ),
+                                  );
                                 },
                               ),
                             ],

@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="bnn_app"
+        android:label="BNN Surabaya"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

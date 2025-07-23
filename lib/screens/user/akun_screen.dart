@@ -3,6 +3,10 @@ import 'beranda_user.dart';
 import 'persebaran_screen.dart';
 import 'masukkan_screen.dart';
 import 'ebook_screen.dart';
+import 'profil_bnnk_screen.dart';
+import 'notifikasi_screen.dart';
+import 'ubah_password_user_screen.dart';
+import '../login_screen.dart';
 
 class AkunScreen extends StatefulWidget {
   const AkunScreen({super.key});
@@ -148,7 +152,7 @@ class _AkunScreenState extends State<AkunScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Icon(
@@ -177,6 +181,9 @@ class _AkunScreenState extends State<AkunScreen> {
   }
 
   Widget _buildProfileSection() {
+    // Dummy data, ganti dengan data user dari backend jika ada
+    const String namaUser = 'Oktavian';
+    const String emailUser = 'oktavian@email.com';
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.all(24),
@@ -186,7 +193,7 @@ class _AkunScreenState extends State<AkunScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             spreadRadius: 1,
             blurRadius: 4,
             offset: const Offset(0, 2),
@@ -205,9 +212,9 @@ class _AkunScreenState extends State<AkunScreen> {
             child: const Icon(Icons.person, color: Colors.white, size: 40),
           ),
           const SizedBox(height: 16),
-          const Text(
-            'User BNN',
-            style: TextStyle(
+          Text(
+            namaUser,
+            style: const TextStyle(
               color: Colors.black,
               fontSize: 20,
               fontFamily: 'Inter',
@@ -215,30 +222,13 @@ class _AkunScreenState extends State<AkunScreen> {
             ),
           ),
           const SizedBox(height: 4),
-          const Text(
-            'Pengguna Aplikasi BNN Surabaya',
-            style: TextStyle(
+          Text(
+            emailUser,
+            style: const TextStyle(
               color: Colors.black54,
               fontSize: 14,
               fontFamily: 'Inter',
               fontWeight: FontWeight.w400,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: const Color(0xFF10B981).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: const Text(
-              'Akun Terverifikasi',
-              style: TextStyle(
-                color: Color(0xFF10B981),
-                fontSize: 12,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w600,
-              ),
             ),
           ),
         ],
@@ -252,52 +242,92 @@ class _AkunScreenState extends State<AkunScreen> {
       child: Column(
         children: [
           _buildMenuCard(
-            'Profil Saya',
+            'Profil BNNK Surabaya',
             Icons.person_outline,
-            'Edit informasi pribadi dan data akun',
-            () => _showComingSoon('Edit Profil'),
-          ),
-          const SizedBox(height: 12),
-          _buildMenuCard(
-            'Riwayat Laporan',
-            Icons.history,
-            'Lihat riwayat pengaduan dan permintaan bantuan',
-            () => _showComingSoon('Riwayat Laporan'),
+            'Lihat informasi profil BNNK Surabaya',
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ProfilBNNKScreen(),
+              ),
+            ),
           ),
           const SizedBox(height: 12),
           _buildMenuCard(
             'Notifikasi',
             Icons.notifications_outlined,
-            'Kelola pengaturan notifikasi aplikasi',
-            () => _showComingSoon('Pengaturan Notifikasi'),
+            'Pesan dari admin',
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NotifikasiScreen(),
+              ),
+            ),
           ),
           const SizedBox(height: 12),
           _buildMenuCard(
             'Keamanan',
             Icons.security,
-            'Ubah password dan pengaturan keamanan',
-            () => _showComingSoon('Pengaturan Keamanan'),
-          ),
-          const SizedBox(height: 12),
-          _buildMenuCard(
-            'Bantuan & FAQ',
-            Icons.help_outline,
-            'Pusat bantuan dan pertanyaan yang sering diajukan',
-            () => _showHelpDialog(),
-          ),
-          const SizedBox(height: 12),
-          _buildMenuCard(
-            'Tentang Aplikasi',
-            Icons.info_outline,
-            'Informasi aplikasi dan versi terbaru',
-            () => _showAboutDialog(),
+            'Ubah password',
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const UbahPasswordUserScreen(),
+              ),
+            ),
           ),
           const SizedBox(height: 12),
           _buildMenuCard(
             'Keluar',
             Icons.logout,
             'Keluar dari akun dan kembali ke halaman login',
-            () => _showLogoutDialog(),
+            () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  title: const Text(
+                    'Konfirmasi Keluar',
+                    style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w700),
+                  ),
+                  content: const Text(
+                    'Apakah Anda yakin ingin keluar dari aplikasi?',
+                    style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w400),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text(
+                        'Batal',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context); // Tutup dialog
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => const LoginScreen()),
+                          (route) => false,
+                        );
+                      },
+                      child: const Text(
+                        'Keluar',
+                        style: TextStyle(
+                          color: Color(0xFFEF4444),
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
             isLogout: true,
           ),
         ],
@@ -322,7 +352,7 @@ class _AkunScreenState extends State<AkunScreen> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               spreadRadius: 1,
               blurRadius: 4,
               offset: const Offset(0, 2),
@@ -336,8 +366,8 @@ class _AkunScreenState extends State<AkunScreen> {
               height: 48,
               decoration: BoxDecoration(
                 color: isLogout
-                    ? const Color(0xFFEF4444).withOpacity(0.1)
-                    : const Color(0xFF3B82F6).withOpacity(0.1),
+                    ? const Color(0xFFEF4444).withValues(alpha: 0.1)
+                    : const Color(0xFF3B82F6).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -450,217 +480,6 @@ class _AkunScreenState extends State<AkunScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  void _showComingSoon(String feature) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Segera Hadir',
-          style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w700),
-        ),
-        content: Text(
-          'Fitur $feature sedang dalam pengembangan dan akan segera tersedia.',
-          style: const TextStyle(
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text(
-              'OK',
-              style: TextStyle(
-                color: Color(0xFF2563EB),
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showHelpDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Bantuan & FAQ',
-          style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w700),
-        ),
-        content: const SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Q: Bagaimana cara melaporkan kejadian narkoba?',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                ),
-              ),
-              SizedBox(height: 4),
-              Text(
-                'A: Gunakan menu "Masukkan" untuk mengisi form pengaduan.',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                ),
-              ),
-              SizedBox(height: 12),
-              Text(
-                'Q: Apakah data saya aman?',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                ),
-              ),
-              SizedBox(height: 4),
-              Text(
-                'A: Ya, semua data pribadi dijaga kerahasiaannya sesuai kebijakan privasi.',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text(
-              'Tutup',
-              style: TextStyle(
-                color: Color(0xFF2563EB),
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showAboutDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Tentang Aplikasi',
-          style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w700),
-        ),
-        content: const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Aplikasi BNN Kota Surabaya',
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Versi: 1.0.0',
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Dikembangkan oleh BNN Kota Surabaya untuk mendukung program P4GN (Pencegahan dan Pemberantasan Penyalahgunaan dan Peredaran Gelap Narkoba).',
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-                height: 1.5,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text(
-              'Tutup',
-              style: TextStyle(
-                color: Color(0xFF2563EB),
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showLogoutDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Keluar',
-          style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w700),
-        ),
-        content: const Text(
-          'Apakah Anda yakin ingin keluar dari aplikasi?',
-          style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w400),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text(
-              'Batal',
-              style: TextStyle(
-                color: Colors.grey,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context); // Close dialog
-              Navigator.pop(context); // Go back to previous screen
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Berhasil keluar dari aplikasi'),
-                  backgroundColor: Color(0xFF10B981),
-                ),
-              );
-            },
-            child: const Text(
-              'Keluar',
-              style: TextStyle(
-                color: Color(0xFFEF4444),
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

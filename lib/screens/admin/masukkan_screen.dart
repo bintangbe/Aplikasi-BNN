@@ -122,6 +122,7 @@ class MasukkanScreen extends StatelessWidget {
                             'Padahal menurut saya, untuk hal sensitif kayak gini, privasi itu penting banget.',
                         tanggal: '20 Juli 2025',
                         status: 'Belum Dibalas',
+                        balasan: null,
                       ),
 
                       MasukanCard(
@@ -132,6 +133,9 @@ class MasukkanScreen extends StatelessWidget {
                             'Mungkin bisa ditambahkan sesi interaktif atau games yang lebih menarik agar siswa lebih antusias dalam mengikuti program.',
                         tanggal: '19 Juli 2025',
                         status: 'Sudah Dibalas',
+                        balasan: 'Terima kasih atas saran yang sangat berharga, Bapak Budi. Kami sangat mengapresiasi masukan Anda terkait program pencegahan narkoba di sekolah. '
+                            'Saran Anda untuk menambahkan sesi interaktif dan games edukatif akan kami sampaikan kepada tim yang bertanggung jawab untuk pengembangan program. '
+                            'Kami terus berupaya meningkatkan metode penyampaian agar lebih menarik dan efektif bagi para siswa.',
                       ),
 
                       const SizedBox(height: 100),
@@ -169,13 +173,14 @@ class MasukkanScreen extends StatelessWidget {
   }
 }
 
-class MasukanCard extends StatelessWidget {
+class MasukanCard extends StatefulWidget {
   final String nama;
   final String email;
   final String judul;
   final String isi;
   final String tanggal;
   final String status;
+  final String? balasan;
 
   const MasukanCard({
     super.key,
@@ -185,7 +190,15 @@ class MasukanCard extends StatelessWidget {
     required this.isi,
     required this.tanggal,
     required this.status,
+    this.balasan,
   });
+
+  @override
+  State<MasukanCard> createState() => _MasukanCardState();
+}
+
+class _MasukanCardState extends State<MasukanCard> {
+  bool showBalasan = false;
 
   @override
   Widget build(BuildContext context) {
@@ -212,24 +225,24 @@ class MasukanCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(nama, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    Text(email, style: const TextStyle(color: Colors.grey)),
+                    Text(widget.nama, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(widget.email, style: const TextStyle(color: Colors.grey)),
                   ],
                 ),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: status == 'Sudah Dibalas' 
+                  color: widget.status == 'Sudah Dibalas' 
                       ? Colors.green.withOpacity(0.2) 
                       : Colors.orange.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  status,
+                  widget.status,
                   style: TextStyle(
                     fontSize: 12,
-                    color: status == 'Sudah Dibalas' ? Colors.green : Colors.orange,
+                    color: widget.status == 'Sudah Dibalas' ? Colors.green : Colors.orange,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -244,7 +257,7 @@ class MasukanCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
-              'Judul: $judul',
+              'Judul: ${widget.judul}',
               style: const TextStyle(fontWeight: FontWeight.w500),
             ),
           ),
@@ -259,16 +272,66 @@ class MasukanCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                TextSpan(text: isi),
+                TextSpan(text: widget.isi),
               ],
             ),
           ),
+          
+          // Tampilkan balasan jika ada dan showBalasan true
+          if (widget.balasan != null && showBalasan) ...[
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color(0xFF0062F3).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: const Color(0xFF0062F3).withOpacity(0.3),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const CircleAvatar(
+                        backgroundColor: Color(0xFF0062F3),
+                        radius: 16,
+                        child: Icon(
+                          Icons.support_agent,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'Admin BNN',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF0062F3),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    widget.balasan!,
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+          
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                tanggal,
+                widget.tanggal,
                 style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 12,
@@ -276,20 +339,28 @@ class MasukanCard extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BalasScreen(
-                        nama: nama,
-                        email: email,
-                        judul: judul,
-                        isi: isi,
+                  if (widget.status == 'Sudah Dibalas' && widget.balasan != null) {
+                    setState(() {
+                      showBalasan = !showBalasan;
+                    });
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BalasScreen(
+                          nama: widget.nama,
+                          email: widget.email,
+                          judul: widget.judul,
+                          isi: widget.isi,
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  }
                 },
                 child: Text(
-                  status == 'Sudah Dibalas' ? '< Lihat Balasan >' : '< Balas >',
+                  widget.status == 'Sudah Dibalas' 
+                      ? (showBalasan ? '< Sembunyikan >' : '< Lihat Balasan >') 
+                      : '< Balas >',
                   style: const TextStyle(
                     color: Color(0xFF0062F3),
                   ),

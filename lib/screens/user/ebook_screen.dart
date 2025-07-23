@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'beranda_user.dart';
 import 'persebaran_screen.dart';
 import 'masukkan_screen.dart';
@@ -24,24 +25,24 @@ class _EbookScreenState extends State<EbookScreen> {
 
   final List<Map<String, dynamic>> _ebooks = [
     {
-      'title': 'Panduan Pencegahan Narkoba untuk Remaja',
+      'title': 'Pedoman Pelaksanaan Reformasi Birokrasi',
       'author': 'BNN Republik Indonesia',
       'category': 'Pencegahan',
-      'pages': 45,
-      'downloadCount': 1250,
-      'image': 'https://via.placeholder.com/120x160?text=Pencegahan',
+      'image': 'assets/images/BK0338.jpg',
+      'url': 'https://ekatalogperpustakaan.bnn.go.id/flipbooks/BK0338_2022_Pedoman_Pelaksanaan_Reformasi_Birokrasi/index.html',
+      'pdfUrl': 'https://perpustakaan.bnn.go.id/sites/default/files/Buku_Digital_2023-08/BK0338_2022_Pedoman_Pelaksanaan_Reformasi_Birokrasi.pdf',
       'description':
-          'Panduan lengkap untuk memahami bahaya narkoba dan cara pencegahannya khusus untuk kalangan remaja.',
+          'Pedoman Pelaksanaan Reformasi Birokrasi.',
     },
     {
-      'title': 'Modul Rehabilitasi Narkoba',
-      'author': 'Direktorat Rehabilitasi BNN',
+      'title': 'Layanan Telerehabilitasi Narkoba Di Lingkungan Badan Narkotika Nasional Republik Indonesia',
+      'author': ' BNN',
       'category': 'Rehabilitasi',
-      'pages': 78,
-      'downloadCount': 890,
-      'image': 'https://via.placeholder.com/120x160?text=Rehabilitasi',
+      'image': 'assets/images/Cover.jpg',
+      'url': 'https://ekatalogperpustakaan.bnn.go.id/flipbooks/BK0339_2022_Petunjuk_Teknis_Layanan_Telerehabilitasi_Narkoba_di_Lingkungan_BNN/index.html',
+      'pdfUrl': 'https://perpustakaan.bnn.go.id/sites/default/files/Buku_Digital_2023-08/BK0339_2022_Petunjuk_Teknis_Layanan_Telerehabilitasi_Narkoba_di_Lingkungan_BNN.pdf',
       'description':
-          'Modul komprehensif tentang proses rehabilitasi dan pemulihan dari ketergantungan narkoba.',
+          'Petunjuk Teknis ini memuat berbagai informasi yang rinci mengenai pelaksanaan layanan TREN yang akan diselenggarakan di klinik BNNP/K dan Unit Pelaksana Teknis Rehabilitasi milik BNN RI. Secara umum, buku ini tersusun dari 6 (enam) bab, meliputi pendahuluan, pelaksanaan pelayanan TREN, pengembangan pelayanan TREN, pemanfaatan teknologi dalam layanan TREN, monitoring dan evaluasi pelayanan TREN, dan penutup.',
     },
     {
       'title': 'Undang-Undang Narkotika Terbaru',
@@ -50,6 +51,8 @@ class _EbookScreenState extends State<EbookScreen> {
       'pages': 156,
       'downloadCount': 2100,
       'image': 'https://via.placeholder.com/120x160?text=UU+Narkotika',
+      'url': 'https://bnn.go.id/undang-undang-narkotika',
+      'pdfUrl': 'https://bnn.go.id/download/undang-undang-narkotika.pdf',
       'description':
           'Kompilasi lengkap peraturan perundang-undangan terkait narkotika dan psikotropika.',
     },
@@ -60,18 +63,22 @@ class _EbookScreenState extends State<EbookScreen> {
       'pages': 32,
       'downloadCount': 1780,
       'image': 'https://via.placeholder.com/120x160?text=Edukasi',
+      'url': 'https://bnn.go.id/edukasi-bahaya-narkoba',
+      'pdfUrl': 'https://bnn.go.id/download/edukasi-bahaya-narkoba.pdf',
       'description':
           'Materi edukasi tentang jenis-jenis narkoba dan dampaknya bagi kesehatan.',
     },
     {
-      'title': 'Strategi P4GN di Lingkungan Keluarga',
+      'title': 'Modul Pembelajaran Rehabilitasi dan Konseling Dasar bagi Pecandu dan Korban Penyalahgunaan Narkotika Pada Layanan Rawat Jalan',
       'author': 'BNN Kota Surabaya',
       'category': 'Pencegahan',
       'pages': 28,
       'downloadCount': 945,
-      'image': 'https://via.placeholder.com/120x160?text=P4GN',
+      'image': 'assets/images/Cover_2.jpg',
+      'url': 'https://bnn.go.id/modul-konseling-surabaya',
+      'pdfUrl': 'https://bnn.go.id/download/modul-konseling-surabaya.pdf',
       'description':
-          'Panduan praktis penerapan Program Pencegahan dan Pemberantasan Penyalahgunaan dan Peredaran Gelap Narkoba di lingkungan keluarga.',
+          'Modul Pembelajaran Rehabilitasi dan Konseling Dasar bagi Pecandu dan Korban Penyalahgunaan Narkotika Pada Layanan Rawat Jalan.',
     },
     {
       'title': 'Deteksi Dini Penyalahgunaan Narkoba',
@@ -80,6 +87,8 @@ class _EbookScreenState extends State<EbookScreen> {
       'pages': 52,
       'downloadCount': 1340,
       'image': 'https://via.placeholder.com/120x160?text=Deteksi+Dini',
+      'url': 'https://bnn.go.id/deteksi-dini-narkoba',
+      'pdfUrl': 'https://bnn.go.id/download/deteksi-dini-narkoba.pdf',
       'description':
           'Panduan mengenali tanda-tanda awal penyalahgunaan narkoba dan langkah-langkah yang harus diambil.',
     },
@@ -92,6 +101,23 @@ class _EbookScreenState extends State<EbookScreen> {
     return _ebooks
         .where((ebook) => ebook['category'] == _selectedCategory)
         .toList();
+  }
+
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      // Show error message if URL cannot be launched
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Tidak dapat membuka link'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -227,7 +253,7 @@ class _EbookScreenState extends State<EbookScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Icon(
@@ -253,7 +279,7 @@ class _EbookScreenState extends State<EbookScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
@@ -280,11 +306,11 @@ class _EbookScreenState extends State<EbookScreen> {
 
   Widget _buildCategoryFilter() {
     return Container(
-      height: 60,
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      height: 100,
+      padding: const EdgeInsets.symmetric(vertical: 18),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         itemCount: _categories.length,
         itemBuilder: (context, index) {
           final category = _categories[index];
@@ -298,7 +324,7 @@ class _EbookScreenState extends State<EbookScreen> {
             },
             child: Container(
               margin: const EdgeInsets.only(right: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
               decoration: BoxDecoration(
                 color: isSelected ? const Color(0xFF2563EB) : Colors.white,
                 borderRadius: BorderRadius.circular(20),
@@ -308,13 +334,16 @@ class _EbookScreenState extends State<EbookScreen> {
                       : Colors.grey[300]!,
                 ),
               ),
-              child: Text(
-                category,
-                style: TextStyle(
-                  color: isSelected ? Colors.white : Colors.black87,
-                  fontSize: 14,
-                  fontFamily: 'Inter',
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+              child: Center(
+                child: Text(
+                  category,
+                  style: TextStyle(
+                    color: isSelected ? Colors.white : Colors.black87,
+                    fontSize: 16,
+                    fontFamily: 'Inter',
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                    height: 1.2,
+                  ),
                 ),
               ),
             ),
@@ -336,22 +365,24 @@ class _EbookScreenState extends State<EbookScreen> {
   }
 
   Widget _buildEbookCard(Map<String, dynamic> ebook) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
+    return GestureDetector(
+      onTap: () => _showEbookDetail(ebook),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
         children: [
           Container(
             width: 80,
@@ -399,7 +430,7 @@ class _EbookScreenState extends State<EbookScreen> {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF3B82F6).withOpacity(0.1),
+                        color: const Color(0xFF3B82F6).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
@@ -412,37 +443,14 @@ class _EbookScreenState extends State<EbookScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Icon(Icons.description, size: 14, color: Colors.grey[600]),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${ebook['pages']} hal',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 12,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
                   ],
                 ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    Icon(Icons.download, size: 14, color: Colors.grey[600]),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${ebook['downloadCount']} unduhan',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 12,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
                     const Spacer(),
                     ElevatedButton(
-                      onPressed: () => _showEbookDetail(ebook),
+                      onPressed: () => _launchURL(ebook['url']),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2563EB),
                         minimumSize: const Size(80, 32),
@@ -467,6 +475,7 @@ class _EbookScreenState extends State<EbookScreen> {
           ),
         ],
       ),
+    ),
     );
   }
 
@@ -549,7 +558,7 @@ class _EbookScreenState extends State<EbookScreen> {
                                     decoration: BoxDecoration(
                                       color: const Color(
                                         0xFF3B82F6,
-                                      ).withOpacity(0.1),
+                                      ).withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Text(
@@ -607,14 +616,7 @@ class _EbookScreenState extends State<EbookScreen> {
                           child: OutlinedButton(
                             onPressed: () {
                               Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    '${ebook['title']} berhasil diunduh!',
-                                  ),
-                                  backgroundColor: const Color(0xFF10B981),
-                                ),
-                              );
+                              _launchURL(ebook['pdfUrl']);
                             },
                             style: OutlinedButton.styleFrom(
                               side: const BorderSide(color: Color(0xFF2563EB)),
@@ -639,12 +641,7 @@ class _EbookScreenState extends State<EbookScreen> {
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Membuka ${ebook['title']}...'),
-                                  backgroundColor: const Color(0xFF2563EB),
-                                ),
-                              );
+                              _launchURL(ebook['url']);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF2563EB),

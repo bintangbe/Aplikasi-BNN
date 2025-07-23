@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "bnn_app" "\0"
+            VALUE "CompanyName", "BNN Kota Surabaya" "\0"
+            VALUE "FileDescription", "BNN Surabaya - Aplikasi Anti Narkoba" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "bnn_app" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2025 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "bnn_app.exe" "\0"
-            VALUE "ProductName", "bnn_app" "\0"
+            VALUE "InternalName", "BNN Surabaya" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2025 BNN Kota Surabaya. All rights reserved." "\0"
+            VALUE "OriginalFilename", "bnn_surabaya.exe" "\0"
+            VALUE "ProductName", "BNN Surabaya - Aplikasi Anti Narkoba" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
