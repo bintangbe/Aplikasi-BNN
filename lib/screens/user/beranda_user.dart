@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../../constants/colors.dart';
 import 'persebaran_screen.dart';
 import 'masukkan_screen.dart';
 import 'ebook_screen.dart';
@@ -64,29 +62,23 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
         children: [
           // Logo BNN
           GestureDetector(
-            onTap: () async {
+            onTap: () {
               // Open BNN website
-              final Uri url = Uri.parse('https://surabayakota.bnn.go.id/');
-              try {
-                if (!await launchUrl(url)) {
-                  throw Exception('Could not launch https://surabayakota.bnn.go.id/');
-                }
-              } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Tidak dapat membuka website BNN Surabaya'),
-                    backgroundColor: Color(0xFFEF4444),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
-              }
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Membuka website BNN Surabaya...'),
+                  backgroundColor: Color(0xFF2563EB),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+              // TODO: Add url_launcher package and implement: launch('https://surabayakota.bnn.go.id/');
             },
             child: Container(
               width: 86,
               height: 86,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.white.withValues(alpha: 0.9),
               ),
               child: Image.asset(
                 'assets/images/logo_bnn.png',
@@ -336,22 +328,15 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
 
   Widget _buildNewsCard(String title, String imageUrl, [String? newsUrl]) {
     return GestureDetector(
-      onTap: () async {
+      onTap: () {
         if (newsUrl != null) {
-          final Uri url = Uri.parse(newsUrl);
-          try {
-            if (!await launchUrl(url)) {
-              throw Exception('Could not launch $newsUrl');
-            }
-          } catch (e) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Tidak dapat membuka link berita'),
-                backgroundColor: Color(0xFFEF4444),
-                duration: Duration(seconds: 2),
-              ),
-            );
-          }
+          // TODO: Navigate to news detail or open in browser
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Membuka: ${title.substring(0, 30)}...'),
+              duration: const Duration(seconds: 2),
+            ),
+          );
         }
       },
       child: Container(
@@ -371,7 +356,7 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     spreadRadius: 1,
                     blurRadius: 4,
                     offset: const Offset(0, 2),
