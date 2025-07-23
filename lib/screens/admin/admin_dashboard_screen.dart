@@ -283,6 +283,17 @@ class AdminDashboardScreen extends StatelessWidget {
         'nomorTelepon': '088102367299',
         'jamOperasional': '24 Jam',
         'fasilitas': 'Ruang rawat inap, ruang terapi, konseling',
+        'image': 'assets/images/yayasan_rumah_kita.jpeg',
+        'deskripsi':
+            'Yayasan Rumah Kita adalah salah satu lembaga rehabilitasi narkoba terbaik di Surabaya yang telah berpengalaman dalam membantu para korban narkoba untuk sembuh total.',
+        'layanan': [
+          'Rehabilitasi Rawat Inap',
+          'Terapi Kelompok',
+          'Konseling Individual',
+          'Program Reintegrasi Sosial',
+          'Pendampingan Keluarga',
+        ],
+        'email': 'info@rumahkita.org',
       },
       {
         'name': 'Yayasan Orbit Surabaya',
@@ -294,6 +305,17 @@ class AdminDashboardScreen extends StatelessWidget {
         'nomorTelepon': '(031) 5928587',
         'jamOperasional': '24 Jam',
         'fasilitas': 'Ruang rawat inap, ruang terapi, laboratorium, apotek',
+        'image': 'assets/images/yayasan_orbit_surabaya.jpeg',
+        'deskripsi':
+            'Yayasan Orbit Surabaya berkomitmen memberikan layanan rehabilitasi narkoba yang komprehensif dengan fasilitas modern dan tenaga profesional berpengalaman.',
+        'layanan': [
+          'Rehabilitasi Rawat Inap',
+          'Detoksifikasi Medis',
+          'Terapi Kelompok',
+          'Konseling Psikologi',
+          'Program Vocational Training',
+        ],
+        'email': 'info@orbitsurabaya.org',
       },
       {
         'name': 'Yayasan Plato Surabaya',
@@ -305,6 +327,17 @@ class AdminDashboardScreen extends StatelessWidget {
         'nomorTelepon': '(031) 5947890',
         'jamOperasional': '08.00 - 16.00 WIB',
         'fasilitas': 'Poliklinik umum, ruang konseling, farmasi',
+        'image': 'assets/images/yayasan_plato_surabaya.jpeg',
+        'deskripsi':
+            'Yayasan Plato Surabaya mengkhususkan diri dalam layanan rawat jalan dengan pendekatan terapi yang inovatif dan personal untuk setiap pasien.',
+        'layanan': [
+          'Rehabilitasi Rawat Jalan',
+          'Konseling Individual dan Keluarga',
+          'Terapi Kelompok',
+          'Program Relapse Prevention',
+          'Konsultasi Medis',
+        ],
+        'email': 'contact@platosurabaya.org',
       },
     ];
 
@@ -349,7 +382,7 @@ class AdminDashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLembagaItem(BuildContext context, Map<String, String> lembaga) {
+  Widget _buildLembagaItem(BuildContext context, Map<String, dynamic> lembaga) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Container(
@@ -364,14 +397,16 @@ class AdminDashboardScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  lembaga['name']!,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Color(0xFF1D4ED8),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
+                Expanded(
+                  child: Text(
+                    lembaga['name']!,
+                    style: const TextStyle(
+                      color: Color(0xFF1D4ED8),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Container(
@@ -399,16 +434,24 @@ class AdminDashboardScreen extends StatelessWidget {
               children: [
                 const Icon(Icons.location_on, size: 16, color: Colors.grey),
                 const SizedBox(width: 4),
-                Text(
-                  lembaga['location']!,
-                  style: const TextStyle(color: Colors.grey, fontSize: 14),
+                Expanded(
+                  child: Text(
+                    lembaga['location']!,
+                    style: const TextStyle(color: Colors.grey, fontSize: 14),
+                  ),
                 ),
-                const SizedBox(width: 16),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
                 const Icon(Icons.people, size: 16, color: Colors.grey),
                 const SizedBox(width: 4),
-                Text(
-                  lembaga['capacity']!,
-                  style: const TextStyle(color: Colors.grey, fontSize: 14),
+                Expanded(
+                  child: Text(
+                    lembaga['capacity']!,
+                    style: const TextStyle(color: Colors.grey, fontSize: 14),
+                  ),
                 ),
               ],
             ),
@@ -426,8 +469,19 @@ class AdminDashboardScreen extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF3B82F6),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
-                child: const Text('Lihat Detail'),
+                child: const Text(
+                  'Lihat Detail',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                ),
               ),
             ),
           ],

@@ -18,12 +18,13 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
   bool _isLoading = false;
 
   final List<String> _lembagaOptions = [
-    'Lembaga Rehabilitasi A',
-    'Lembaga Rehabilitasi B',
-    'Lembaga Rehabilitasi C',
-    'Lembaga Rehabilitasi D',
-    'Lembaga Rehabilitasi E',
-    'Lembaga Rehabilitasi F',
+    'Yayasan Rumah Kita Surabaya',
+    'Yayasan Orbit Surabaya',
+    'Yayasan Plato Surabaya',
+    'Yayasan LRPPN-Surabaya',
+    'Yayasan Rumah Merah Putih Surabaya',
+    'RS Menur Surabaya',
+    'Omah Sehat Bersinar',
   ];
 
   @override

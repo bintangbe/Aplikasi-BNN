@@ -18,6 +18,7 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
   final _keteranganController = TextEditingController();
   String _selectedKategori = 'Laporan Kejadian';
   String _selectedUrgency = 'Normal';
+  String? _selectedLembaga;
 
   final List<String> _kategoriOptions = [
     'Laporan Kejadian',
@@ -30,6 +31,44 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
     'Normal',
     'Mendesak',
     'Sangat Mendesak',
+  ];
+
+  final List<Map<String, String>> _lembagaOptions = [
+    {
+      'name': 'Yayasan Rumah Kita',
+      'location': 'Surabaya Timur',
+      'alamat': 'Jl. Ngagel Madya II / 9 Surabaya',
+    },
+    {
+      'name': 'Yayasan LRPPN',
+      'location': 'Surabaya Barat',
+      'alamat': 'Jl. Pucang Sewu No.88 Surabaya',
+    },
+    {
+      'name': 'Yayasan Rumah Merah Putih',
+      'location': 'Surabaya Utara',
+      'alamat': 'Jl. Mulyorejo Prima No.98 Surabaya',
+    },
+    {
+      'name': 'Yayasan Plato',
+      'location': 'Surabaya Selatan',
+      'alamat': 'Jl. Raya Menganti No.123 Surabaya',
+    },
+    {
+      'name': 'Yayasan Orbit',
+      'location': 'Surabaya Tengah',
+      'alamat': 'Jl. Kartini No.45 Surabaya',
+    },
+    {
+      'name': 'RS Menur Surabaya',
+      'location': 'Surabaya Timur',
+      'alamat': 'Jl. Menur Pumpungan No.20 Surabaya',
+    },
+    {
+      'name': 'Omah Sehat Bersinar',
+      'location': 'Surabaya Pusat',
+      'alamat': 'Jl. Jemur Andayani No.50 Surabaya',
+    },
   ];
 
   @override
@@ -303,6 +342,11 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
           },
         ),
         const SizedBox(height: 16),
+        // Dropdown Lembaga Tujuan (hanya muncul jika kategori adalah Permintaan Rehabilitasi)
+        if (_selectedKategori == 'Permintaan Rehabilitasi') ...[
+          _buildLembagaDropdownField(),
+          const SizedBox(height: 16),
+        ],
         _buildTextField(
           label: 'Keterangan Detail',
           controller: _keteranganController,
@@ -473,6 +517,90 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
     );
   }
 
+  Widget _buildLembagaDropdownField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Lembaga Tujuan Rehabilitasi',
+          style: TextStyle(
+            color: Color(0xFF1F2937),
+            fontSize: 14,
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(width: 1, color: const Color(0xFFD1D5DB)),
+          ),
+          child: DropdownButtonFormField<String>(
+            value: _selectedLembaga,
+            hint: const Text(
+              'Pilih lembaga rehabilitasi tujuan',
+              style: TextStyle(
+                color: Color(0xFF9CA3AF),
+                fontSize: 14,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF6B7280)),
+            decoration: InputDecoration(
+              prefixIcon: const Icon(
+                Icons.home_work,
+                color: Color(0xFF6B7280),
+                size: 20,
+              ),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
+            ),
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedLembaga = newValue;
+              });
+            },
+            items: _lembagaOptions.map<DropdownMenuItem<String>>((lembaga) {
+              return DropdownMenuItem<String>(
+                value: lembaga['name'],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      lembaga['name'] ?? '',
+                      style: const TextStyle(
+                        color: Color(0xFF1F2937),
+                        fontSize: 14,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      '${lembaga['location']} • ${lembaga['alamat']}',
+                      style: const TextStyle(
+                        color: Color(0xFF6B7280),
+                        fontSize: 12,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
   void _handleSubmit() {
     if (_namaController.text.isEmpty ||
         _nomorTeleponController.text.isEmpty ||
@@ -487,14 +615,28 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
       return;
     }
 
-    // TODO: Implement actual submission logic
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          'Pengaduan berhasil dikirim! Tim kami akan menindaklanjuti.',
+    // Validate lembaga selection for rehabilitation requests
+    if (_selectedKategori == 'Permintaan Rehabilitasi' &&
+        _selectedLembaga == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Mohon pilih lembaga tujuan rehabilitasi'),
+          backgroundColor: Color(0xFFEF4444),
         ),
-        backgroundColor: Color(0xFF10B981),
-        duration: Duration(seconds: 3),
+      );
+      return;
+    }
+
+    // TODO: Implement actual submission logic
+    String message = _selectedKategori == 'Permintaan Rehabilitasi'
+        ? 'Permintaan rehabilitasi ke $_selectedLembaga berhasil dikirim! Tim kami akan menindaklanjuti.'
+        : 'Pengaduan berhasil dikirim! Tim kami akan menindaklanjuti.';
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: const Color(0xFF10B981),
+        duration: const Duration(seconds: 3),
       ),
     );
 
@@ -506,6 +648,7 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
     setState(() {
       _selectedKategori = 'Laporan Kejadian';
       _selectedUrgency = 'Normal';
+      _selectedLembaga = null;
     });
   }
 
