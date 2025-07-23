@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'persebaran_screen.dart';
 import 'ebook_screen.dart';
 import 'akun_screen.dart';
@@ -13,63 +14,7 @@ class MasukkanScreen extends StatefulWidget {
 
 class _MasukkanScreenState extends State<MasukkanScreen> {
   final _namaController = TextEditingController();
-  final _nomorTeleponController = TextEditingController();
-  final _alamatController = TextEditingController();
   final _keteranganController = TextEditingController();
-  String _selectedKategori = 'Laporan Kejadian';
-  String _selectedUrgency = 'Normal';
-  String? _selectedLembaga;
-
-  final List<String> _kategoriOptions = [
-    'Laporan Kejadian',
-    'Permintaan Rehabilitasi',
-    'Konsultasi',
-    'Informasi Umum',
-  ];
-
-  final List<String> _urgencyOptions = [
-    'Normal',
-    'Mendesak',
-    'Sangat Mendesak',
-  ];
-
-  final List<Map<String, String>> _lembagaOptions = [
-    {
-      'name': 'Yayasan Rumah Kita',
-      'location': 'Surabaya Timur',
-      'alamat': 'Jl. Ngagel Madya II / 9 Surabaya',
-    },
-    {
-      'name': 'Yayasan LRPPN',
-      'location': 'Surabaya Barat',
-      'alamat': 'Jl. Pucang Sewu No.88 Surabaya',
-    },
-    {
-      'name': 'Yayasan Rumah Merah Putih',
-      'location': 'Surabaya Utara',
-      'alamat': 'Jl. Mulyorejo Prima No.98 Surabaya',
-    },
-    {
-      'name': 'Yayasan Plato',
-      'location': 'Surabaya Selatan',
-      'alamat': 'Jl. Raya Menganti No.123 Surabaya',
-    },
-    {
-      'name': 'Yayasan Orbit',
-      'location': 'Surabaya Tengah',
-      'alamat': 'Jl. Kartini No.45 Surabaya',
-    },
-    {
-      'name': 'RS Menur Surabaya',
-      'location': 'Surabaya Timur',
-      'alamat': 'Jl. Menur Pumpungan No.20 Surabaya',
-    },
-    {
-      'name': 'Omah Sehat Bersinar',
-      'location': 'Surabaya Pusat',
-      'alamat': 'Jl. Jemur Andayani No.50 Surabaya',
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -102,9 +47,17 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildInfoCard(),
+                        const Text(
+                          'Masukkan',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 28,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                         const SizedBox(height: 24),
-                        _buildFormSection(),
+                        _buildSimpleForm(),
                       ],
                     ),
                   ),
@@ -203,77 +156,106 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
       padding: const EdgeInsets.all(24),
       child: Row(
         children: [
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Container(
-              width: 40,
-              height: 40,
+          // Logo BNN
+          GestureDetector(
+            onTap: () async {
+              // Open BNN website
+              final Uri url = Uri.parse('https://surabayakota.bnn.go.id/');
+              try {
+                if (!await launchUrl(url)) {
+                  throw Exception('Could not launch https://surabayakota.bnn.go.id/');
+                }
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Tidak dapat membuka website BNN Surabaya'),
+                    backgroundColor: Color(0xFFEF4444),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              }
+            },
+            child: Container(
+              width: 86,
+              height: 86,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(12),
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.9),
               ),
-              child: const Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-                size: 20,
+              child: Image.asset(
+                'assets/images/logo_bnn.png',
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Center(
+                    child: Text(
+                      'BNN',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF063CA8),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ),
           const SizedBox(width: 16),
+          // Kota Surabaya
           const Expanded(
             child: Text(
-              'Form Pengaduan &\nPermintaan Bantuan',
+              'KOTA\nSURABAYA',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 16,
                 fontFamily: 'Inter',
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w500,
                 height: 1.2,
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoCard() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: const Color(0xFF3B82F6),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.info_outline, color: Colors.white, size: 24),
-              const SizedBox(width: 12),
-              const Expanded(
-                child: Text(
-                  'Informasi Penting',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+          // User Profile
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AkunScreen()),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
               ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          const Text(
-            '• Semua laporan akan ditindaklanjuti sesuai prosedur\n• Data pribadi Anda akan dijaga kerahasiaannya\n• Untuk kasus darurat, hubungi: 031-5023979\n• WhatsApp: 081234484195',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-              height: 1.5,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'User',
+                    style: TextStyle(
+                      color: Color(0xFF063CA8),
+                      fontSize: 16,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 35,
+                    height: 35,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF063CA8),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.person,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -281,84 +263,75 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
     );
   }
 
-  Widget _buildFormSection() {
+  Widget _buildSimpleForm() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Form Pengaduan',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 24,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w700,
+        // Input Judul
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey[300]!),
+          ),
+          child: TextField(
+            controller: _namaController,
+            decoration: const InputDecoration(
+              hintText: 'Judul Masukkan',
+              hintStyle: TextStyle(
+                color: Colors.grey,
+                fontSize: 16,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w400,
+              ),
+              border: InputBorder.none,
+            ),
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ),
-        const SizedBox(height: 20),
-        _buildTextField(
-          label: 'Nama Lengkap',
-          controller: _namaController,
-          hintText: 'Masukkan nama lengkap Anda',
-          icon: Icons.person,
-        ),
         const SizedBox(height: 16),
-        _buildTextField(
-          label: 'Nomor Telepon',
-          controller: _nomorTeleponController,
-          hintText: 'Contoh: 08123456789',
-          icon: Icons.phone,
-          keyboardType: TextInputType.phone,
-        ),
-        const SizedBox(height: 16),
-        _buildTextField(
-          label: 'Alamat',
-          controller: _alamatController,
-          hintText: 'Alamat lengkap Anda',
-          icon: Icons.location_on,
-          maxLines: 3,
-        ),
-        const SizedBox(height: 16),
-        _buildDropdownField(
-          label: 'Kategori Pengaduan',
-          value: _selectedKategori,
-          options: _kategoriOptions,
-          icon: Icons.category,
-          onChanged: (value) {
-            setState(() {
-              _selectedKategori = value!;
-            });
-          },
-        ),
-        const SizedBox(height: 16),
-        _buildDropdownField(
-          label: 'Tingkat Urgensi',
-          value: _selectedUrgency,
-          options: _urgencyOptions,
-          icon: Icons.priority_high,
-          onChanged: (value) {
-            setState(() {
-              _selectedUrgency = value!;
-            });
-          },
-        ),
-        const SizedBox(height: 16),
-        // Dropdown Lembaga Tujuan (hanya muncul jika kategori adalah Permintaan Rehabilitasi)
-        if (_selectedKategori == 'Permintaan Rehabilitasi') ...[
-          _buildLembagaDropdownField(),
-          const SizedBox(height: 16),
-        ],
-        _buildTextField(
-          label: 'Keterangan Detail',
-          controller: _keteranganController,
-          hintText:
-              'Jelaskan secara detail mengenai pengaduan atau permintaan bantuan Anda',
-          icon: Icons.description,
-          maxLines: 5,
+        // Input Isi Masukkan
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey[300]!),
+          ),
+          child: TextField(
+            controller: _keteranganController,
+            maxLines: 8,
+            decoration: const InputDecoration(
+              hintText: 'Tulis isi masukkan...',
+              hintStyle: TextStyle(
+                color: Colors.grey,
+                fontSize: 16,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w400,
+              ),
+              border: InputBorder.none,
+            ),
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w400,
+            ),
+          ),
         ),
         const SizedBox(height: 32),
+        // Tombol Kirim
         SizedBox(
           width: double.infinity,
-          height: 48,
+          height: 50,
           child: ElevatedButton(
             onPressed: _handleSubmit,
             style: ElevatedButton.styleFrom(
@@ -369,232 +342,14 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
               elevation: 0,
             ),
             child: const Text(
-              'Kirim Pengaduan',
+              'Kirim',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,
                 fontFamily: 'Inter',
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
               ),
             ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        const Center(
-          child: Text(
-            'Dengan mengirim form ini, Anda menyetujui\nbahwa data akan diproses sesuai kebijakan privasi',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.black54,
-              fontSize: 12,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTextField({
-    required String label,
-    required TextEditingController controller,
-    required String hintText,
-    required IconData icon,
-    TextInputType? keyboardType,
-    int maxLines = 1,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Color(0xFF1F2937),
-            fontSize: 14,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          controller: controller,
-          keyboardType: keyboardType,
-          maxLines: maxLines,
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: const TextStyle(
-              color: Color(0xFF9CA3AF),
-              fontSize: 14,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-            ),
-            prefixIcon: Icon(icon, color: const Color(0xFF6B7280), size: 20),
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(width: 2, color: Color(0xFF2563EB)),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDropdownField({
-    required String label,
-    required String value,
-    required List<String> options,
-    required IconData icon,
-    required ValueChanged<String?> onChanged,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Color(0xFF1F2937),
-            fontSize: 14,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 8),
-        DropdownButtonFormField<String>(
-          value: value,
-          onChanged: onChanged,
-          decoration: InputDecoration(
-            prefixIcon: Icon(icon, color: const Color(0xFF6B7280), size: 20),
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(width: 2, color: Color(0xFF2563EB)),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
-            ),
-          ),
-          items: options.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: const TextStyle(
-                  color: Color(0xFF1F2937),
-                  fontSize: 14,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLembagaDropdownField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Lembaga Tujuan Rehabilitasi',
-          style: TextStyle(
-            color: Color(0xFF1F2937),
-            fontSize: 14,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(width: 1, color: const Color(0xFFD1D5DB)),
-          ),
-          child: DropdownButtonFormField<String>(
-            value: _selectedLembaga,
-            hint: const Text(
-              'Pilih lembaga rehabilitasi tujuan',
-              style: TextStyle(
-                color: Color(0xFF9CA3AF),
-                fontSize: 14,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF6B7280)),
-            decoration: InputDecoration(
-              prefixIcon: const Icon(
-                Icons.home_work,
-                color: Color(0xFF6B7280),
-                size: 20,
-              ),
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
-              ),
-            ),
-            onChanged: (String? newValue) {
-              setState(() {
-                _selectedLembaga = newValue;
-              });
-            },
-            items: _lembagaOptions.map<DropdownMenuItem<String>>((lembaga) {
-              return DropdownMenuItem<String>(
-                value: lembaga['name'],
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      lembaga['name'] ?? '',
-                      style: const TextStyle(
-                        color: Color(0xFF1F2937),
-                        fontSize: 14,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      '${lembaga['location']} • ${lembaga['alamat']}',
-                      style: const TextStyle(
-                        color: Color(0xFF6B7280),
-                        fontSize: 12,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
           ),
         ),
       ],
@@ -602,25 +357,10 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
   }
 
   void _handleSubmit() {
-    if (_namaController.text.isEmpty ||
-        _nomorTeleponController.text.isEmpty ||
-        _alamatController.text.isEmpty ||
-        _keteranganController.text.isEmpty) {
+    if (_namaController.text.isEmpty || _keteranganController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Mohon lengkapi semua field yang diperlukan'),
-          backgroundColor: Color(0xFFEF4444),
-        ),
-      );
-      return;
-    }
-
-    // Validate lembaga selection for rehabilitation requests
-    if (_selectedKategori == 'Permintaan Rehabilitasi' &&
-        _selectedLembaga == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Mohon pilih lembaga tujuan rehabilitasi'),
+          content: Text('Mohon lengkapi judul dan isi masukkan'),
           backgroundColor: Color(0xFFEF4444),
         ),
       );
@@ -628,35 +368,22 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
     }
 
     // TODO: Implement actual submission logic
-    String message = _selectedKategori == 'Permintaan Rehabilitasi'
-        ? 'Permintaan rehabilitasi ke $_selectedLembaga berhasil dikirim! Tim kami akan menindaklanjuti.'
-        : 'Pengaduan berhasil dikirim! Tim kami akan menindaklanjuti.';
-
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: const Color(0xFF10B981),
-        duration: const Duration(seconds: 3),
+      const SnackBar(
+        content: Text('Masukkan berhasil dikirim!'),
+        backgroundColor: Color(0xFF10B981),
+        duration: Duration(seconds: 3),
       ),
     );
 
     // Clear form
     _namaController.clear();
-    _nomorTeleponController.clear();
-    _alamatController.clear();
     _keteranganController.clear();
-    setState(() {
-      _selectedKategori = 'Laporan Kejadian';
-      _selectedUrgency = 'Normal';
-      _selectedLembaga = null;
-    });
   }
 
   @override
   void dispose() {
     _namaController.dispose();
-    _nomorTeleponController.dispose();
-    _alamatController.dispose();
     _keteranganController.dispose();
     super.dispose();
   }
