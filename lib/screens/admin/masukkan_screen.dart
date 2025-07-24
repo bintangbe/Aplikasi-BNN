@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'balas_screen.dart';
 import 'profile_screen.dart';
-import 'unified_bottom_navigation.dart';
+import '../../services/masukkan_service.dart';
+import '../../models/masukkan_model.dart';
+import '../shared/detail_percakapan_screen.dart';
 
-class MasukkanScreen extends StatelessWidget {
+class MasukkanScreen extends StatefulWidget {
   const MasukkanScreen({super.key});
 
   @override
+  State<MasukkanScreen> createState() => _MasukkanScreenState();
+}
+
+class _MasukkanScreenState extends State<MasukkanScreen> {
+  final MasukkanService _masukkanService = MasukkanService();
+
+  @override
   Widget build(BuildContext context) {
+    final daftarMasukkan = _masukkanService.daftarMasukkan;
     return Scaffold(
       body: Stack(
         children: [
@@ -112,31 +121,13 @@ class MasukkanScreen extends StatelessWidget {
 
                       const SizedBox(height: 20),
 
-                      // Feedback cards
-                      MasukanCard(
-                        nama: 'Diana Cantika',
-                        email: 'dianacanci123@gmail.com',
-                        judul: 'Kurangnya Privasi Saat Konsultasi di Tempat Rehabilitasi',
-                        isi: 'Halo BNN, saya mau sampaikan sedikit unek-unek waktu dampingi teman saya konsultasi ke salah satu tempat rehabilitasi. '
-                            'Pas sesi konsultasi berlangsung, ruangannya ternyata terbuka dan ada beberapa orang lain yang bisa dengar pembicaraan. '
-                            'Padahal menurut saya, untuk hal sensitif kayak gini, privasi itu penting banget.',
-                        tanggal: '20 Juli 2025',
-                        status: 'Belum Dibalas',
-                        balasan: null,
-                      ),
-
-                      MasukanCard(
-                        nama: 'Budi Santoso',
-                        email: 'budisantoso@gmail.com',
-                        judul: 'Saran Untuk Program Pencegahan di Sekolah',
-                        isi: 'Selamat siang BNN, saya ingin memberikan saran terkait program pencegahan narkoba di sekolah. '
-                            'Mungkin bisa ditambahkan sesi interaktif atau games yang lebih menarik agar siswa lebih antusias dalam mengikuti program.',
-                        tanggal: '19 Juli 2025',
-                        status: 'Sudah Dibalas',
-                        balasan: 'Terima kasih atas saran yang sangat berharga, Bapak Budi. Kami sangat mengapresiasi masukan Anda terkait program pencegahan narkoba di sekolah. '
-                            'Saran Anda untuk menambahkan sesi interaktif dan games edukatif akan kami sampaikan kepada tim yang bertanggung jawab untuk pengembangan program. '
-                            'Kami terus berupaya meningkatkan metode penyampaian agar lebih menarik dan efektif bagi para siswa.',
-                      ),
+                      // Feedback cards from service
+                      ...daftarMasukkan.map((masukkan) => MasukanCard(
+                        masukkanModel: masukkan,
+                        onUpdate: () {
+                          setState(() {}); // Refresh UI when chat is updated
+                        },
+                      )),
 
                       const SizedBox(height: 100),
                     ],
@@ -174,23 +165,13 @@ class MasukkanScreen extends StatelessWidget {
 }
 
 class MasukanCard extends StatefulWidget {
-  final String nama;
-  final String email;
-  final String judul;
-  final String isi;
-  final String tanggal;
-  final String status;
-  final String? balasan;
+  final MasukkanModel masukkanModel;
+  final VoidCallback onUpdate;
 
   const MasukanCard({
     super.key,
-    required this.nama,
-    required this.email,
-    required this.judul,
-    required this.isi,
-    required this.tanggal,
-    required this.status,
-    this.balasan,
+    required this.masukkanModel,
+    required this.onUpdate,
   });
 
   @override
@@ -198,7 +179,15 @@ class MasukanCard extends StatefulWidget {
 }
 
 class _MasukanCardState extends State<MasukanCard> {
-  bool showBalasan = false;
+  final MasukkanService _masukkanService = MasukkanService();
+
+  String _formatDate(DateTime date) {
+    final months = [
+      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+    return '${date.day} ${months[date.month - 1]} ${date.year}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -225,27 +214,47 @@ class _MasukanCardState extends State<MasukanCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.nama, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    Text(widget.email, style: const TextStyle(color: Colors.grey)),
+                    Text(widget.masukkanModel.nama, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(widget.masukkanModel.email, style: const TextStyle(color: Colors.grey)),
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: widget.status == 'Sudah Dibalas' 
-                      ? Colors.green.withOpacity(0.2) 
-                      : Colors.orange.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  widget.status,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: widget.status == 'Sudah Dibalas' ? Colors.green : Colors.orange,
-                    fontWeight: FontWeight.w500,
+              Row(
+                children: [
+                  // Indikator pesan baru dari user
+                  if (widget.masukkanModel.percakapan.isNotEmpty && 
+                      widget.masukkanModel.percakapan.last.pengirim == 'user')
+                    Container(
+                      width: 8,
+                      height: 8,
+                      margin: const EdgeInsets.only(right: 8),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: _masukkanService.getStatusDinamis(widget.masukkanModel) == 'Menunggu Balasan' ||
+                             _masukkanService.getStatusDinamis(widget.masukkanModel) == 'Menunggu Balasan Admin'
+                          ? Colors.orange.withOpacity(0.2) 
+                          : Colors.green.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      _masukkanService.getStatusDinamis(widget.masukkanModel),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: _masukkanService.getStatusDinamis(widget.masukkanModel) == 'Menunggu Balasan' ||
+                               _masukkanService.getStatusDinamis(widget.masukkanModel) == 'Menunggu Balasan Admin'
+                            ? Colors.orange 
+                            : Colors.green,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
@@ -257,7 +266,7 @@ class _MasukanCardState extends State<MasukanCard> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
-              'Judul: ${widget.judul}',
+              'Judul: ${widget.masukkanModel.judul}',
               style: const TextStyle(fontWeight: FontWeight.w500),
             ),
           ),
@@ -272,66 +281,17 @@ class _MasukanCardState extends State<MasukanCard> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                TextSpan(text: widget.isi),
+                TextSpan(text: widget.masukkanModel.isi),
               ],
             ),
           ),
-          
-          // Tampilkan balasan jika ada dan showBalasan true
-          if (widget.balasan != null && showBalasan) ...[
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: const Color(0xFF0062F3).withOpacity(0.1),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: const Color(0xFF0062F3).withOpacity(0.3),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const CircleAvatar(
-                        backgroundColor: Color(0xFF0062F3),
-                        radius: 16,
-                        child: Icon(
-                          Icons.support_agent,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Text(
-                        'Admin BNN',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF0062F3),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.balasan!,
-                    style: const TextStyle(
-                      color: Colors.black87,
-                      height: 1.4,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
           
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                widget.tanggal,
+                _formatDate(widget.masukkanModel.tanggal),
                 style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 12,
@@ -339,30 +299,22 @@ class _MasukanCardState extends State<MasukanCard> {
               ),
               TextButton(
                 onPressed: () {
-                  if (widget.status == 'Sudah Dibalas' && widget.balasan != null) {
-                    setState(() {
-                      showBalasan = !showBalasan;
-                    });
-                  } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BalasScreen(
-                          nama: widget.nama,
-                          email: widget.email,
-                          judul: widget.judul,
-                          isi: widget.isi,
-                        ),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetailPercakapanScreen(
+                        masukkan: widget.masukkanModel,
+                        isAdmin: true,
+                        currentUserName: 'Admin BNN',
                       ),
-                    );
-                  }
+                    ),
+                  ).then((_) => widget.onUpdate());
                 },
                 child: Text(
-                  widget.status == 'Sudah Dibalas' 
-                      ? (showBalasan ? '< Sembunyikan >' : '< Lihat Balasan >') 
-                      : '< Balas >',
+                  widget.masukkanModel.percakapan.isEmpty ? '< Balas >' : '< Balas Lagi >',
                   style: const TextStyle(
                     color: Color(0xFF0062F3),
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),

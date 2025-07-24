@@ -26,7 +26,7 @@ class MasukkanService {
       isi: 'Selamat siang BNN, saya ingin memberikan saran terkait program pencegahan narkoba di sekolah. '
           'Mungkin bisa ditambahkan sesi interaktif atau games yang lebih menarik agar siswa lebih antusias dalam mengikuti program.',
       tanggal: DateTime(2025, 7, 19),
-      status: 'Sudah Dibalas',
+      status: 'Menunggu Balasan Admin',
       percakapan: [
         ChatMessage(
           id: '1',
@@ -36,6 +36,14 @@ class MasukkanService {
               'Saran Anda untuk menambahkan sesi interaktif dan games edukatif akan kami sampaikan kepada tim yang bertanggung jawab untuk pengembangan program. '
               'Kami terus berupaya meningkatkan metode penyampaian agar lebih menarik dan efektif bagi para siswa.',
           waktu: DateTime(2025, 7, 19, 14, 30),
+        ),
+        ChatMessage(
+          id: '2',
+          pengirim: 'user',
+          namaPengirim: 'Budi Santoso',
+          pesan: 'Terima kasih atas responnya, Admin. Saya juga ingin menambahkan bahwa mungkin bisa dipertimbangkan untuk mengundang alumni yang pernah mengalami rehabilitasi untuk berbagi cerita. '
+              'Menurut saya, testimoni langsung dari mereka akan lebih berkesan bagi para siswa.',
+          waktu: DateTime(2025, 7, 19, 15, 45),
         ),
       ],
     ),
@@ -51,6 +59,19 @@ class MasukkanService {
     final index = _daftarMasukkan.indexWhere((m) => m.id == masukkanId);
     if (index != -1) {
       _daftarMasukkan[index].percakapan.add(pesan);
+      // Update status berdasarkan pengirim pesan terakhir
+      String newStatus;
+      if (_daftarMasukkan[index].percakapan.isEmpty) {
+        newStatus = 'Menunggu Balasan';
+      } else {
+        final lastMessage = _daftarMasukkan[index].percakapan.last;
+        if (lastMessage.pengirim == 'admin') {
+          newStatus = 'Menunggu Balasan User';
+        } else {
+          newStatus = 'Menunggu Balasan Admin';
+        }
+      }
+      
       _daftarMasukkan[index] = MasukkanModel(
         id: _daftarMasukkan[index].id,
         nama: _daftarMasukkan[index].nama,
@@ -58,7 +79,7 @@ class MasukkanService {
         judul: _daftarMasukkan[index].judul,
         isi: _daftarMasukkan[index].isi,
         tanggal: _daftarMasukkan[index].tanggal,
-        status: 'Sudah Dibalas',
+        status: newStatus,
         percakapan: _daftarMasukkan[index].percakapan,
       );
     }
@@ -74,5 +95,19 @@ class MasukkanService {
 
   String generateId() {
     return DateTime.now().millisecondsSinceEpoch.toString();
+  }
+
+  // Mendapatkan status dinamis berdasarkan percakapan terakhir
+  String getStatusDinamis(MasukkanModel masukkan) {
+    if (masukkan.percakapan.isEmpty) {
+      return 'Menunggu Balasan';
+    }
+    
+    final lastMessage = masukkan.percakapan.last;
+    if (lastMessage.pengirim == 'admin') {
+      return 'Menunggu Balasan User';
+    } else {
+      return 'Menunggu Balasan Admin';
+    }
   }
 }

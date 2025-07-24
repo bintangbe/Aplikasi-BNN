@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
 import 'unified_bottom_navigation.dart';
 import 'profile_screen.dart';
+import 'edit_lembaga_screen.dart';
 
-class DetailLembagaScreen extends StatelessWidget {
+class DetailLembagaScreen extends StatefulWidget {
   final Map<String, dynamic> lembagaData;
 
   const DetailLembagaScreen({super.key, required this.lembagaData});
+
+  @override
+  State<DetailLembagaScreen> createState() => _DetailLembagaScreenState();
+}
+
+class _DetailLembagaScreenState extends State<DetailLembagaScreen> {
+  late Map<String, dynamic> currentLembagaData;
+
+  @override
+  void initState() {
+    super.initState();
+    currentLembagaData = Map<String, dynamic>.from(widget.lembagaData);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -233,6 +247,29 @@ class DetailLembagaScreen extends StatelessWidget {
               ),
             ),
           ),
+
+          // Edit Button
+          GestureDetector(
+            onTap: () => _navigateToEdit(context),
+            child: Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
+                ),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: const Icon(Icons.edit, color: Colors.white, size: 20),
+            ),
+          ),
         ],
       ),
     );
@@ -277,7 +314,8 @@ class DetailLembagaScreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Image.asset(
-                    lembagaData['image'] ?? 'assets/images/placeholder.jpeg',
+                    currentLembagaData['image'] ??
+                        'assets/images/placeholder.jpeg',
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       // Fallback icon if image fails to load
@@ -309,7 +347,7 @@ class DetailLembagaScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      lembagaData['name'] ?? 'Nama Lembaga',
+                      currentLembagaData['name'] ?? 'Nama Lembaga',
                       style: const TextStyle(
                         color: Color(0xFF1A1A1A),
                         fontSize: 16,
@@ -329,7 +367,7 @@ class DetailLembagaScreen extends StatelessWidget {
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
-                            lembagaData['alamatLengkap'] ??
+                            currentLembagaData['alamatLengkap'] ??
                                 'Alamat tidak tersedia',
                             style: const TextStyle(
                               color: Color(0xFF666666),
@@ -352,7 +390,8 @@ class DetailLembagaScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          lembagaData['nomorTelepon'] ?? 'Tidak tersedia',
+                          currentLembagaData['nomorTelepon'] ??
+                              'Tidak tersedia',
                           style: const TextStyle(
                             color: Color(0xFF666666),
                             fontSize: 12,
@@ -373,7 +412,7 @@ class DetailLembagaScreen extends StatelessWidget {
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
-                            lembagaData['jamOperasional'] ??
+                            currentLembagaData['jamOperasional'] ??
                                 'Jam operasional tidak tersedia',
                             style: const TextStyle(
                               color: Color(0xFF666666),
@@ -523,13 +562,29 @@ class DetailLembagaScreen extends StatelessWidget {
             ),
             child: Column(
               children: [
-                _buildKapasitasRow('Rawat Inap Laki-laki', '3 / 17', true),
+                _buildKapasitasRow(
+                  'Rawat Inap Laki-laki',
+                  '${currentLembagaData['rawatInapLaki'] ?? 3} / ${currentLembagaData['kapasitasLaki'] ?? 17}',
+                  true,
+                ),
                 const SizedBox(height: 12),
-                _buildKapasitasRow('Rawat Inap Perempuan', '1 / 5', true),
+                _buildKapasitasRow(
+                  'Rawat Inap Perempuan',
+                  '${currentLembagaData['rawatInapPerempuan'] ?? 1} / ${currentLembagaData['kapasitasPerempuan'] ?? 5}',
+                  true,
+                ),
                 const SizedBox(height: 12),
-                _buildKapasitasRow('Rawat Jalan', '2', false),
+                _buildKapasitasRow(
+                  'Rawat Jalan',
+                  '${currentLembagaData['rawatJalan'] ?? 2}',
+                  false,
+                ),
                 const SizedBox(height: 12),
-                _buildKapasitasRow('Pasca Rehab', '2', false),
+                _buildKapasitasRow(
+                  'Pasca Rehab',
+                  '${currentLembagaData['pascaRehab'] ?? 2}',
+                  false,
+                ),
               ],
             ),
           ),
@@ -591,10 +646,36 @@ class DetailLembagaScreen extends StatelessWidget {
 
   // Helper methods untuk data
   String _getKapasitasTotal() {
-    return '22'; // 17 + 5 dari rawat inap
+    int kapasitasLaki = currentLembagaData['kapasitasLaki'] ?? 17;
+    int kapasitasPerempuan = currentLembagaData['kapasitasPerempuan'] ?? 5;
+    return (kapasitasLaki + kapasitasPerempuan).toString();
   }
 
   String _getSisaKapasitas() {
-    return '18'; // 22 - 4 (3+1 yang terisi)
+    int kapasitasLaki = currentLembagaData['kapasitasLaki'] ?? 17;
+    int kapasitasPerempuan = currentLembagaData['kapasitasPerempuan'] ?? 5;
+    int terisiLaki = currentLembagaData['rawatInapLaki'] ?? 3;
+    int terisiPerempuan = currentLembagaData['rawatInapPerempuan'] ?? 1;
+
+    int totalKapasitas = kapasitasLaki + kapasitasPerempuan;
+    int totalTerisi = terisiLaki + terisiPerempuan;
+
+    return (totalKapasitas - totalTerisi).toString();
+  }
+
+  void _navigateToEdit(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            EditLembagaScreen(lembagaData: currentLembagaData),
+      ),
+    );
+
+    if (result != null && result is Map<String, dynamic>) {
+      setState(() {
+        currentLembagaData = result;
+      });
+    }
   }
 }

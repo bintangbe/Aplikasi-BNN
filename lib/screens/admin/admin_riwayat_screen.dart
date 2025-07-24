@@ -36,7 +36,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
       'lembagaRehab': 'Yayasan Orbit',
       'tanggalMasuk': '10 Agustus 2024',
       'tanggalSelesai': '20 Agustus 2024',
-      'statusProgress': 'Dalam Proses',
+      'statusProgress': 'Masa Rehab',
     },
     {
       'nama': 'Bintang Azis Satrio Wibowo',
@@ -508,9 +508,11 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
     switch (status) {
       case 'Selesai':
         return const Color(0xFF22C55E);
-      case 'Dalam Proses':
+      case 'Masa Rehab':
         return const Color(0xFFF59E0B);
-      case 'Menunggu':
+      case 'Dalam Proses': // Keep for backward compatibility with existing data
+        return const Color(0xFFF59E0B);
+      case 'Menunggu': // Keep for backward compatibility with existing data
         return const Color(0xFF6B7280);
       default:
         return const Color(0xFF6B7280);
@@ -555,17 +557,10 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               _buildRadioOption(
-                'Menunggu',
-                selectedStatus,
-                const Color(0xFF6B7280),
-                Icons.hourglass_empty,
-                (value) => setState(() => selectedStatus = value!),
-              ),
-              _buildRadioOption(
-                'Dalam Proses',
+                'Masa Rehab',
                 selectedStatus,
                 const Color(0xFFF59E0B),
-                Icons.refresh,
+                Icons.medical_services,
                 (value) => setState(() => selectedStatus = value!),
               ),
               _buildRadioOption(
