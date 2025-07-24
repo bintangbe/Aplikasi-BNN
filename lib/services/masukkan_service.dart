@@ -51,6 +51,19 @@ class MasukkanService {
     final index = _daftarMasukkan.indexWhere((m) => m.id == masukkanId);
     if (index != -1) {
       _daftarMasukkan[index].percakapan.add(pesan);
+      // Update status berdasarkan pengirim pesan terakhir
+      String newStatus;
+      if (_daftarMasukkan[index].percakapan.isEmpty) {
+        newStatus = 'Menunggu Balasan';
+      } else {
+        final lastMessage = _daftarMasukkan[index].percakapan.last;
+        if (lastMessage.pengirim == 'admin') {
+          newStatus = 'Sudah Dibalas';
+        } else {
+          newStatus = 'Menunggu Balasan Admin';
+        }
+      }
+      
       _daftarMasukkan[index] = MasukkanModel(
         id: _daftarMasukkan[index].id,
         nama: _daftarMasukkan[index].nama,
@@ -58,7 +71,7 @@ class MasukkanService {
         judul: _daftarMasukkan[index].judul,
         isi: _daftarMasukkan[index].isi,
         tanggal: _daftarMasukkan[index].tanggal,
-        status: 'Sudah Dibalas',
+        status: newStatus,
         percakapan: _daftarMasukkan[index].percakapan,
       );
     }
@@ -74,5 +87,19 @@ class MasukkanService {
 
   String generateId() {
     return DateTime.now().millisecondsSinceEpoch.toString();
+  }
+
+  // Mendapatkan status dinamis berdasarkan percakapan terakhir
+  String getStatusDinamis(MasukkanModel masukkan) {
+    if (masukkan.percakapan.isEmpty) {
+      return 'Menunggu Balasan';
+    }
+    
+    final lastMessage = masukkan.percakapan.last;
+    if (lastMessage.pengirim == 'admin') {
+      return 'Sudah Dibalas';
+    } else {
+      return 'Menunggu Balasan Admin';
+    }
   }
 }
