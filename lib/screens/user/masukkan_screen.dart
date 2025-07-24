@@ -432,7 +432,7 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
       judul: _judulController.text,
       isi: _pesanController.text,
       tanggal: DateTime.now(),
-      status: 'Terkirim',
+      status: 'Menunggu Balasan',
       percakapan: [],
     );
     
@@ -533,18 +533,18 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: masukkan.percakapan.isEmpty
+                              color: _masukkanService.getStatusDinamis(masukkan) == 'Menunggu Balasan' ||
+                                     _masukkanService.getStatusDinamis(masukkan) == 'Menunggu Balasan Admin'
                                   ? Colors.orange[100]
                                   : Colors.green[100],
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
-                              masukkan.percakapan.isEmpty
-                                  ? 'Menunggu Balasan'
-                                  : '${masukkan.percakapan.length} Balasan',
+                              _masukkanService.getStatusDinamis(masukkan),
                               style: TextStyle(
                                 fontSize: 12,
-                                color: masukkan.percakapan.isEmpty
+                                color: _masukkanService.getStatusDinamis(masukkan) == 'Menunggu Balasan' ||
+                                       _masukkanService.getStatusDinamis(masukkan) == 'Menunggu Balasan Admin'
                                     ? Colors.orange[800]
                                     : Colors.green[800],
                                 fontWeight: FontWeight.w500,
@@ -555,7 +555,24 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
                       ),
                     ],
                   ),
-                  trailing: const Icon(Icons.chevron_right),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Indikator pesan baru
+                      if (masukkan.percakapan.isNotEmpty && 
+                          masukkan.percakapan.last.pengirim == 'admin')
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      const SizedBox(width: 8),
+                      const Icon(Icons.chevron_right),
+                    ],
+                  ),
                   onTap: () {
                     Navigator.push(
                       context,

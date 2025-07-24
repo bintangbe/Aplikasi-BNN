@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import '../login_screen.dart';
 import 'notifikasi_admin_screen.dart';
 import 'ubah_password_admin_screen.dart';
+import 'masukkan_screen.dart';
 import 'unified_bottom_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../services/masukkan_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -45,6 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       children: [
                         _buildProfileSection(),
+                        _buildMasukkanStatsSection(),
                         _buildMenuSection(),
                         _buildContactSection(),
                       ],
@@ -58,6 +61,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       // Footer as in admin_dashboard_screen.dart
       bottomNavigationBar: const UnifiedBottomNavigation(currentIndex: 4),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MasukkanScreen(),
+          ),
+        ),
+        backgroundColor: const Color(0xFF063CA8),
+        foregroundColor: Colors.white,
+        icon: const Icon(Icons.feedback),
+        label: const Text(
+          'Kelola Masukkan',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
     );
   }
 
@@ -191,11 +211,198 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Widget _buildMasukkanStatsSection() {
+    final masukkanService = MasukkanService();
+    final masukkanList = masukkanService.daftarMasukkan;
+    final unreadCount = masukkanList.where((m) => m.status == 'Belum Dibalas').length;
+    final totalMasukkan = masukkanList.length;
+
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF063CA8).withOpacity(0.3),
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.feedback,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Text(
+                  'Masukkan & Feedback',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              if (unreadCount > 0)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    '$unreadCount',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: _buildStatItem(
+                  'Total Masukkan',
+                  '$totalMasukkan',
+                  Icons.message,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: _buildStatItem(
+                  'Belum Dibaca',
+                  '$unreadCount',
+                  Icons.mark_email_unread,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MasukkanScreen(),
+                ),
+              ),
+              icon: const Icon(Icons.open_in_new, color: Color(0xFF063CA8)),
+              label: const Text(
+                'Buka Masukkan',
+                style: TextStyle(
+                  color: Color(0xFF063CA8),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                elevation: 0,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatItem(String label, String value, IconData icon) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.3),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            color: Colors.white,
+            size: 20,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildMenuSection() {
+    final masukkanService = MasukkanService();
+    final unreadCount = masukkanService.daftarMasukkan.where((m) => m.status == 'Belum Dibalas').length;
+    
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         children: [
+          _buildMenuCard(
+            'Masukkan & Feedback',
+            Icons.feedback_outlined,
+            'Kelola masukkan dan feedback dari masyarakat',
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MasukkanScreen(),
+              ),
+            ),
+            badgeCount: unreadCount,
+          ),
+          const SizedBox(height: 12),
           _buildMenuCard(
             'Notifikasi',
             Icons.notifications_outlined,
@@ -292,6 +499,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     String subtitle,
     VoidCallback onTap, {
     bool isLogout = false,
+    int? badgeCount,
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -312,22 +520,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         child: Row(
           children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: isLogout
-                    ? const Color(0xFFEF4444).withOpacity(0.1)
-                    : const Color(0xFF3B82F6).withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                icon,
-                color: isLogout
-                    ? const Color(0xFFEF4444)
-                    : const Color(0xFF3B82F6),
-                size: 24,
-              ),
+            Stack(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: isLogout
+                        ? const Color(0xFFEF4444).withOpacity(0.1)
+                        : const Color(0xFF3B82F6).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: isLogout
+                        ? const Color(0xFFEF4444)
+                        : const Color(0xFF3B82F6),
+                    size: 24,
+                  ),
+                ),
+                if (badgeCount != null && badgeCount > 0)
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 20,
+                        minHeight: 20,
+                      ),
+                      child: Text(
+                        badgeCount > 99 ? '99+' : '$badgeCount',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
             ),
             const SizedBox(width: 16),
             Expanded(
