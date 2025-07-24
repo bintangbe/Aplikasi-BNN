@@ -26,7 +26,7 @@ class MasukkanService {
       isi: 'Selamat siang BNN, saya ingin memberikan saran terkait program pencegahan narkoba di sekolah. '
           'Mungkin bisa ditambahkan sesi interaktif atau games yang lebih menarik agar siswa lebih antusias dalam mengikuti program.',
       tanggal: DateTime(2025, 7, 19),
-      status: 'Sudah Dibalas',
+      status: 'Menunggu Balasan Admin',
       percakapan: [
         ChatMessage(
           id: '1',
@@ -36,6 +36,14 @@ class MasukkanService {
               'Saran Anda untuk menambahkan sesi interaktif dan games edukatif akan kami sampaikan kepada tim yang bertanggung jawab untuk pengembangan program. '
               'Kami terus berupaya meningkatkan metode penyampaian agar lebih menarik dan efektif bagi para siswa.',
           waktu: DateTime(2025, 7, 19, 14, 30),
+        ),
+        ChatMessage(
+          id: '2',
+          pengirim: 'user',
+          namaPengirim: 'Budi Santoso',
+          pesan: 'Terima kasih atas responnya, Admin. Saya juga ingin menambahkan bahwa mungkin bisa dipertimbangkan untuk mengundang alumni yang pernah mengalami rehabilitasi untuk berbagi cerita. '
+              'Menurut saya, testimoni langsung dari mereka akan lebih berkesan bagi para siswa.',
+          waktu: DateTime(2025, 7, 19, 15, 45),
         ),
       ],
     ),
@@ -58,7 +66,7 @@ class MasukkanService {
       } else {
         final lastMessage = _daftarMasukkan[index].percakapan.last;
         if (lastMessage.pengirim == 'admin') {
-          newStatus = 'Sudah Dibalas';
+          newStatus = 'Menunggu Balasan User';
         } else {
           newStatus = 'Menunggu Balasan Admin';
         }
@@ -97,7 +105,7 @@ class MasukkanService {
     
     final lastMessage = masukkan.percakapan.last;
     if (lastMessage.pengirim == 'admin') {
-      return 'Sudah Dibalas';
+      return 'Menunggu Balasan User';
     } else {
       return 'Menunggu Balasan Admin';
     }

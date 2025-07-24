@@ -179,7 +179,6 @@ class MasukanCard extends StatefulWidget {
 }
 
 class _MasukanCardState extends State<MasukanCard> {
-  bool showPercakapan = false;
   final MasukkanService _masukkanService = MasukkanService();
 
   String _formatDate(DateTime date) {
@@ -287,72 +286,6 @@ class _MasukanCardState extends State<MasukanCard> {
             ),
           ),
           
-          // Tampilkan percakapan jika ada dan showPercakapan true
-          if (widget.masukkanModel.percakapan.isNotEmpty && showPercakapan) ...[
-            const SizedBox(height: 12),
-            ...widget.masukkanModel.percakapan.map((message) => Container(
-              margin: const EdgeInsets.only(bottom: 8),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: message.pengirim == 'admin' 
-                    ? const Color(0xFF0062F3).withOpacity(0.1)
-                    : Colors.grey.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: message.pengirim == 'admin' 
-                      ? const Color(0xFF0062F3).withOpacity(0.3)
-                      : Colors.grey.withOpacity(0.3),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: message.pengirim == 'admin' 
-                            ? const Color(0xFF0062F3)
-                            : Colors.grey,
-                        radius: 16,
-                        child: Icon(
-                          message.pengirim == 'admin' ? Icons.support_agent : Icons.person,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        message.namaPengirim,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: message.pengirim == 'admin' 
-                              ? const Color(0xFF0062F3)
-                              : Colors.grey[700],
-                        ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        _formatDate(message.waktu),
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    message.pesan,
-                    style: const TextStyle(
-                      color: Colors.black87,
-                      height: 1.4,
-                    ),
-                  ),
-                ],
-              ),
-            )).toList(),
-          ],
-          
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -366,29 +299,22 @@ class _MasukanCardState extends State<MasukanCard> {
               ),
               TextButton(
                 onPressed: () {
-                  if (widget.masukkanModel.percakapan.isNotEmpty) {
-                    setState(() {
-                      showPercakapan = !showPercakapan;
-                    });
-                  } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetailPercakapanScreen(
-                          masukkan: widget.masukkanModel,
-                          isAdmin: true,
-                          currentUserName: 'Admin BNN',
-                        ),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetailPercakapanScreen(
+                        masukkan: widget.masukkanModel,
+                        isAdmin: true,
+                        currentUserName: 'Admin BNN',
                       ),
-                    ).then((_) => widget.onUpdate());
-                  }
+                    ),
+                  ).then((_) => widget.onUpdate());
                 },
                 child: Text(
-                  widget.masukkanModel.percakapan.isNotEmpty 
-                      ? (showPercakapan ? '< Sembunyikan >' : '< Lihat Percakapan >') 
-                      : '< Balas >',
+                  widget.masukkanModel.percakapan.isEmpty ? '< Balas >' : '< Balas Lagi >',
                   style: const TextStyle(
                     color: Color(0xFF0062F3),
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
