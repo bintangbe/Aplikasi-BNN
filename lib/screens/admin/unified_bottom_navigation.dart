@@ -8,6 +8,7 @@ import 'admin_persebaran.dart';
 import 'admin_ajukan_rehab_screen.dart';
 import 'admin_riwayat_screen.dart';
 import 'profile_screen.dart';
+import 'masukkan_screen.dart';
 
 class UnifiedBottomNavigation extends StatelessWidget {
   final int currentIndex;
@@ -151,7 +152,7 @@ class UnifiedBottomNavigation extends StatelessWidget {
         targetScreen = const AdminPersebaranScreen();
         break;
       case 2:
-        targetScreen = const AdminAjukanRehabScreen();
+        targetScreen = const MasukkanScreen();
         break;
       case 3:
         targetScreen = const AdminRiwayatScreen();
