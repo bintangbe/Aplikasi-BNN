@@ -4,6 +4,7 @@ import 'beranda_user.dart';
 import 'persebaran_screen.dart';
 import 'masukkan_screen.dart';
 import 'akun_screen.dart';
+import 'unified_bottom_navigation_user.dart';
 
 class EbookScreen extends StatefulWidget {
   const EbookScreen({super.key});
@@ -156,26 +157,11 @@ class _EbookScreenState extends State<EbookScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigation(),
+      bottomNavigationBar: UnifiedBottomNavigationUser(currentIndex: 3),
     );
   }
 
-  Widget _buildBottomNavigation() {
-    return Container(
-      height: 65,
-      decoration: const BoxDecoration(color: Color(0xFF063CA8)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildNavItem(Icons.home, 'Beranda', 0),
-          _buildNavItem(Icons.map, 'Persebaran', 1),
-          _buildNavItem(Icons.input, 'Masukkan', 2),
-          _buildNavItem(Icons.book, 'E-Book', 3),
-          _buildNavItem(Icons.person, 'Akun', 4),
-        ],
-      ),
-    );
-  }
+  // ...existing code...
 
   Widget _buildNavItem(IconData icon, String label, int index) {
     bool isSelected = index == 3; // E-Book is selected

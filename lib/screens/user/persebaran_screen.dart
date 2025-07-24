@@ -5,6 +5,7 @@ import 'beranda_user.dart';
 import 'masukkan_screen.dart';
 import 'ebook_screen.dart';
 import 'akun_screen.dart';
+import 'unified_bottom_navigation_user.dart';
 
 class PersebaranScreen extends StatelessWidget {
   const PersebaranScreen({super.key});
@@ -59,90 +60,12 @@ class PersebaranScreen extends StatelessWidget {
                 ],
               ),
             ),
-            _buildBottomNavigation(context),
           ],
         ),
+        bottomNavigationBar: UnifiedBottomNavigationUser(currentIndex: 1),
       ),
     );
   }
 
-  Widget _buildBottomNavigation(BuildContext context) {
-    return Container(
-      height: 65,
-      decoration: const BoxDecoration(color: Color(0xFF063CA8)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildNavItem(context, Icons.home, 'Beranda', 0),
-          _buildNavItem(context, Icons.map, 'Persebaran', 1),
-          _buildNavItem(context, Icons.input, 'Masukkan', 2),
-          _buildNavItem(context, Icons.book, 'E-Book', 3),
-          _buildNavItem(context, Icons.person, 'Akun', 4),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(BuildContext context, IconData icon, String label, int index) {
-    bool isSelected = index == 1; // Persebaran is selected
-    return GestureDetector(
-      onTap: () {
-        // Navigate to different screens based on index
-        switch (index) {
-          case 0:
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const BerandaUserScreen(),
-              ),
-            );
-            break;
-          case 1:
-            // Already on Persebaran, do nothing
-            break;
-          case 2:
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const MasukkanScreen()),
-            );
-            break;
-          case 3:
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const EbookScreen()),
-            );
-            break;
-          case 4:
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const AkunScreen()),
-            );
-            break;
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF062766) : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: Colors.white, size: 20),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // ...existing code...
 }

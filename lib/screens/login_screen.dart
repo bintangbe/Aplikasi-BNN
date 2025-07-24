@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import 'admin/admin_login_screen.dart';
 import 'user/login_user.dart';
+import '../widgets/responsive_wrapper.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -9,155 +10,141 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              AppColors.backgroundBlue,
-              AppColors.primaryDark,
-            ],
+      body: ResponsiveWrapper(
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                AppColors.backgroundBlue,
+                AppColors.primaryDark,
+              ],
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                const SizedBox(height: 40),
-                
-                // BNN Logo & Title
-                Column(
-                  children: [
-                    // BNN Logo (real asset atau fallback)
-                    _buildBNNLogo(),
-                    
-                    const SizedBox(height: 16),
-                    
-                    // KOTA SURABAYA
-                    const Text(
-                      'KOTA\nSURABAYA',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textWhite,
-                        height: 1.2,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: ListView(
+                physics: const BouncingScrollPhysics(),
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 24),
+                children: [
+                  const SizedBox(height: 40),
+                  // BNN Logo & Title
+                  Column(
+                    children: [
+                      _buildBNNLogo(),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'KOTA\nSURABAYA',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.textWhite,
+                          height: 1.2,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 40),
+                  // Login Card
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: double.infinity,
+                      constraints: BoxConstraints(
+                        minHeight: 320,
+                      ),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.black.withOpacity(0.1),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            'Selamat Datang',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            'Silakan login untuk melanjutkan',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          _buildLoginButton(
+                            'Login Masyarakat',
+                            AppColors.buttonMasyarakat,
+                            () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginUserScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          _buildLoginButton(
+                            'Login Lembaga',
+                            AppColors.buttonLembaga,
+                            () {
+                              // Navigate to Lembaga
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          _buildLoginButton(
+                            'Login Penyidik',
+                            AppColors.buttonPenyidik,
+                            () {
+                              // Navigate to Penyidik
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          _buildLoginButton(
+                            'Login Admin',
+                            AppColors.buttonAdmin,
+                            () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const AdminLoginScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-                
-                const SizedBox(height: 40),
-                
-                // Login Card
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(32),
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.black.withOpacity(0.1),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Welcome Text
-                        const Text(
-                          'Selamat Datang',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                        
-                        const SizedBox(height: 8),
-                        
-                        const Text(
-                          'Silakan login untuk melanjutkan',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                        
-                        const SizedBox(height: 40),
-                        
-                        // Login Buttons
-                        Expanded(
-                          child: Column(
-                            children: [
-                              _buildLoginButton(
-                                'Login Masyarakat',
-                                AppColors.buttonMasyarakat,
-                                () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const LoginUserScreen(),
-                                    )
-                                  );
-                                },
-                              ),
-                              
-                              const SizedBox(height: 16),
-                              
-                              _buildLoginButton(
-                                'Login Lembaga',
-                                AppColors.buttonLembaga,
-                                () {
-                                  // Navigate to Lembaga
-                                },
-                              ),
-                              
-                              const SizedBox(height: 16),
-                              
-                              _buildLoginButton(
-                                'Login Penyidik',
-                                AppColors.buttonPenyidik,
-                                () {
-                                  // Navigate to Penyidik
-                                },
-                              ),
-                              
-                              const SizedBox(height: 16),
-                              
-                              _buildLoginButton(
-                                'Login Admin',
-                                AppColors.buttonAdmin,
-                                () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const AdminLoginScreen(),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 24),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
+           
   }
   
   Widget _buildBNNLogo() {

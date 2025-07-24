@@ -6,6 +6,7 @@ import 'detail_lembaga_screen.dart';
 import 'daftar_lembaga_screen.dart';
 import 'profile_screen.dart';
 import 'unified_bottom_navigation.dart';
+import '../../widgets/responsive_wrapper.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
@@ -16,60 +17,48 @@ class AdminDashboardScreen extends StatelessWidget {
       canPop: false,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
+        body: ResponsiveWrapper(
+          child: Stack(
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
+                  ),
                 ),
               ),
-            ),
-            SafeArea(
-              bottom: false,
-              child: Column(
-                children: [
-                  _buildHeader(context),
-                  Expanded(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFEFEFEF),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(35),
-                          topRight: Radius.circular(35),
-                        ),
-                      ),
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.only(
-                          left: 24,
-                          right: 24,
-                          top: 24,
-                          bottom: 100,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildActionButtons(context),
-                            const SizedBox(height: 24),
-                            _buildLembagaSection(context),
-                          ],
-                        ),
-                      ),
-                    ),
+              SafeArea(
+                bottom: false,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.only(
+                    left: 24,
+                    right: 24,
+                    top: 24,
+                    bottom: 100,
                   ),
-                ],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildHeader(context),
+                      const SizedBox(height: 16),
+                      _buildActionButtons(context),
+                      const SizedBox(height: 24),
+                      _buildLembagaSection(context),
+                    ],
+                  ),
+                ),
               ),
-            ),
-            // Bottom Navigation
-            const Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: UnifiedBottomNavigation(currentIndex: 0),
-            ),
-          ],
+              // Bottom Navigation
+              const Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: UnifiedBottomNavigation(currentIndex: 0),
+              ),
+            ],
+          ),
         ),
       ),
     );

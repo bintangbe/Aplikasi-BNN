@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
-import '../constants/text_styles.dart';
+import '../widgets/responsive_wrapper.dart';
 import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -14,69 +14,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Navigate to login after 3 seconds
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const LoginScreen()),
       );
     });
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // SEMANGGI Logo - Real Asset atau Fallback (diperbesar)
-            _buildLogo(),
-
-            const SizedBox(height: 40),
-
-            // SEMANGGI Text
-            const Text(
-              'Semangat Menggapai Asa untuk Memulai Rehabilitasi',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w900,
-                color: AppColors.textPrimary,
-                letterSpacing: 2,
-              ),
-            ),
-
-            const SizedBox(height: 60),
-
-            // Welcome Text
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40),
-              child: Text(
-                'Selamat datang di aplikasi Semanggi',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
-                  height: 1.4,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 40),
-
-            // Loading indicator
-            const CircularProgressIndicator(
-              color: AppColors.logoBlue,
-              strokeWidth: 3,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildLogo() {
     return Center(
       child: SizedBox(
@@ -144,6 +87,61 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: ResponsiveWrapper(
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // SEMANGGI Logo - Real Asset atau Fallback (diperbesar)
+                  _buildLogo(),
+                  const SizedBox(height: 40),
+                  // SEMANGGI Text
+                  const Text(
+                    'Semangat Menggapai Asa untuk Memulai Rehabilitasi',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.textPrimary,
+                      letterSpacing: 2,
+                    ),
+                  ),
+                  const SizedBox(height: 60),
+                  // Welcome Text
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    child: const Text(
+                      'Selamat datang di aplikasi Semanggi',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                        height: 1.4,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  // Loading indicator
+                  const CircularProgressIndicator(
+                    color: AppColors.logoBlue,
+                    strokeWidth: 3,
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

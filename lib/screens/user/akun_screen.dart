@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'beranda_user.dart';
+import 'unified_bottom_navigation_user.dart';
 import 'persebaran_screen.dart';
 import 'masukkan_screen.dart';
 import 'ebook_screen.dart';
@@ -57,7 +58,7 @@ class _AkunScreenState extends State<AkunScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigation(),
+      bottomNavigationBar: UnifiedBottomNavigationUser(currentIndex: 4),
     );
   }
 

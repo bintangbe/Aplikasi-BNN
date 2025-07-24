@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'persebaran_screen.dart';
+import 'unified_bottom_navigation_user.dart';
 import 'ebook_screen.dart';
 import 'akun_screen.dart';
 import 'beranda_user.dart';
@@ -94,7 +95,7 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigation(),
+      bottomNavigationBar: UnifiedBottomNavigationUser(currentIndex: 2),
     );
   }
 

@@ -6,6 +6,7 @@ import 'notifikasi_admin_screen.dart';
 import 'ubah_password_admin_screen.dart';
 import 'unified_bottom_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../widgets/admin_header.dart';
 
 
 class ProfileScreen extends StatefulWidget {
@@ -32,7 +33,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              _buildAdminHeader(),
+              const AdminHeader(),
+              const SizedBox(height: 8),
               Expanded(
                 child: Container(
                   decoration: const BoxDecoration(
@@ -62,88 +64,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildAdminHeader() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () async {
-              final Uri url = Uri.parse('https://surabayakota.bnn.go.id');
-              if (!await launchUrl(url)) {
-                throw Exception('Could not launch $url');
-              }
-            },
-            child: Container(
-              width: 86,
-              height: 86,
-              child: Image.asset(
-                'assets/images/logo_bnn.png',
-                fit: BoxFit.contain,
-              ),
-            ),
-          ),
-          const SizedBox(width: 16),
-          const Expanded(
-            child: Text(
-              'KOTA\nSURABAYA',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontFamily: 'Roboto',
-                fontWeight: FontWeight.w400,
-                height: 1.2,
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'Admin',
-                  style: TextStyle(
-                    color: Color(0xFF0540B0),
-                    fontSize: 16,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: const Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // ...existing code...
 
   Widget _buildProfileSection() {
     const String namaUser = 'Oktavian';
     const String emailUser = 'oktavian@email.com';
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.all(24),
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),

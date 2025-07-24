@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'unified_bottom_navigation.dart';
 import 'profile_screen.dart';
+import '../../widgets/responsive_wrapper.dart';
 
 class AdminRiwayatScreen extends StatefulWidget {
   const AdminRiwayatScreen({super.key});
@@ -64,44 +65,46 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
+        body: ResponsiveWrapper(
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
+              ),
             ),
-          ),
-          child: Column(
-            children: [
-              _buildHeader(context),
-              Expanded(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFEFEFEF),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(35),
-                      topRight: Radius.circular(35),
+            child: Column(
+              children: [
+                _buildHeader(context),
+                Expanded(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFEFEFEF),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(35),
+                        topRight: Radius.circular(35),
+                      ),
                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      _buildContentHeader(),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-                          child: Column(
-                            children: _filteredData
-                                .map((data) => _buildRiwayatItem(data))
-                                .toList(),
+                    child: Column(
+                      children: [
+                        _buildContentHeader(),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                            child: Column(
+                              children: _filteredData
+                                  .map((data) => _buildRiwayatItem(data))
+                                  .toList(),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         bottomNavigationBar: UnifiedBottomNavigation(currentIndex: 3),
