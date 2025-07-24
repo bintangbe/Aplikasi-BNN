@@ -152,7 +152,7 @@ class UnifiedBottomNavigation extends StatelessWidget {
         targetScreen = const AdminPersebaranScreen();
         break;
       case 2:
-        targetScreen = const MasukkanScreen();
+        targetScreen = const AdminAjukanRehabScreen();
         break;
       case 3:
         targetScreen = const AdminRiwayatScreen();
