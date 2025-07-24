@@ -40,10 +40,9 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
       'name': 'Yayasan Orbit Surabaya',
       'location': 'Surabaya Timur',
       'capacity': '24 orang',
-      'alamatLengkap':
-          'Jl. BarataJaya XII A No.6, RT.001/RW.004, Baratajaya, Kec. Gubeng, Surabaya',
-      'nomorTelepon': '082245948605',
-      'jamOperasional': '09.00 - 17.00 WIB',
+      'alamatLengkap': 'Jl. Margorejo Indah Utara Blok B-922, Surabaya',
+      'nomorTelepon': '081233563815',
+      'jamOperasional': '09.00 - 21.00 WIB',
       'image': 'assets/images/yayasan_orbit.jpeg',
       'email': 'orbit.foundation@yahoo.com',
     },

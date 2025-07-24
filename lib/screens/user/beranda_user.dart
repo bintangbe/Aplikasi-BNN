@@ -3,6 +3,8 @@ import 'persebaran_screen.dart';
 import 'masukkan_screen.dart';
 import 'ebook_screen.dart';
 import 'akun_screen.dart';
+import 'daftar_lembaga_user_screen.dart';
+import 'detail_lembaga_user_screen.dart';
 
 class BerandaUserScreen extends StatefulWidget {
   const BerandaUserScreen({super.key});
@@ -42,7 +44,11 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
                   ),
                   child: SingleChildScrollView(
                     child: Column(
-                      children: [_buildRehabSection(), _buildNewsSection()],
+                      children: [
+                        _buildQuickSearchSection(),
+                        _buildRehabSection(),
+                        _buildNewsSection(),
+                      ],
                     ),
                   ),
                 ),
@@ -161,38 +167,66 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
     );
   }
 
-  Widget _buildRehabSection() {
+  Widget _buildQuickSearchSection() {
     return Container(
-      width: double.infinity,
       padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Daftar Lembaga Rehab',
+            'Cari Lembaga Rehabilitasi',
             style: TextStyle(
               color: Colors.black,
-              fontSize: 24,
+              fontSize: 20,
               fontFamily: 'Inter',
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 16),
-          ...List.generate(4, (index) => _buildRehabCard(index)),
-          const SizedBox(height: 8),
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () {
-                // TODO: Navigate to full rehab list
+          const SizedBox(height: 12),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 10,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            child: TextField(
+              onTap: () {
+                // Navigate to search screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DaftarLembagaUserScreen(),
+                  ),
+                );
               },
-              child: const Text(
-                'Lihat Semua',
-                style: TextStyle(
-                  color: Color(0xFF3B82F6),
-                  fontSize: 14,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w500,
+              readOnly: true,
+              decoration: InputDecoration(
+                hintText: 'Cari berdasarkan nama atau lokasi...',
+                hintStyle: TextStyle(color: Colors.grey[400]),
+                prefixIcon: Container(
+                  padding: const EdgeInsets.all(12),
+                  child: Icon(Icons.search, color: Colors.grey[400]),
+                ),
+                suffixIcon: Container(
+                  margin: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF2563EB),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.tune, color: Colors.white, size: 16),
+                ),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
                 ),
               ),
             ),
@@ -202,53 +236,296 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
     );
   }
 
-  Widget _buildRehabCard(int index) {
+  // Data lembaga rehabilitasi (integrated with admin data)
+  final List<Map<String, dynamic>> topLembaga = [
+    {
+      'name': 'RS Menur Surabaya',
+      'location': 'Surabaya Pusat',
+      'capacity': '42 orang',
+      'alamatLengkap': 'Jl. Raya Menur No. 120 Surabaya',
+      'nomorTelepon': '081330305585',
+      'jamOperasional': 'Buka 24 jam',
+      'image': 'assets/images/rs_menur.jpeg',
+      'email': 'rsj.menur@gmail.com',
+      'rating': 4.9,
+      'type': 'Rawat Inap',
+    },
+    {
+      'name': 'Yayasan Rumah Kita Surabaya',
+      'location': 'Surabaya Timur',
+      'type': 'Rawat Inap',
+      'capacity': '17 orang',
+      'alamatLengkap': 'Jl. Ngagel Madya II / 9 Surabaya',
+      'nomorTelepon': '081230724211',
+      'jamOperasional': '24 Jam',
+      'image': 'assets/images/yayasan_rumah_kita.jpeg',
+      'email': 'rumahkitasby86@gmail.com',
+      'rating': 4.8,
+    },
+    {
+      'name': 'Yayasan Plato Surabaya',
+      'location': 'Surabaya Timur',
+      'capacity': '24 orang',
+      'alamatLengkap':
+          'Jl. Cipta Mananggal v No. 16, RT 011 RW 005, Kelurahan Menanggal, Kecamatan Gayungan',
+      'nomorTelepon': '081330351599',
+      'jamOperasional': '08.00 - 16.00 WIB',
+      'image': 'assets/images/yayasan_plato_surabaya.jpeg',
+      'email': 'plato.found@gmail.com',
+      'rating': 4.7,
+      'type': 'Rawat Inap',
+    },
+    {
+      'name': 'Yayasan Orbit Surabaya',
+      'location': 'Surabaya Timur',
+      'capacity': '24 orang',
+      'alamatLengkap':
+          'Jl. BarataJaya XII A No.6, RT.001/RW.004, Baratajaya, Kec. Gubeng, Surabaya',
+      'nomorTelepon': '082245948605',
+      'jamOperasional': '09.00 - 17.00 WIB',
+      'image': 'assets/images/yayasan_orbit.jpeg',
+      'email': 'orbit.foundation@yahoo.com',
+      'rating': 4.6,
+      'type': 'Rawat Jalan',
+    },
+  ];
+
+  Widget _buildRehabSection() {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0x19000000),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-            spreadRadius: -2,
-          ),
-          BoxShadow(
-            color: const Color(0x19000000),
-            blurRadius: 6,
-            offset: const Offset(0, 4),
-            spreadRadius: -1,
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Lembaga Rehabilitasi ${String.fromCharCode(65 + index)}',
-            style: const TextStyle(
-              color: Color(0xFF1D4ED8),
-              fontSize: 16,
+          const Text(
+            'Daftar Lembaga Rehabilitasi',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 24,
               fontFamily: 'Inter',
               fontWeight: FontWeight.w700,
             ),
           ),
-          TextButton(
-            onPressed: () {
-              // TODO: Navigate to detail
-            },
-            child: const Text(
-              'Lihat Detail',
-              style: TextStyle(
-                color: Color(0xFF3B82F6),
-                fontSize: 14,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w500,
+          const SizedBox(height: 20),
+          ...List.generate(
+            topLembaga.length,
+            (index) => _buildRehabCard(topLembaga[index]),
+          ),
+          const SizedBox(height: 16),
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF2563EB), Color(0xFF063CA8)],
+                ),
+                borderRadius: BorderRadius.circular(25),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF2563EB).withOpacity(0.3),
+                    spreadRadius: 1,
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const DaftarLembagaUserScreen(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.list_alt, color: Colors.white),
+                label: const Text(
+                  'Lihat Semua Lembaga',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRehabCard(Map<String, dynamic> lembaga) {
+    final name = lembaga['name'] ?? 'Nama tidak tersedia';
+    final location = lembaga['location'] ?? 'Lokasi tidak tersedia';
+    final image = lembaga['image'] ?? 'assets/images/placeholder.jpeg';
+
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0x19000000),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // Image Section
+          Container(
+            height: 120,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+              ),
+              color: Colors.grey[200],
+            ),
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                  child: Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(image),
+                        fit: BoxFit.cover,
+                        onError: (exception, stackTrace) =>
+                            const Icon(Icons.broken_image),
+                      ),
+                    ),
+                  ),
+                ),
+                // Gradient overlay
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
+                    ),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.3),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Content Section
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        name,
+                        style: const TextStyle(
+                          color: Color(0xFF1D4ED8),
+                          fontSize: 16,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w700,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF2563EB).withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(
+                        Icons.local_hospital,
+                        color: Color(0xFF2563EB),
+                        size: 18,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Icon(Icons.location_on, size: 16, color: Colors.grey[600]),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        location,
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontSize: 14,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              DetailLembagaUserScreen(lembagaData: lembaga),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF2563EB),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: const Text(
+                      'Lihat Detail',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -285,7 +562,7 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
               children: [
                 _buildNewsCard(
                   'BNN Kota Surabaya Gencarkan Edukasi Bahaya Narkoba dan Deklarasi Pelajar Anti Narkoba di SMA Khadijah',
-                  'https://via.placeholder.com/258x130?text=BNN+Edukasi',
+                  'assets/images/BK0338.jpg',
                   'https://surabayakota.bnn.go.id/bnn-kota-surabaya-gencarkan-edukasi-bahaya-narkoba-dan-deklarasi-pelajar-anti-narkoba-di-sma-khadijah/',
                 ),
                 _buildNewsCard(
@@ -313,55 +590,131 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
   }
 
   Widget _buildNewsCard(String title, String imageUrl, [String? newsUrl]) {
+    final bool isAssetImage = imageUrl.startsWith('assets/');
+
     return GestureDetector(
       onTap: () {
         if (newsUrl != null) {
-          // TODO: Navigate to news detail or open in browser
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Membuka: ${title.substring(0, 30)}...'),
               duration: const Duration(seconds: 2),
+              backgroundColor: const Color(0xFF2563EB),
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
           );
         }
       },
       child: Container(
-        width: 258,
+        width: 280,
         margin: const EdgeInsets.only(right: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              width: 258,
-              height: 130,
+              width: 280,
+              height: 140,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                image: DecorationImage(
-                  image: NetworkImage(imageUrl),
-                  fit: BoxFit.cover,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    spreadRadius: 1,
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
+                color: Colors.grey[200],
+              ),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
+                    ),
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: isAssetImage
+                              ? AssetImage(imageUrl) as ImageProvider
+                              : NetworkImage(imageUrl),
+                          fit: BoxFit.cover,
+                          onError: (exception, stackTrace) =>
+                              const Icon(Icons.broken_image),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Gradient overlay
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16),
+                      ),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withOpacity(0.3),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // News badge
+                  Positioned(
+                    top: 8,
+                    left: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF2563EB),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Text(
+                        'BERITA',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: const TextStyle(
-                color: Color(0xFF3B82F6),
-                fontSize: 13,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w500,
-                height: 1.4,
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Text(
+                title,
+                style: const TextStyle(
+                  color: Color(0xFF1F2937),
+                  fontSize: 14,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w600,
+                  height: 1.4,
+                ),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
               ),
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

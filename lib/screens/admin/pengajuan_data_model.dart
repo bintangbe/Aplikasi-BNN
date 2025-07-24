@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../constants/colors.dart';
 import 'admin_ajukan_rehab_screen.dart';
-import 'riwayat_pengajuan_screen.dart'; // Import file riwayat pengajuan
+import 'admin_riwayat_screen.dart'; // Import file riwayat pengajuan
 
 class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
@@ -166,7 +166,7 @@ class AdminDashboardScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const RiwayatPengajuanScreen(),
+                  builder: (context) => const AdminRiwayatScreen(),
                 ),
               );
             },
@@ -448,7 +448,7 @@ class AdminDashboardScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const RiwayatPengajuanScreen(),
+                builder: (context) => const AdminRiwayatScreen(),
               ),
             );
           }),

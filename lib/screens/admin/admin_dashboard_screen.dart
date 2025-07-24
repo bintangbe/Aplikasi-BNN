@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'admin_ajukan_rehab_screen.dart';
-import 'riwayat_pengajuan_screen.dart';
+import 'admin_riwayat_screen.dart';
 import 'detail_lembaga_screen.dart';
 import 'daftar_lembaga_screen.dart';
 import 'profile_screen.dart';
@@ -194,9 +194,7 @@ class AdminDashboardScreen extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => const RiwayatPengajuanScreen(),
-                ),
+                MaterialPageRoute(builder: (_) => const AdminRiwayatScreen()),
               );
             },
           ),

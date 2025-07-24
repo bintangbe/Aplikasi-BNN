@@ -104,9 +104,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
             ],
           ),
         ),
-        bottomNavigationBar: UnifiedBottomNavigation(
-          currentIndex: 3,
-        ),
+        bottomNavigationBar: UnifiedBottomNavigation(currentIndex: 3),
       ),
     );
   }
@@ -431,6 +429,28 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
             data['tanggalSelesai'],
             Icons.event_available,
           ),
+
+          const SizedBox(height: 16),
+
+          // Update Status Button
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () => _showUpdateStatusDialog(data),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF3B82F6),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                'Update Status',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -492,6 +512,158 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
       default:
         return const Color(0xFF6B7280);
     }
+  }
+
+  void _showUpdateStatusDialog(Map<String, dynamic> data) {
+    String selectedStatus = data['statusProgress'];
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF22C55E),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(Icons.edit, color: Colors.white, size: 20),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'Update Status',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF1D4ED8),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildRadioOption(
+                'Menunggu',
+                selectedStatus,
+                const Color(0xFF6B7280),
+                Icons.hourglass_empty,
+                (value) => setState(() => selectedStatus = value!),
+              ),
+              _buildRadioOption(
+                'Dalam Proses',
+                selectedStatus,
+                const Color(0xFFF59E0B),
+                Icons.refresh,
+                (value) => setState(() => selectedStatus = value!),
+              ),
+              _buildRadioOption(
+                'Selesai',
+                selectedStatus,
+                const Color(0xFF22C55E),
+                Icons.check_circle,
+                (value) => setState(() => selectedStatus = value!),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              style: TextButton.styleFrom(
+                foregroundColor: const Color(0xFF6B7280),
+              ),
+              child: const Text('Batal'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _updateStatus(data, selectedStatus);
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Status untuk ${data['nama']} berhasil diupdate ke: $selectedStatus',
+                    ),
+                    backgroundColor: const Color(0xFF22C55E),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF3B82F6),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text('Update'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRadioOption(
+    String title,
+    String selectedValue,
+    Color color,
+    IconData icon,
+    Function(String?) onChanged,
+  ) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: selectedValue == title ? color : Colors.grey.shade300,
+          width: selectedValue == title ? 2 : 1,
+        ),
+      ),
+      child: RadioListTile<String>(
+        title: Row(
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Icon(icon, color: color, size: 18),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              title,
+              style: TextStyle(
+                fontWeight: selectedValue == title
+                    ? FontWeight.w600
+                    : FontWeight.w400,
+                color: selectedValue == title ? color : Colors.black87,
+              ),
+            ),
+          ],
+        ),
+        value: title,
+        groupValue: selectedValue,
+        onChanged: onChanged,
+        activeColor: color,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+      ),
+    );
+  }
+
+  void _updateStatus(Map<String, dynamic> data, String newStatus) {
+    setState(() {
+      data['statusProgress'] = newStatus;
+    });
   }
 
   @override
