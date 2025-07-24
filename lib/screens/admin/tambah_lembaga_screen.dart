@@ -632,8 +632,8 @@ class _TambahLembagaScreenState extends State<TambahLembagaScreen> {
                       return 'Wajib diisi';
                     }
                     int? intValue = int.tryParse(value);
-                    if (intValue == null || intValue <= 0) {
-                      return 'Harus > 0';
+                    if (intValue == null || intValue < 0) {
+                      return 'Harus >= 0';
                     }
                     return null;
                   },
@@ -677,8 +677,8 @@ class _TambahLembagaScreenState extends State<TambahLembagaScreen> {
                       return 'Wajib diisi';
                     }
                     int? intValue = int.tryParse(value);
-                    if (intValue == null || intValue <= 0) {
-                      return 'Harus > 0';
+                    if (intValue == null || intValue < 0) {
+                      return 'Harus >= 0';
                     }
                     return null;
                   },

@@ -45,22 +45,22 @@ class _EditLembagaScreenState extends State<EditLembagaScreen> {
 
     // Initialize capacity controllers with default values
     _rawatInapLakiController = TextEditingController(
-      text: widget.lembagaData['rawatInapLaki']?.toString() ?? '3',
+      text: widget.lembagaData['rawatInapLaki']?.toString() ?? '',
     );
     _rawatInapPerempuanController = TextEditingController(
-      text: widget.lembagaData['rawatInapPerempuan']?.toString() ?? '1',
+      text: widget.lembagaData['rawatInapPerempuan']?.toString() ?? '',
     );
     _rawatJalanController = TextEditingController(
-      text: widget.lembagaData['rawatJalan']?.toString() ?? '2',
+      text: widget.lembagaData['rawatJalan']?.toString() ?? '',
     );
     _pascaRehabController = TextEditingController(
-      text: widget.lembagaData['pascaRehab']?.toString() ?? '2',
+      text: widget.lembagaData['pascaRehab']?.toString() ?? '',
     );
     _kapasitasLakiController = TextEditingController(
-      text: widget.lembagaData['kapasitasLaki']?.toString() ?? '17',
+      text: widget.lembagaData['kapasitasLaki']?.toString() ?? '',
     );
     _kapasitasPerempuanController = TextEditingController(
-      text: widget.lembagaData['kapasitasPerempuan']?.toString() ?? '5',
+      text: widget.lembagaData['kapasitasPerempuan']?.toString() ?? '',
     );
   }
 
@@ -509,8 +509,8 @@ class _EditLembagaScreenState extends State<EditLembagaScreen> {
                       return 'Wajib diisi';
                     }
                     int? intValue = int.tryParse(value);
-                    if (intValue == null || intValue <= 0) {
-                      return 'Harus > 0';
+                    if (intValue == null || intValue < 0) {
+                      return 'Harus >= 0';
                     }
                     return null;
                   },
@@ -554,8 +554,8 @@ class _EditLembagaScreenState extends State<EditLembagaScreen> {
                       return 'Wajib diisi';
                     }
                     int? intValue = int.tryParse(value);
-                    if (intValue == null || intValue <= 0) {
-                      return 'Harus > 0';
+                    if (intValue == null || intValue < 0) {
+                      return 'Harus >= 0';
                     }
                     return null;
                   },

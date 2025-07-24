@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class DetailLembagaUserScreen extends StatelessWidget {
   final Map<String, dynamic> lembagaData;
@@ -35,7 +34,6 @@ class DetailLembagaUserScreen extends StatelessWidget {
                       children: [
                         _buildImageSection(),
                         _buildDetailContent(),
-                        _buildActionButtons(context),
                         const SizedBox(height: 20),
                       ],
                     ),
@@ -73,24 +71,6 @@ class DetailLembagaUserScreen extends StatelessWidget {
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
               ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: IconButton(
-              onPressed: () {
-                // TODO: Add to favorites
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Ditambahkan ke favorit'),
-                    backgroundColor: Color(0xFF059669),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.favorite_border, color: Colors.white),
             ),
           ),
         ],
@@ -153,7 +133,14 @@ class DetailLembagaUserScreen extends StatelessWidget {
     final location = lembagaData['location'] ?? 'Lokasi tidak tersedia';
     final alamatLengkap =
         lembagaData['alamatLengkap'] ?? 'Alamat tidak tersedia';
-    final capacity = lembagaData['capacity'] ?? 'Kapasitas tidak tersedia';
+    final capacityPria =
+        lembagaData['capacityPria'] ??
+        lembagaData['capacity_pria'] ??
+        'Tidak tersedia';
+    final capacityWanita =
+        lembagaData['capacityWanita'] ??
+        lembagaData['capacity_wanita'] ??
+        'Tidak tersedia';
     final jamOperasional =
         lembagaData['jamOperasional'] ?? 'Jam tidak tersedia';
     final nomorTelepon = lembagaData['nomorTelepon'] ?? 'Nomor tidak tersedia';
@@ -206,10 +193,16 @@ class DetailLembagaUserScreen extends StatelessWidget {
               const Color(0xFF059669),
             ),
             _buildDetailRow(
-              Icons.people_outline,
-              'Kapasitas',
-              capacity,
+              Icons.man_outlined,
+              'Kapasitas Pria',
+              capacityPria,
               const Color(0xFF2563EB),
+            ),
+            _buildDetailRow(
+              Icons.woman_outlined,
+              'Kapasitas Wanita',
+              capacityWanita,
+              const Color(0xFFEC4899),
             ),
             _buildDetailRow(
               Icons.access_time_outlined,
@@ -307,119 +300,6 @@ class DetailLembagaUserScreen extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActionButtons(BuildContext context) {
-    final nomorTelepon = lembagaData['nomorTelepon'] ?? '';
-    final alamatLengkap = lembagaData['alamatLengkap'] ?? '';
-
-    return Container(
-      margin: const EdgeInsets.all(20),
-      child: Column(
-        children: [
-          // Call Button
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: () async {
-                if (nomorTelepon.isNotEmpty &&
-                    nomorTelepon != 'Nomor tidak tersedia') {
-                  final Uri phoneUri = Uri(scheme: 'tel', path: nomorTelepon);
-                  if (await canLaunchUrl(phoneUri)) {
-                    await launchUrl(phoneUri);
-                  } else {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Tidak dapat membuka aplikasi telepon'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Nomor telepon tidak tersedia'),
-                      backgroundColor: Colors.orange,
-                    ),
-                  );
-                }
-              },
-              icon: const Icon(Icons.phone),
-              label: const Text(
-                'Hubungi Sekarang',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF059669),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                elevation: 2,
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 12),
-
-          // Maps Button
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: () async {
-                if (alamatLengkap.isNotEmpty &&
-                    alamatLengkap != 'Alamat tidak tersedia') {
-                  final Uri mapsUri = Uri(
-                    scheme: 'https',
-                    host: 'www.google.com',
-                    path: '/maps/search/',
-                    query: alamatLengkap,
-                  );
-                  if (await canLaunchUrl(mapsUri)) {
-                    await launchUrl(
-                      mapsUri,
-                      mode: LaunchMode.externalApplication,
-                    );
-                  } else {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Tidak dapat membuka Google Maps'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Alamat tidak tersedia'),
-                      backgroundColor: Colors.orange,
-                    ),
-                  );
-                }
-              },
-              icon: const Icon(Icons.location_on),
-              label: const Text(
-                'Buka di Maps',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: const Color(0xFF2563EB),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                side: const BorderSide(color: Color(0xFF2563EB), width: 2),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
             ),
           ),
         ],

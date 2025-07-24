@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'detail_lembaga_user_screen.dart';
+import '../../services/lembaga_service.dart';
 
 class DaftarLembagaUserScreen extends StatefulWidget {
   const DaftarLembagaUserScreen({super.key});
@@ -13,113 +14,29 @@ class _DaftarLembagaUserScreenState extends State<DaftarLembagaUserScreen> {
   String selectedFilter = 'Semua';
   String searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
+  List<Map<String, dynamic>> allLembaga = [];
+  bool isLoading = true;
 
-  // Data lembaga rehabilitasi (sama dengan admin dashboard)
-  final List<Map<String, dynamic>> allLembaga = [
-    {
-      'name': 'Klinik Pratama BNN Kota Surabaya',
-      'location': 'Surabaya Selatan',
-      'capacity': '17 orang',
-      'alamatLengkap': 'Jl. Ngagel Madya V no. 22 Surabaya',
-      'nomorTelepon': '081231878822',
-      'jamOperasional': '09.00 - 17.00 WIB',
-      'image': 'assets/images/klinik_pratama.jpeg',
-      'email': 'rehab.bnnksby@gmail.com',
-    },
-    {
-      'name': 'Yayasan Rumah Kita Surabaya',
-      'location': 'Surabaya Timur',
-      'type': 'Rawat Inap',
-      'capacity': '17 orang',
-      'alamatLengkap': 'Jl. Ngagel Madya II / 9 Surabaya',
-      'nomorTelepon': '081230724211',
-      'jamOperasional': '24 Jam',
-      'image': 'assets/images/yayasan_rumah_kita.jpeg',
-      'email': 'rumahkitasby86@gmail.com',
-    },
-    {
-      'name': 'Yayasan Orbit Surabaya',
-      'location': 'Surabaya Timur',
-      'capacity': '24 orang',
-      'alamatLengkap':
-          'Jl. BarataJaya XII A No.6, RT.001/RW.004, Baratajaya, Kec. Gubeng, Surabaya',
-      'nomorTelepon': '082245948605',
-      'jamOperasional': '09.00 - 17.00 WIB',
-      'image': 'assets/images/yayasan_orbit.jpeg',
-      'email': 'orbit.foundation@yahoo.com',
-    },
-    {
-      'name': 'Yayasan Plato Surabaya',
-      'location': 'Surabaya Timur',
-      'capacity': '24 orang',
-      'alamatLengkap':
-          'Jl. Cipta Mananggal v No. 16, RT 011 RW 005, Kelurahan Menanggal, Kecamatan Gayungan',
-      'nomorTelepon': '081330351599',
-      'jamOperasional': '08.00 - 16.00 WIB',
-      'image': 'assets/images/yayasan_plato_surabaya.jpeg',
-      'email': 'plato.found@gmail.com',
-    },
-    {
-      'name': 'Yayasan LRPPN-BI Surabaya',
-      'location': 'Surabaya Selatan',
-      'capacity': '20 orang',
-      'alamatLengkap':
-          'Jl. Khairil Anwar No.23, Darmo, Kec. Wonokromo, Surabaya',
-      'nomorTelepon': '08123263524',
-      'jamOperasional': '08.00 - 20.00 WIB',
-      'image': 'assets/images/yayasan_lrppn.jpeg',
-      'email': 'pantilrppnsurabaya@gmail.com',
-    },
-    {
-      'name': 'Yayasan Rumah Merah Putih Surabaya',
-      'location': 'Waru',
-      'capacity': '25 orang',
-      'alamatLengkap': 'Jl. Blimbing I No.18, Ngipa, Wadungasri, Kec. Waru',
-      'nomorTelepon': '085853125026',
-      'jamOperasional': '09.00 - 15.00 WIB',
-      'image': 'assets/images/yayasan_rumah_merah_putih.jpeg',
-      'email': 'Mako2rungkut@gmail.com',
-    },
-    {
-      'name': 'Yayasan Griya Ashefa Pusaka Surabaya',
-      'location': 'Surabaya',
-      'capacity': '20 orang',
-      'alamatLengkap': 'Jl Kutisari XIA no 1 RT 08 RW 05 Surabaya',
-      'nomorTelepon': '085959591822',
-      'jamOperasional': '09.00 - 17.00 WIB',
-      'image': 'assets/images/yayasan_ashefa_griya_pusaka.jpeg',
-      'email': 'fpratiwisuryaningrums@gmail.com',
-    },
-    {
-      'name': 'RS Menur Surabaya',
-      'location': 'Surabaya Pusat',
-      'capacity': '42 orang',
-      'alamatLengkap': 'Jl. Raya Menur No. 120 Surabaya',
-      'nomorTelepon': '081330305585',
-      'jamOperasional': 'Buka 24 jam',
-      'image': 'assets/images/rs_menur.jpeg',
-      'email': 'rsj.menur@gmail.com',
-    },
-    {
-      'name': 'Omah Sehat Bersinar',
-      'location': 'Surabaya Pusat',
-      'capacity': '30 orang',
-      'alamatLengkap': 'Jl. Jemur Andayani No.50 Surabaya',
-      'nomorTelepon': 'Tidak tersedia',
-      'jamOperasional': '08.00 - 17.00 WIB',
-      'image': 'assets/images/yayasan_omah_sehat_bersinar.jpeg',
-    },
-    {
-      'name': 'Subdirektorat Mitigasi Crisis Center Unesa',
-      'location': 'Surabaya Barat',
-      'capacity': '10 orang',
-      'alamatLengkap':
-          'SMCC di Gedung rektorat unesa lantai 4. Jl. Lidah Wetan, Lidah Wetan, Kec. Lakarsantri, Surabaya',
-      'nomorTelepon': '0812-3456-7890',
-      'jamOperasional': '09.00 - 15.00 WIB',
-      'image': 'assets/images/smcc_unesa.jpeg',
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _loadLembagaData();
+  }
+
+  Future<void> _loadLembagaData() async {
+    try {
+      final data = await LembagaService.instance.getAllLembaga();
+      setState(() {
+        allLembaga = data;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      // Handle error if needed
+    }
+  }
 
   List<Map<String, dynamic>> get filteredLembaga {
     var filtered = allLembaga.where((lembaga) {
@@ -168,8 +85,15 @@ class _DaftarLembagaUserScreenState extends State<DaftarLembagaUserScreen> {
                   child: Column(
                     children: [
                       _buildSearchAndFilter(),
-                      _buildStatistics(),
-                      Expanded(child: _buildLembagaList()),
+                      Expanded(
+                        child: isLoading
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: Color(0xFF2563EB),
+                                ),
+                              )
+                            : _buildLembagaList(),
+                      ),
                     ],
                   ),
                 ),
@@ -205,16 +129,6 @@ class _DaftarLembagaUserScreenState extends State<DaftarLembagaUserScreen> {
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.favorite_border, color: Colors.white),
             ),
           ),
         ],
@@ -271,136 +185,8 @@ class _DaftarLembagaUserScreenState extends State<DaftarLembagaUserScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
-          // Filter Chips
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: ['Semua', 'Rawat Inap', 'Rawat Jalan']
-                  .map(
-                    (filter) => Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: FilterChip(
-                        selected: selectedFilter == filter,
-                        label: Text(filter),
-                        onSelected: (selected) {
-                          setState(() {
-                            selectedFilter = filter;
-                          });
-                        },
-                        selectedColor: const Color(0xFF2563EB).withOpacity(0.2),
-                        backgroundColor: Colors.white,
-                        labelStyle: TextStyle(
-                          color: selectedFilter == filter
-                              ? const Color(0xFF2563EB)
-                              : Colors.grey[600],
-                          fontWeight: selectedFilter == filter
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: BorderSide(
-                            color: selectedFilter == filter
-                                ? const Color(0xFF2563EB)
-                                : Colors.grey[300]!,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
         ],
       ),
-    );
-  }
-
-  Widget _buildStatistics() {
-    final filteredCount = filteredLembaga.length;
-    final totalCount = allLembaga.length;
-    final rawatInapCount = allLembaga
-        .where((l) => (l['type'] ?? '').contains('Rawat Inap'))
-        .length;
-    final rawatJalanCount = allLembaga
-        .where((l) => (l['type'] ?? '').contains('Rawat Jalan'))
-        .length;
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            const Color(0xFF2563EB).withOpacity(0.1),
-            const Color(0xFF063CA8).withOpacity(0.1),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: const Color(0xFF2563EB).withOpacity(0.2)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildStatItem(
-            'Total',
-            totalCount.toString(),
-            Icons.business,
-            const Color(0xFF2563EB),
-          ),
-          _buildStatItem(
-            'Rawat Inap',
-            rawatInapCount.toString(),
-            Icons.local_hospital,
-            const Color(0xFF059669),
-          ),
-          _buildStatItem(
-            'Rawat Jalan',
-            rawatJalanCount.toString(),
-            Icons.medical_services,
-            const Color(0xFFDC2626),
-          ),
-          _buildStatItem(
-            'Ditemukan',
-            filteredCount.toString(),
-            Icons.search,
-            const Color(0xFFF59E0B),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatItem(
-    String label,
-    String value,
-    IconData icon,
-    Color color,
-  ) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Icon(icon, color: color, size: 20),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
-        ),
-        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
-      ],
     );
   }
 
@@ -547,14 +333,19 @@ class _DaftarLembagaUserScreenState extends State<DaftarLembagaUserScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      final result = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) =>
                               DetailLembagaUserScreen(lembagaData: lembaga),
                         ),
                       );
+
+                      // Refresh data jika ada perubahan
+                      if (result == true) {
+                        await _loadLembagaData();
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF2563EB),

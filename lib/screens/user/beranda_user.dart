@@ -6,6 +6,7 @@ import 'akun_screen.dart';
 import 'daftar_lembaga_user_screen.dart';
 import 'detail_lembaga_user_screen.dart';
 import 'unified_bottom_navigation_user.dart';
+import '../../services/lembaga_service.dart';
 
 class BerandaUserScreen extends StatefulWidget {
   const BerandaUserScreen({super.key});
@@ -16,6 +17,25 @@ class BerandaUserScreen extends StatefulWidget {
 
 class _BerandaUserScreenState extends State<BerandaUserScreen> {
   int _selectedIndex = 0;
+  List<Map<String, dynamic>> topLembaga = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTopLembaga();
+  }
+
+  Future<void> _loadTopLembaga() async {
+    try {
+      final allLembaga = await LembagaService.instance.getAllLembaga();
+      // Ambil 3 lembaga pertama sebagai top lembaga
+      setState(() {
+        topLembaga = allLembaga.take(3).toList();
+      });
+    } catch (e) {
+      // Handle error if needed
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +78,9 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: UnifiedBottomNavigationUser(currentIndex: _selectedIndex),
+      bottomNavigationBar: UnifiedBottomNavigationUser(
+        currentIndex: _selectedIndex,
+      ),
     );
   }
 
@@ -236,60 +258,6 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
       ),
     );
   }
-
-  // Data lembaga rehabilitasi (integrated with admin data)
-  final List<Map<String, dynamic>> topLembaga = [
-    {
-      'name': 'RS Menur Surabaya',
-      'location': 'Surabaya Pusat',
-      'capacity': '42 orang',
-      'alamatLengkap': 'Jl. Raya Menur No. 120 Surabaya',
-      'nomorTelepon': '081330305585',
-      'jamOperasional': 'Buka 24 jam',
-      'image': 'assets/images/rs_menur.jpeg',
-      'email': 'rsj.menur@gmail.com',
-      'rating': 4.9,
-      'type': 'Rawat Inap',
-    },
-    {
-      'name': 'Yayasan Rumah Kita Surabaya',
-      'location': 'Surabaya Timur',
-      'type': 'Rawat Inap',
-      'capacity': '17 orang',
-      'alamatLengkap': 'Jl. Ngagel Madya II / 9 Surabaya',
-      'nomorTelepon': '081230724211',
-      'jamOperasional': '24 Jam',
-      'image': 'assets/images/yayasan_rumah_kita.jpeg',
-      'email': 'rumahkitasby86@gmail.com',
-      'rating': 4.8,
-    },
-    {
-      'name': 'Yayasan Plato Surabaya',
-      'location': 'Surabaya Timur',
-      'capacity': '24 orang',
-      'alamatLengkap':
-          'Jl. Cipta Mananggal v No. 16, RT 011 RW 005, Kelurahan Menanggal, Kecamatan Gayungan',
-      'nomorTelepon': '081330351599',
-      'jamOperasional': '08.00 - 16.00 WIB',
-      'image': 'assets/images/yayasan_plato_surabaya.jpeg',
-      'email': 'plato.found@gmail.com',
-      'rating': 4.7,
-      'type': 'Rawat Inap',
-    },
-    {
-      'name': 'Yayasan Orbit Surabaya',
-      'location': 'Surabaya Timur',
-      'capacity': '24 orang',
-      'alamatLengkap':
-          'Jl. BarataJaya XII A No.6, RT.001/RW.004, Baratajaya, Kec. Gubeng, Surabaya',
-      'nomorTelepon': '082245948605',
-      'jamOperasional': '09.00 - 17.00 WIB',
-      'image': 'assets/images/yayasan_orbit.jpeg',
-      'email': 'orbit.foundation@yahoo.com',
-      'rating': 4.6,
-      'type': 'Rawat Jalan',
-    },
-  ];
 
   Widget _buildRehabSection() {
     return Container(
@@ -722,5 +690,4 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
       ),
     );
   }
-
 }

@@ -3,6 +3,7 @@ import 'detail_lembaga_screen.dart';
 import 'tambah_lembaga_screen.dart';
 import 'edit_lembaga_screen.dart';
 import 'unified_bottom_navigation.dart';
+import '../../services/lembaga_service.dart';
 
 class DaftarLembagaScreen extends StatefulWidget {
   const DaftarLembagaScreen({super.key});
@@ -14,110 +15,29 @@ class DaftarLembagaScreen extends StatefulWidget {
 class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
   String searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
+  List<Map<String, dynamic>> allLembaga = [];
+  bool isLoading = true;
 
-  final List<Map<String, dynamic>> allLembaga = [
-    {
-      'name': 'Klinik Pratama BNN Kota Surabaya',
-      'location': 'Surabaya Selatan',
-      'capacity': '100 orang',
-      'alamatLengkap': 'Jl. ngagel Madya V no. 22 Surabaya',
-      'nomorTelepon': '081231878822',
-      'jamOperasional': '08.00 - 16.00 WIB',
-      'image': 'assets/images/klinik_pratama1.jpg',
-      'email': 'rehab.bnnksby@gmail.com',
-    },
-    {
-      'name': 'Yayasan Rumah Kita Surabaya',
-      'location': 'Surabaya Timur',
-      'capacity': '17 orang',
-      'alamatLengkap': 'Jl. Ngagel Madya II / 9 Surabaya',
-      'nomorTelepon': '081230724211',
-      'jamOperasional': '08.00 - 20.00 WIB',
-      'image': 'assets/images/yayasan_rumah_kita.jpeg',
-      'email': 'rumahkitasby86@gmail.com',
-    },
-    {
-      'name': 'Yayasan Orbit Surabaya',
-      'location': 'Surabaya Timur',
-      'capacity': '24 orang',
-      'alamatLengkap': 'Jl. Margorejo Indah Utara Blok B-922, Surabaya',
-      'nomorTelepon': '081233563815',
-      'jamOperasional': '09.00 - 21.00 WIB',
-      'image': 'assets/images/yayasan_orbit.jpeg',
-      'email': 'orbit.foundation@yahoo.com',
-    },
-    {
-      'name': 'Yayasan Plato Surabaya',
-      'location': 'Surabaya Timur',
-      'capacity': '24 orang',
-      'alamatLengkap':
-          'Jl. Cipta Mananggal v No. 16, RT 011 RW 005, Kelurahan Menanggal, Kecamatan Gayungan',
-      'nomorTelepon': '081330351599',
-      'jamOperasional': '08.00 - 16.00 WIB',
-      'image': 'assets/images/yayasan_plato_surabaya.jpeg',
-      'email': 'plato.found@gmail.com',
-    },
-    {
-      'name': 'Yayasan LRPPN-BI Surabaya',
-      'location': 'Surabaya Selatan',
-      'capacity': '20 orang',
-      'alamatLengkap':
-          'Jl. Khairil Anwar No.23, Darmo, Kec. Wonokromo, Surabaya',
-      'nomorTelepon': '08123263524',
-      'jamOperasional': '08.00 - 20.00 WIB',
-      'image': 'assets/images/yayasan_lrppn.jpeg',
-      'email': 'pantilrppnsurabaya@gmail.com',
-    },
-    {
-      'name': 'Yayasan Rumah Merah Putih Surabaya',
-      'location': 'Waru',
-      'capacity': '25 orang',
-      'alamatLengkap': 'Jl. Blimbing I No.18, Ngipa, Wadungasri, Kec. Waru',
-      'nomorTelepon': '085853125026',
-      'jamOperasional': '09.00 - 15.00 WIB',
-      'image': 'assets/images/yayasan_rumah_merah_putih.jpeg',
-      'email': 'Mako2rungkut@gmail.com',
-    },
-    {
-      'name': 'Yayasan Griya Ashefa Pusaka Surabaya',
-      'location': 'Surabaya',
-      'capacity': '20 orang',
-      'alamatLengkap': 'Jl Kutisari XIA no 1 RT 08 RW 05 Surabaya',
-      'nomorTelepon': '085959591822',
-      'jamOperasional': '09.00 - 17.00 WIB',
-      'image': 'assets/images/yayasan_ashefa_griya_pusaka.jpeg',
-      'email': 'fpratiwisuryaningrums@gmail.com',
-    },
-    {
-      'name': 'RS Menur Surabaya',
-      'location': 'Surabaya Pusat',
-      'capacity': '42 orang',
-      'alamatLengkap': 'Jl. Raya Menur No. 120 Surabaya',
-      'nomorTelepon': '081330305585',
-      'jamOperasional': 'Buka 24 jam',
-      'image': 'assets/images/rs_menur.jpeg',
-      'email': 'rsj.menur@gmail.com',
-    },
-    {
-      'name': 'Omah Sehat Bersinar',
-      'location': 'Surabaya Pusat',
-      'capacity': '30 orang',
-      'alamatLengkap': 'Jl. Jemur Andayani No.50 Surabaya',
-      'nomorTelepon': 'Tidak tersedia',
-      'jamOperasional': '08.00 - 17.00 WIB',
-      'image': 'assets/images/yayasan_omah_sehat_bersinar.jpeg',
-    },
-    {
-      'name': 'Subdirektorat Mitigasi Crisis Center Unesa',
-      'location': 'Surabaya Barat',
-      'type': 'Rawat Jalan',
-      'capacity': '20 orang',
-      'alamatLengkap': 'Kampus Unesa Lidah Wetan, Surabaya',
-      'nomorTelepon': '0812-3456-7890',
-      'jamOperasional': '09.00 - 16.00 WIB',
-      'image': 'assets/images/smcc_unesa.jpeg',
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _loadLembagaData();
+  }
+
+  Future<void> _loadLembagaData() async {
+    try {
+      final data = await LembagaService.instance.getAllLembaga();
+      setState(() {
+        allLembaga = data;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      // Handle error if needed
+    }
+  }
 
   List<Map<String, dynamic>> get filteredLembaga {
     var filtered = allLembaga.where((lembaga) {
@@ -171,7 +91,13 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 100),
-                              child: _buildLembagaList(),
+                              child: isLoading
+                                  ? const Center(
+                                      child: CircularProgressIndicator(
+                                        color: Color(0xFF063CA8),
+                                      ),
+                                    )
+                                  : _buildLembagaList(),
                             ),
                           ),
                         ],
@@ -331,7 +257,7 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
     // Null safety untuk semua field
     final name = lembaga['name'] ?? 'Nama tidak tersedia';
     final location = lembaga['location'] ?? 'Lokasi tidak tersedia';
-    final capacity = lembaga['capacity'] ?? 'Kapasitas tidak tersedia';
+    final capacity = _getCapacityDisplay(lembaga);
     final jamOperasional = lembaga['jamOperasional'] ?? 'Jam tidak tersedia';
     final image = lembaga['image'] ?? 'assets/images/placeholder.jpeg';
 
@@ -594,22 +520,39 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
     );
 
     if (result != null && result is Map<String, dynamic>) {
-      setState(() {
-        allLembaga.add(result);
-      });
+      // Save to service
+      final success = await LembagaService.instance.addLembaga(result);
 
-      // Show success message
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Lembaga "${result['name']}" berhasil ditambahkan!'),
-            backgroundColor: Colors.green,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+      if (success) {
+        // Reload data from service
+        await _loadLembagaData();
+
+        // Show success message
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Lembaga "${result['name']}" berhasil ditambahkan!',
+              ),
+              backgroundColor: Colors.green,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
-          ),
-        );
+          );
+        }
+      } else {
+        // Show error message
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Gagal menambahkan lembaga!'),
+              backgroundColor: Colors.red,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
       }
     }
   }
@@ -626,30 +569,58 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
     );
 
     if (result != null && result is Map<String, dynamic>) {
-      setState(() {
-        // Find and update the lembaga in the list
-        final index = allLembaga.indexWhere(
-          (item) => item['name'] == lembaga['name'],
-        );
-        if (index != -1) {
-          allLembaga[index] = result;
-        }
-      });
+      // Update in service
+      final success = await LembagaService.instance.updateLembaga(result);
 
-      // Show success message
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Lembaga "${result['name']}" berhasil diperbarui!'),
-            backgroundColor: Colors.green,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+      if (success) {
+        // Reload data from service
+        await _loadLembagaData();
+
+        // Show success message
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Lembaga "${result['name']}" berhasil diperbarui!'),
+              backgroundColor: Colors.green,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
-          ),
-        );
+          );
+        }
+      } else {
+        // Show error message
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Gagal memperbarui lembaga!'),
+              backgroundColor: Colors.red,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
       }
     }
+  }
+
+  String _getCapacityDisplay(Map<String, dynamic> lembaga) {
+    // Check if we have detailed capacity data from the edit form
+    if (lembaga.containsKey('kapasitasLaki') &&
+        lembaga.containsKey('kapasitasPerempuan')) {
+      int kapasitasLaki = lembaga['kapasitasLaki'] ?? 0;
+      int kapasitasPerempuan = lembaga['kapasitasPerempuan'] ?? 0;
+      int totalKapasitas = kapasitasLaki + kapasitasPerempuan;
+
+      int terisiLaki = lembaga['rawatInapLaki'] ?? 0;
+      int terisiPerempuan = lembaga['rawatInapPerempuan'] ?? 0;
+      int totalTerisi = terisiLaki + terisiPerempuan;
+
+      return '$totalTerisi / $totalKapasitas orang';
+    }
+
+    // Fallback to old capacity format
+    return lembaga['capacity'] ?? 'Kapasitas tidak tersedia';
   }
 
   @override

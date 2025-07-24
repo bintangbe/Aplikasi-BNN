@@ -21,13 +21,16 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
   bool _isLoading = false;
 
   final List<String> _lembagaOptions = [
+    'Klinik Pratama BNN Surabaya',
     'Yayasan Rumah Kita Surabaya',
     'Yayasan Orbit Surabaya',
     'Yayasan Plato Surabaya',
     'Yayasan LRPPN-Surabaya',
     'Yayasan Rumah Merah Putih Surabaya',
+    'Yayasan Griya Ashefa Pusaka Surabaya',
     'RS Menur Surabaya',
     'Omah Sehat Bersinar',
+    'Subdirektorat Mitigasi Crisis Center Unesa',
   ];
 
   final List<String> _kecamatanOptions = [
