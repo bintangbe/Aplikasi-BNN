@@ -263,75 +263,61 @@ class _AdminResetPasswordScreenState extends State<AdminResetPasswordScreen> {
     required bool isVisible,
     required VoidCallback onToggleVisibility,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Color(0xFF1F2937),
-            fontSize: 14,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w400,
+    return TextField(
+      controller: controller,
+      obscureText: !isVisible,
+      decoration: InputDecoration(
+        labelText: label,
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
+        labelStyle: const TextStyle(
+          color: Color(0xFF063CA8),
+          fontSize: 18,
+          fontWeight: FontWeight.w400,
+        ),
+        hintText: '••••••••',
+        hintStyle: const TextStyle(
+          color: Color(0xFF9CA3AF),
+          fontSize: 15,
+          fontFamily: 'Inter',
+          fontWeight: FontWeight.w400,
+        ),
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 3, color: Color(0xFF063CA8)),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 1, color: Color(0xFFEF4444)),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 17,
+          vertical: 18,
+        ),
+        suffixIcon: IconButton(
+          onPressed: onToggleVisibility,
+          icon: Icon(
+            isVisible ? Icons.visibility : Icons.visibility_off,
+            color: const Color(0xFF9CA3AF),
+            size: 20,
           ),
         ),
-        const SizedBox(height: 4),
-        TextField(
-          controller: controller,
-          obscureText: !isVisible,
-          decoration: InputDecoration(
-            hintText: '••••••••',
-            hintStyle: const TextStyle(
-              color: Color(0xFF9CA3AF),
-              fontSize: 15,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-            ),
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                width: 1,
-                color: Color(0xFFD1D5DB),
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                width: 1,
-                color: Color(0xFFD1D5DB),
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                width: 2,
-                color: Color(0xFF2563EB),
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(
-                width: 1,
-                color: Color(0xFFEF4444),
-              ),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 17,
-              vertical: 12,
-            ),
-            suffixIcon: IconButton(
-              onPressed: onToggleVisibility,
-              icon: Icon(
-                isVisible ? Icons.visibility : Icons.visibility_off,
-                color: const Color(0xFF9CA3AF),
-                size: 20,
-              ),
-            ),
-          ),
-        ),
-      ],
+      ),
+      style: const TextStyle(
+        color: Color(0xFF1F2937),
+        fontSize: 16,
+        fontFamily: 'Inter',
+        fontWeight: FontWeight.w400,
+      ),
     );
   }
 
