@@ -7,7 +7,6 @@ import 'ubah_password_admin_screen.dart';
 import 'unified_bottom_navigation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -203,9 +202,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             'Pesan dari admin',
             () => Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => const NotifikasiScreen(),
-              ),
+              MaterialPageRoute(builder: (context) => const NotifikasiScreen()),
             ),
           ),
           const SizedBox(height: 12),
@@ -229,14 +226,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                   title: const Text(
                     'Konfirmasi Keluar',
-                    style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   content: const Text(
                     'Apakah Anda yakin ingin keluar dari aplikasi?',
-                    style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w400),
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                   actions: [
                     TextButton(
@@ -255,7 +260,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Navigator.pop(context); // Tutup dialog
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => const LoginScreen()),
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ),
                           (route) => false,
                         );
                       },
@@ -426,6 +433,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ],
     );
   }
-
-
 }

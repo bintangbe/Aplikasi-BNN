@@ -188,9 +188,9 @@ class AdminDashboardScreen extends StatelessWidget {
         const SizedBox(width: 16),
         Expanded(
           child: _buildActionCard(
-            title: 'Update\nPengajuan',
+            title: 'Riwayat\nRehab',
             color: const Color(0xFF22C55E),
-            icon: Icons.edit_document,
+            icon: Icons.history,
             onTap: () {
               Navigator.push(
                 context,
@@ -254,17 +254,18 @@ class AdminDashboardScreen extends StatelessWidget {
       {
         'name': 'Klinik Pratama BNN Kota Surabaya',
         'location': 'Surabaya Selatan',
+        'capacity': '100 orang',
         'alamatLengkap': 'Jl. ngagel Madya V no. 22 Surabaya',
         'nomorTelepon': '081231878822',
         'jamOperasional': '08.00 - 16.00 WIB',
-        'image': 'assets/images/klinik_pratama.jpeg',
+        'image': 'assets/images/klinik_pratama1.jpg',
       },
       {
         'name': 'Yayasan Rumah Kita Surabaya',
         'location': 'Surabaya Timur',
         'capacity': '17 orang',
         'alamatLengkap': 'Jl. Ngagel Madya II / 9 Surabaya',
-        'nomorTelepon': '088102367299',
+        'nomorTelepon': '081230724211',
         'jamOperasional': '08.00 - 20.00 WIB',
         'image': 'assets/images/yayasan_rumah_kita.jpeg',
       },
@@ -272,10 +273,9 @@ class AdminDashboardScreen extends StatelessWidget {
         'name': 'Yayasan Orbit Surabaya',
         'location': 'Surabaya Timur',
         'capacity': '24 orang',
-        'alamatLengkap':
-            'Jl. BarataJaya XII A No.6, RT.001/RW.004, Baratajaya, Kec. Gubeng, Surabaya',
-        'nomorTelepon': '082245948605',
-        'jamOperasional': '09.00 - 17.00 WIB',
+        'alamatLengkap': 'Jl. Margorejo Indah Utara Blok B-922, Surabaya',
+        'nomorTelepon': '081233563815',
+        'jamOperasional': '09.00 - 21.00 WIB',
         'image': 'assets/images/yayasan_orbit_surabaya.jpeg',
       },
     ];

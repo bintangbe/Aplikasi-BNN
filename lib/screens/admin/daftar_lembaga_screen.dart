@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'detail_lembaga_screen.dart';
+import 'tambah_lembaga_screen.dart';
+import 'edit_lembaga_screen.dart';
 import 'unified_bottom_navigation.dart';
 
 class DaftarLembagaScreen extends StatefulWidget {
@@ -10,7 +12,6 @@ class DaftarLembagaScreen extends StatefulWidget {
 }
 
 class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
-  String selectedFilter = 'Semua';
   String searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
 
@@ -18,21 +19,20 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
     {
       'name': 'Klinik Pratama BNN Kota Surabaya',
       'location': 'Surabaya Selatan',
-      'capacity': '17 orang',
+      'capacity': '100 orang',
       'alamatLengkap': 'Jl. ngagel Madya V no. 22 Surabaya',
       'nomorTelepon': '081231878822',
-      'jamOperasional': '09.00 - 17.00 WIB',
-      'image': 'assets/images/klinik_pratama.jpeg',
+      'jamOperasional': '08.00 - 16.00 WIB',
+      'image': 'assets/images/klinik_pratama1.jpg',
       'email': 'rehab.bnnksby@gmail.com',
     },
     {
       'name': 'Yayasan Rumah Kita Surabaya',
       'location': 'Surabaya Timur',
-      'type': 'Rawat Inap',
       'capacity': '17 orang',
       'alamatLengkap': 'Jl. Ngagel Madya II / 9 Surabaya',
       'nomorTelepon': '081230724211',
-      'jamOperasional': '24 Jam',
+      'jamOperasional': '08.00 - 20.00 WIB',
       'image': 'assets/images/yayasan_rumah_kita.jpeg',
       'email': 'rumahkitasby86@gmail.com',
     },
@@ -124,14 +124,12 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
       // Null safety checks
       final name = lembaga['name'] ?? '';
       final location = lembaga['location'] ?? '';
-      final type = lembaga['type'] ?? '';
 
-      final matchesFilter = selectedFilter == 'Semua' || type == selectedFilter;
       final matchesSearch =
           name.toLowerCase().contains(searchQuery.toLowerCase()) ||
           location.toLowerCase().contains(searchQuery.toLowerCase());
 
-      return matchesFilter && matchesSearch;
+      return matchesSearch;
     }).toList();
 
     return filtered;
@@ -222,18 +220,6 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
               ),
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: IconButton(
-              onPressed: () {
-                // Filter action
-              },
-              icon: const Icon(Icons.tune, color: Colors.white),
-            ),
-          ),
         ],
       ),
     );
@@ -242,97 +228,48 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
   Widget _buildSearchAndFilter() {
     return Container(
       padding: const EdgeInsets.all(20),
-      child: Column(
-        children: [
-          // Search Bar
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 10,
-                  offset: const Offset(0, 1),
-                ),
-              ],
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 10,
+              offset: const Offset(0, 1),
             ),
-            child: TextField(
-              controller: _searchController,
-              onChanged: (value) {
-                setState(() {
-                  searchQuery = value;
-                });
-              },
-              decoration: InputDecoration(
-                hintText: 'Cari lembaga rehabilitasi...',
-                hintStyle: TextStyle(color: Colors.grey[400]),
-                prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
-                suffixIcon: searchQuery.isNotEmpty
-                    ? IconButton(
-                        onPressed: () {
-                          _searchController.clear();
-                          setState(() {
-                            searchQuery = '';
-                          });
-                        },
-                        icon: Icon(Icons.clear, color: Colors.grey[400]),
-                      )
-                    : null,
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 16,
-                ),
-              ),
+          ],
+        ),
+        child: TextField(
+          controller: _searchController,
+          onChanged: (value) {
+            setState(() {
+              searchQuery = value;
+            });
+          },
+          decoration: InputDecoration(
+            hintText: 'Cari lembaga rehabilitasi...',
+            hintStyle: TextStyle(color: Colors.grey[400]),
+            prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
+            suffixIcon: searchQuery.isNotEmpty
+                ? IconButton(
+                    onPressed: () {
+                      _searchController.clear();
+                      setState(() {
+                        searchQuery = '';
+                      });
+                    },
+                    icon: Icon(Icons.clear, color: Colors.grey[400]),
+                  )
+                : null,
+            border: InputBorder.none,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 16,
             ),
           ),
-          const SizedBox(height: 16),
-          // Filter Chips
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children:
-                  ['Semua', 'Rawat Inap', 'Rawat Jalan', 'Rawat Inap & Jalan']
-                      .map(
-                        (filter) => Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: FilterChip(
-                            selected: selectedFilter == filter,
-                            label: Text(filter),
-                            onSelected: (selected) {
-                              setState(() {
-                                selectedFilter = filter;
-                              });
-                            },
-                            selectedColor: const Color(
-                              0xFF0050FF,
-                            ).withOpacity(0.2),
-                            backgroundColor: Colors.white,
-                            labelStyle: TextStyle(
-                              color: selectedFilter == filter
-                                  ? const Color(0xFF0050FF)
-                                  : Colors.grey[600],
-                              fontWeight: selectedFilter == filter
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              side: BorderSide(
-                                color: selectedFilter == filter
-                                    ? const Color(0xFF0050FF)
-                                    : Colors.grey[300]!,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                      .toList(),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -354,21 +291,39 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
               'Coba ubah kata kunci pencarian atau filter',
               style: TextStyle(fontSize: 14, color: Colors.grey[500]),
             ),
+            const SizedBox(height: 32),
+            _buildTambahLembagaButton(),
           ],
         ),
       );
     }
 
-    return ListView.builder(
-      padding: const EdgeInsets.all(20),
-      itemCount: filteredLembaga.length,
-      itemBuilder: (context, index) {
-        final lembaga = filteredLembaga[index];
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: _buildLembagaCard(lembaga),
-        );
-      },
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.all(20),
+            itemCount: filteredLembaga.length,
+            itemBuilder: (context, index) {
+              final lembaga = filteredLembaga[index];
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: _buildLembagaCard(lembaga),
+              );
+            },
+          ),
+        ),
+        // Tombol Tambah Lembaga di bagian bawah
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            20,
+            8,
+            20,
+            24, // Reduced from 100 to 24 to make it closer to footer
+          ),
+          child: _buildTambahLembagaButton(),
+        ),
+      ],
     );
   }
 
@@ -522,6 +477,26 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    // Edit Button
+                    ElevatedButton.icon(
+                      onPressed: () => _navigateToEditLembaga(context, lembaga),
+                      icon: const Icon(Icons.edit, size: 16),
+                      label: const Text('Edit'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF00AEEF),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+
+                    // Detail Button
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(
@@ -544,7 +519,7 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
                         ),
                       ),
                       child: const Text(
-                        'Lihat Detail',
+                        'Detail',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -559,6 +534,122 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildTambahLembagaButton() {
+    return Container(
+      width: double.infinity,
+      height: 56,
+      decoration: BoxDecoration(
+        color: const Color(0xFF4CAF50), // Green color
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF4CAF50).withOpacity(0.3),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: ElevatedButton(
+        onPressed: () => _navigateToTambahLembaga(context),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          padding: EdgeInsets.zero,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(Icons.add, color: Colors.white, size: 24),
+            ),
+            const SizedBox(width: 12),
+            const Text(
+              'Tambah Lembaga Rehabilitasi',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _navigateToTambahLembaga(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const TambahLembagaScreen()),
+    );
+
+    if (result != null && result is Map<String, dynamic>) {
+      setState(() {
+        allLembaga.add(result);
+      });
+
+      // Show success message
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Lembaga "${result['name']}" berhasil ditambahkan!'),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  void _navigateToEditLembaga(
+    BuildContext context,
+    Map<String, dynamic> lembaga,
+  ) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditLembagaScreen(lembagaData: lembaga),
+      ),
+    );
+
+    if (result != null && result is Map<String, dynamic>) {
+      setState(() {
+        // Find and update the lembaga in the list
+        final index = allLembaga.indexWhere(
+          (item) => item['name'] == lembaga['name'],
+        );
+        if (index != -1) {
+          allLembaga[index] = result;
+        }
+      });
+
+      // Show success message
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Lembaga "${result['name']}" berhasil diperbarui!'),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
+      }
+    }
   }
 
   @override

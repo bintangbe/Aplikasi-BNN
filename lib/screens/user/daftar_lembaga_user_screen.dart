@@ -25,8 +25,6 @@ class _DaftarLembagaUserScreenState extends State<DaftarLembagaUserScreen> {
       'jamOperasional': '09.00 - 17.00 WIB',
       'image': 'assets/images/klinik_pratama.jpeg',
       'email': 'rehab.bnnksby@gmail.com',
-      'rating': 4.5,
-      'type': 'Rawat Jalan',
     },
     {
       'name': 'Yayasan Rumah Kita Surabaya',
@@ -38,7 +36,6 @@ class _DaftarLembagaUserScreenState extends State<DaftarLembagaUserScreen> {
       'jamOperasional': '24 Jam',
       'image': 'assets/images/yayasan_rumah_kita.jpeg',
       'email': 'rumahkitasby86@gmail.com',
-      'rating': 4.8,
     },
     {
       'name': 'Yayasan Orbit Surabaya',
@@ -50,8 +47,6 @@ class _DaftarLembagaUserScreenState extends State<DaftarLembagaUserScreen> {
       'jamOperasional': '09.00 - 17.00 WIB',
       'image': 'assets/images/yayasan_orbit.jpeg',
       'email': 'orbit.foundation@yahoo.com',
-      'rating': 4.6,
-      'type': 'Rawat Jalan',
     },
     {
       'name': 'Yayasan Plato Surabaya',
@@ -63,8 +58,6 @@ class _DaftarLembagaUserScreenState extends State<DaftarLembagaUserScreen> {
       'jamOperasional': '08.00 - 16.00 WIB',
       'image': 'assets/images/yayasan_plato_surabaya.jpeg',
       'email': 'plato.found@gmail.com',
-      'rating': 4.7,
-      'type': 'Rawat Inap',
     },
     {
       'name': 'Yayasan LRPPN-BI Surabaya',
@@ -76,8 +69,6 @@ class _DaftarLembagaUserScreenState extends State<DaftarLembagaUserScreen> {
       'jamOperasional': '08.00 - 20.00 WIB',
       'image': 'assets/images/yayasan_lrppn.jpeg',
       'email': 'pantilrppnsurabaya@gmail.com',
-      'rating': 4.4,
-      'type': 'Rawat Jalan',
     },
     {
       'name': 'Yayasan Rumah Merah Putih Surabaya',
@@ -88,8 +79,6 @@ class _DaftarLembagaUserScreenState extends State<DaftarLembagaUserScreen> {
       'jamOperasional': '09.00 - 15.00 WIB',
       'image': 'assets/images/yayasan_rumah_merah_putih.jpeg',
       'email': 'Mako2rungkut@gmail.com',
-      'rating': 4.3,
-      'type': 'Rawat Inap',
     },
     {
       'name': 'Yayasan Griya Ashefa Pusaka Surabaya',
@@ -100,8 +89,6 @@ class _DaftarLembagaUserScreenState extends State<DaftarLembagaUserScreen> {
       'jamOperasional': '09.00 - 17.00 WIB',
       'image': 'assets/images/yayasan_ashefa_griya_pusaka.jpeg',
       'email': 'fpratiwisuryaningrums@gmail.com',
-      'rating': 4.2,
-      'type': 'Rawat Jalan',
     },
     {
       'name': 'RS Menur Surabaya',
@@ -112,8 +99,25 @@ class _DaftarLembagaUserScreenState extends State<DaftarLembagaUserScreen> {
       'jamOperasional': 'Buka 24 jam',
       'image': 'assets/images/rs_menur.jpeg',
       'email': 'rsj.menur@gmail.com',
-      'rating': 4.9,
-      'type': 'Rawat Inap',
+    },
+    {
+      'name': 'Omah Sehat Bersinar',
+      'location': 'Surabaya Pusat',
+      'capacity': '30 orang',
+      'alamatLengkap': 'Jl. Jemur Andayani No.50 Surabaya',
+      'nomorTelepon': 'Tidak tersedia',
+      'jamOperasional': '08.00 - 17.00 WIB',
+      'image': 'assets/images/yayasan_omah_sehat_bersinar.jpeg',
+    },
+    {
+      'name': 'Subdirektorat Mitigasi Crisis Center Unesa',
+      'location': 'Surabaya Barat',
+      'capacity': '10 orang',
+      'alamatLengkap':
+          'SMCC di Gedung rektorat unesa lantai 4. Jl. Lidah Wetan, Lidah Wetan, Kec. Lakarsantri, Surabaya',
+      'nomorTelepon': '0812-3456-7890',
+      'jamOperasional': '09.00 - 15.00 WIB',
+      'image': 'assets/images/smcc_unesa.jpeg',
     },
   ];
 
