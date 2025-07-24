@@ -295,63 +295,93 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Input Judul
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.grey[300]!),
-          ),
-          child: TextField(
-            controller: _judulController,
-            decoration: const InputDecoration(
-              hintText: 'Judul Masukkan',
-              hintStyle: TextStyle(
-                color: Colors.grey,
-                fontSize: 16,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
-              ),
-              border: InputBorder.none,
+        TextField(
+          controller: _judulController,
+          decoration: InputDecoration(
+            labelText: 'Judul Masukkan',
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
+            labelStyle: const TextStyle(
+              color: Color(0xFF063CA8),
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
             ),
-            style: const TextStyle(
-              color: Colors.black,
+            hintText: 'Judul Masukkan',
+            hintStyle: const TextStyle(
+              color: Color(0xFF9CA3AF),
               fontSize: 16,
               fontFamily: 'Inter',
               fontWeight: FontWeight.w400,
             ),
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(width: 3, color: Color(0xFF063CA8)),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 17,
+              vertical: 18,
+            ),
+          ),
+          style: const TextStyle(
+            color: Color(0xFF1F2937),
+            fontSize: 16,
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w400,
           ),
         ),
         const SizedBox(height: 16),
         // Input Isi Masukkan
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.grey[300]!),
-          ),
-          child: TextField(
-            controller: _pesanController,
-            maxLines: 8,
-            decoration: const InputDecoration(
-              hintText: 'Tulis isi masukkan...',
-              hintStyle: TextStyle(
-                color: Colors.grey,
-                fontSize: 16,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
-              ),
-              border: InputBorder.none,
+        TextField(
+          controller: _pesanController,
+          maxLines: 8,
+          decoration: InputDecoration(
+            labelText: 'Isi Masukkan',
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
+            labelStyle: const TextStyle(
+              color: Color(0xFF063CA8),
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
             ),
-            style: const TextStyle(
-              color: Colors.black,
+            hintText: 'Tulis isi masukkan...',
+            hintStyle: const TextStyle(
+              color: Color(0xFF9CA3AF),
               fontSize: 16,
               fontFamily: 'Inter',
               fontWeight: FontWeight.w400,
             ),
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(width: 3, color: Color(0xFF063CA8)),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 17,
+              vertical: 18,
+            ),
+          ),
+          style: const TextStyle(
+            color: Color(0xFF1F2937),
+            fontSize: 16,
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w400,
           ),
         ),
         const SizedBox(height: 32),

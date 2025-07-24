@@ -21,241 +21,233 @@ class _RegisterUserScreenState extends State<RegisterUserScreen> {
     required String label,
     required String hintText,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Color(0xFF1F2937),
-            fontSize: 14,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w400,
-          ),
+    return TextField(
+      onChanged: (value) {
+        setState(() {
+          if (label == 'Full Name') {
+            _fullname = value;
+          } else if (label == 'Username') {
+            _username = value;
+          }
+        });
+      },
+      decoration: InputDecoration(
+        labelText: label,
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
+        labelStyle: const TextStyle(
+          color: Color(0xFF063CA8),
+          fontSize: 18,
+          fontWeight: FontWeight.w400,
         ),
-        const SizedBox(height: 4),
-        TextField(
-          onChanged: (value) {
-            setState(() {
-              if (label == 'Full Name') {
-                _fullname = value;
-              } else if (label == 'Username') {
-                _username = value;
-              }
-            });
-          },
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: const TextStyle(
-              color: Color(0xFF9CA3AF),
-              fontSize: 15,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-            ),
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(width: 2, color: Color(0xFF2563EB)),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 17,
-              vertical: 12,
-            ),
-          ),
+        hintText: hintText,
+        hintStyle: const TextStyle(
+          color: Color(0xFF9CA3AF),
+          fontSize: 15,
+          fontFamily: 'Inter',
+          fontWeight: FontWeight.w400,
         ),
-      ],
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 3, color: Color(0xFF063CA8)),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 17,
+          vertical: 18,
+        ),
+      ),
+      style: const TextStyle(
+        color: Color(0xFF1F2937),
+        fontSize: 16,
+        fontFamily: 'Inter',
+        fontWeight: FontWeight.w400,
+      ),
     );
   }
 
   Widget _buildEmailField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Email',
-          style: TextStyle(
-            color: Color(0xFF1F2937),
-            fontSize: 14,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w400,
-          ),
+    return TextField(
+      keyboardType: TextInputType.emailAddress,
+      onChanged: (value) {
+        setState(() {
+          _email = value;
+        });
+      },
+      decoration: InputDecoration(
+        labelText: 'Email',
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
+        labelStyle: const TextStyle(
+          color: Color(0xFF063CA8),
+          fontSize: 18,
+          fontWeight: FontWeight.w400,
         ),
-        const SizedBox(height: 4),
-        TextField(
-          keyboardType: TextInputType.emailAddress,
-          onChanged: (value) {
-            setState(() {
-              _email = value;
-            });
-          },
-          decoration: InputDecoration(
-            hintText: 'email@example.com',
-            hintStyle: const TextStyle(
-              color: Color(0xFF9CA3AF),
-              fontSize: 15,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-            ),
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(width: 2, color: Color(0xFF2563EB)),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 17,
-              vertical: 12,
-            ),
-          ),
+        hintText: 'email@example.com',
+        hintStyle: const TextStyle(
+          color: Color(0xFF9CA3AF),
+          fontSize: 15,
+          fontFamily: 'Inter',
+          fontWeight: FontWeight.w400,
         ),
-      ],
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 3, color: Color(0xFF063CA8)),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 17,
+          vertical: 18,
+        ),
+      ),
+      style: const TextStyle(
+        color: Color(0xFF1F2937),
+        fontSize: 16,
+        fontFamily: 'Inter',
+        fontWeight: FontWeight.w400,
+      ),
     );
   }
 
   Widget _buildPasswordField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Password',
-          style: TextStyle(
-            color: Color(0xFF1F2937),
-            fontSize: 14,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w400,
-          ),
+    return TextField(
+      obscureText: !_isPasswordVisible,
+      onChanged: (value) {
+        setState(() {
+          _password = value;
+        });
+      },
+      decoration: InputDecoration(
+        labelText: 'Password',
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
+        labelStyle: const TextStyle(
+          color: Color(0xFF063CA8),
+          fontSize: 18,
+          fontWeight: FontWeight.w400,
         ),
-        const SizedBox(height: 4),
-        TextField(
-          obscureText: !_isPasswordVisible,
-          onChanged: (value) {
+        hintText: 'Minimal 8 karakter, campur huruf & angka',
+        hintStyle: const TextStyle(
+          color: Color(0xFF9CA3AF),
+          fontSize: 15,
+          fontFamily: 'Inter',
+          fontWeight: FontWeight.w400,
+        ),
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 3, color: Color(0xFF063CA8)),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 17,
+          vertical: 18,
+        ),
+        suffixIcon: IconButton(
+          onPressed: () {
             setState(() {
-              _password = value;
+              _isPasswordVisible = !_isPasswordVisible;
             });
           },
-          decoration: InputDecoration(
-            hintText: 'Minimal 8 karakter, campur huruf & angka',
-            hintStyle: const TextStyle(
-              color: Color(0xFF9CA3AF),
-              fontSize: 15,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-            ),
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(width: 2, color: Color(0xFF2563EB)),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 17,
-              vertical: 12,
-            ),
-            suffixIcon: IconButton(
-              onPressed: () {
-                setState(() {
-                  _isPasswordVisible = !_isPasswordVisible;
-                });
-              },
-              icon: Icon(
-                _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                color: const Color(0xFF9CA3AF),
-                size: 20,
-              ),
-            ),
+          icon: Icon(
+            _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+            color: const Color(0xFF9CA3AF),
+            size: 20,
           ),
         ),
-      ],
+      ),
+      style: const TextStyle(
+        color: Color(0xFF1F2937),
+        fontSize: 16,
+        fontFamily: 'Inter',
+        fontWeight: FontWeight.w400,
+      ),
     );
   }
 
   Widget _buildConfirmPasswordField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Ulangi Password',
-          style: TextStyle(
-            color: Color(0xFF1F2937),
-            fontSize: 14,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w400,
-          ),
+    return TextField(
+      obscureText: !_isConfirmPasswordVisible,
+      onChanged: (value) {
+        setState(() {
+          _confirmPassword = value;
+        });
+      },
+      decoration: InputDecoration(
+        labelText: 'Ulangi Password',
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
+        labelStyle: const TextStyle(
+          color: Color(0xFF063CA8),
+          fontSize: 18,
+          fontWeight: FontWeight.w400,
         ),
-        const SizedBox(height: 4),
-        TextField(
-          obscureText: !_isConfirmPasswordVisible,
-          onChanged: (value) {
+        hintText: 'Ulangi password',
+        hintStyle: const TextStyle(
+          color: Color(0xFF9CA3AF),
+          fontSize: 15,
+          fontFamily: 'Inter',
+          fontWeight: FontWeight.w400,
+        ),
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 3, color: Color(0xFF063CA8)),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 17,
+          vertical: 18,
+        ),
+        suffixIcon: IconButton(
+          onPressed: () {
             setState(() {
-              _confirmPassword = value;
+              _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
             });
           },
-          decoration: InputDecoration(
-            hintText: 'Ulangi password',
-            hintStyle: const TextStyle(
-              color: Color(0xFF9CA3AF),
-              fontSize: 15,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-            ),
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(width: 2, color: Color(0xFF2563EB)),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 17,
-              vertical: 12,
-            ),
-            suffixIcon: IconButton(
-              onPressed: () {
-                setState(() {
-                  _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
-                });
-              },
-              icon: Icon(
-                _isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                color: const Color(0xFF9CA3AF),
-                size: 20,
-              ),
-            ),
+          icon: Icon(
+            _isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
+            color: const Color(0xFF9CA3AF),
+            size: 20,
           ),
         ),
-      ],
+      ),
+      style: const TextStyle(
+        color: Color(0xFF1F2937),
+        fontSize: 16,
+        fontFamily: 'Inter',
+        fontWeight: FontWeight.w400,
+      ),
     );
   }
 
