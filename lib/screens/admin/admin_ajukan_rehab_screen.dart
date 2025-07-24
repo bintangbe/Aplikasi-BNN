@@ -13,7 +13,9 @@ class AdminAjukanRehabScreen extends StatefulWidget {
 class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
   final _namaController = TextEditingController();
   final _nomorIdentitasController = TextEditingController();
+  final _nomorTATController = TextEditingController();
   final _alamatController = TextEditingController();
+  final _keteranganController = TextEditingController();
   String? _selectedLembaga;
   String? _selectedKecamatan;
   bool _isLoading = false;
@@ -139,6 +141,15 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
 
                               const SizedBox(height: 16),
 
+                              _buildTextField(
+                                label: 'Nomor TAT',
+                                controller: _nomorTATController,
+                                hintText: 'Masukkan nomor TAT',
+                                keyboardType: TextInputType.text,
+                              ),
+
+                              const SizedBox(height: 16),
+
                               // Dropdown Kecamatan
                               _buildKecamatanDropdownField(),
 
@@ -149,6 +160,15 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
                                 controller: _alamatController,
                                 hintText:
                                     'Masukkan alamat detail (jalan, RT/RW, dll)',
+                                maxLines: 2,
+                              ),
+
+                              const SizedBox(height: 16),
+
+                              _buildTextField(
+                                label: 'Keterangan',
+                                controller: _keteranganController,
+                                hintText: 'Masukkan keterangan tambahan',
                                 maxLines: 2,
                               ),
 
@@ -315,74 +335,50 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
     TextInputType? keyboardType,
     int maxLines = 1,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 15,
-            fontFamily: 'Inter',
-            fontWeight: FontWeight.w400,
-            height: 1.57,
-          ),
+    return TextField(
+      controller: controller,
+      keyboardType: keyboardType,
+      maxLines: maxLines,
+      decoration: InputDecoration(
+        labelText: label,
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
+        labelStyle: const TextStyle(
+          color: Color(0xFF063CA8),
+          fontSize: 18,
+          fontWeight: FontWeight.w400,
         ),
-        const SizedBox(height: 4),
-        Container(
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0x3F000000),
-                blurRadius: 4,
-                offset: const Offset(0, 4),
-                spreadRadius: 0,
-              ),
-            ],
-          ),
-          child: TextField(
-            controller: controller,
-            keyboardType: keyboardType,
-            maxLines: maxLines,
-            decoration: InputDecoration(
-              hintText: hintText,
-              hintStyle: const TextStyle(
-                color: Color(0xFF9CA3AF),
-                fontSize: 14,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
-              ),
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  width: 1,
-                  color: Color(0xFFE5E7EB),
-                ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  width: 1,
-                  color: Color(0xFFE5E7EB),
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  width: 2,
-                  color: Color(0xFF2563EB),
-                ),
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
-              ),
-            ),
-          ),
+        hintText: hintText,
+        hintStyle: const TextStyle(
+          color: Color(0xFF9CA3AF),
+          fontSize: 15,
+          fontFamily: 'Inter',
+          fontWeight: FontWeight.w400,
         ),
-      ],
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(width: 3, color: Color(0xFF063CA8)),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 17,
+          vertical: 18,
+        ),
+      ),
+      style: const TextStyle(
+        color: Color(0xFF1F2937),
+        fontSize: 16,
+        fontFamily: 'Inter',
+        fontWeight: FontWeight.w400,
+      ),
     );
   }
 
