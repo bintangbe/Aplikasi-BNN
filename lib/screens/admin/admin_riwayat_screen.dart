@@ -3,6 +3,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'unified_bottom_navigation.dart';
 import 'profile_screen.dart';
 import '../../widgets/responsive_wrapper.dart';
+import '../../services/rehabilitasi_service.dart';
+import '../../models/rehabilitasi_model.dart';
+import 'tambah_rehabilitasi_screen.dart';
 
 class AdminRiwayatScreen extends StatefulWidget {
   const AdminRiwayatScreen({super.key});
@@ -14,49 +17,39 @@ class AdminRiwayatScreen extends StatefulWidget {
 class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  List<RehabilitasiModel> _riwayatData = [];
+  bool _isLoading = true;
 
-  final List<Map<String, dynamic>> _riwayatData = [
-    {
-      'nama': 'Waishabilla Rahadian F',
-      'nik': '35020783942961',
-      'status': 'Rawat Inap',
-      'alamat': 'Lidah',
-      'jenisKelamin': 'Laki-laki',
-      'lembagaRehab': 'Yayasan Rumah Kita',
-      'tanggalMasuk': '7 Agustus 2024',
-      'tanggalSelesai': '18 Agustus 2024',
-      'statusProgress': 'Selesai',
-    },
-    {
-      'nama': 'Oktavian Ismarudin',
-      'nik': '35020783942962',
-      'status': 'Rawat Jalan',
-      'alamat': 'Lidah',
-      'jenisKelamin': 'Laki-laki',
-      'lembagaRehab': 'Yayasan Orbit',
-      'tanggalMasuk': '10 Agustus 2024',
-      'tanggalSelesai': '20 Agustus 2024',
-      'statusProgress': 'Masa Rehab',
-    },
-    {
-      'nama': 'Bintang Azis Satrio Wibowo',
-      'nik': '35020783942963',
-      'status': 'Rawat Jalan',
-      'alamat': 'Jalan Kertajaya',
-      'jenisKelamin': 'Laki-laki',
-      'lembagaRehab': 'Yayasan Plato',
-      'tanggalMasuk': '15 Agustus 2024',
-      'tanggalSelesai': '25 Agustus 2024',
-      'statusProgress': 'Selesai',
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
 
-  List<Map<String, dynamic>> get _filteredData {
+  Future<void> _loadData() async {
+    setState(() => _isLoading = true);
+    try {
+      final data = await RehabilitasiService.getAllRehabilitasi();
+      setState(() {
+        _riwayatData = data;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() => _isLoading = false);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error memuat data: $e')),
+        );
+      }
+    }
+  }
+
+  List<RehabilitasiModel> get _filteredData {
     if (_searchQuery.isEmpty) return _riwayatData;
     return _riwayatData.where((data) {
-      return data['nama'].toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          data['nik'].contains(_searchQuery) ||
-          data['alamat'].toLowerCase().contains(_searchQuery.toLowerCase());
+      return data.nama.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          data.nik.contains(_searchQuery) ||
+          data.alamat.toLowerCase().contains(_searchQuery.toLowerCase());
     }).toList();
   }
 
@@ -90,14 +83,44 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
                       children: [
                         _buildContentHeader(),
                         Expanded(
-                          child: SingleChildScrollView(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-                            child: Column(
-                              children: _filteredData
-                                  .map((data) => _buildRiwayatItem(data))
-                                  .toList(),
-                            ),
-                          ),
+                          child: _isLoading 
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF063CA8)),
+                                ),
+                              )
+                            : _filteredData.isEmpty
+                              ? Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.search_off,
+                                        size: 64,
+                                        color: Colors.grey[400],
+                                      ),
+                                      const SizedBox(height: 16),
+                                      Text(
+                                        _searchQuery.isEmpty 
+                                          ? 'Belum ada data rehabilitasi'
+                                          : 'Tidak ada data yang sesuai dengan pencarian',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey[600],
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : SingleChildScrollView(
+                                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                                  child: Column(
+                                    children: _filteredData
+                                        .map((data) => _buildRiwayatItem(data))
+                                        .toList(),
+                                  ),
+                                ),
                         ),
                       ],
                     ),
@@ -108,6 +131,21 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
           ),
         ),
         bottomNavigationBar: UnifiedBottomNavigation(currentIndex: 3),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: const Color(0xFF063CA8),
+          onPressed: () async {
+            final result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const TambahRehabilitasiScreen(),
+              ),
+            );
+            if (result == true) {
+              await _loadData(); // Refresh data after adding new item
+            }
+          },
+          child: const Icon(Icons.add, color: Colors.white),
+        ),
       ),
     );
   }
@@ -289,7 +327,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
     );
   }
 
-  Widget _buildRiwayatItem(Map<String, dynamic> data) {
+  Widget _buildRiwayatItem(RehabilitasiModel data) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(20),
@@ -339,7 +377,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      data['nama'],
+                      data.nama,
                       style: const TextStyle(
                         color: Color(0xFF1A1A1A),
                         fontSize: 16,
@@ -350,7 +388,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'NIK: ${data['nik']}',
+                      'NIK: ${data.nik}',
                       style: const TextStyle(
                         color: Color(0xFF666666),
                         fontSize: 12,
@@ -370,14 +408,14 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
                 ),
                 decoration: BoxDecoration(
                   color: _getStatusColor(
-                    data['statusProgress'],
+                    data.statusProgress,
                   ).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  data['statusProgress'],
+                  data.statusProgress,
                   style: TextStyle(
-                    color: _getStatusColor(data['statusProgress']),
+                    color: _getStatusColor(data.statusProgress),
                     fontSize: 11,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
@@ -408,28 +446,28 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
           // Details
           _buildDetailRow(
             'Status Rehab',
-            data['status'],
+            data.status,
             Icons.medical_services,
           ),
-          _buildDetailRow('Alamat', data['alamat'], Icons.location_on),
+          _buildDetailRow('Alamat', data.alamat, Icons.location_on),
           _buildDetailRow(
             'Jenis Kelamin',
-            data['jenisKelamin'],
+            data.jenisKelamin,
             Icons.person_outline,
           ),
           _buildDetailRow(
             'Lembaga Rehab',
-            data['lembagaRehab'],
+            data.lembagaRehab,
             Icons.business,
           ),
           _buildDetailRow(
             'Tanggal Masuk',
-            data['tanggalMasuk'],
+            data.tanggalMasuk,
             Icons.calendar_today,
           ),
           _buildDetailRow(
             'Tanggal Selesai',
-            data['tanggalSelesai'],
+            data.tanggalSelesai,
             Icons.event_available,
           ),
 
@@ -519,8 +557,8 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
     }
   }
 
-  void _showUpdateStatusDialog(Map<String, dynamic> data) {
-    String selectedStatus = data['statusProgress'];
+  void _showUpdateStatusDialog(RehabilitasiModel data) {
+    String selectedStatus = data.statusProgress;
 
     showDialog(
       context: context,
@@ -587,7 +625,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      'Status untuk ${data['nama']} berhasil diupdate ke: $selectedStatus',
+                      'Status untuk ${data.nama} berhasil diupdate ke: $selectedStatus',
                     ),
                     backgroundColor: const Color(0xFF22C55E),
                     behavior: SnackBarBehavior.floating,
@@ -658,10 +696,18 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
     );
   }
 
-  void _updateStatus(Map<String, dynamic> data, String newStatus) {
-    setState(() {
-      data['statusProgress'] = newStatus;
-    });
+  void _updateStatus(RehabilitasiModel data, String newStatus) async {
+    try {
+      final updatedData = data.copyWith(statusProgress: newStatus);
+      await RehabilitasiService.updateRehabilitasi(updatedData);
+      await _loadData(); // Reload data to reflect changes
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error updating status: $e')),
+        );
+      }
+    }
   }
 
   @override
