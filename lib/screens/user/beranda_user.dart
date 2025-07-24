@@ -531,22 +531,22 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
               children: [
                 _buildNewsCard(
                   'BNN Kota Surabaya Gencarkan Edukasi Bahaya Narkoba dan Deklarasi Pelajar Anti Narkoba di SMA Khadijah',
-                  'assets/images/BK0338.jpg',
+                  'assets/images/news1.jpg',
                   'https://surabayakota.bnn.go.id/bnn-kota-surabaya-gencarkan-edukasi-bahaya-narkoba-dan-deklarasi-pelajar-anti-narkoba-di-sma-khadijah/',
                 ),
                 _buildNewsCard(
                   'Fenomena Ibu Rumah Tangga Terlibat Narkoba, Kepala BNN Surabaya Tampil di Podcast Memorandum',
-                  'https://via.placeholder.com/258x130?text=Podcast+BNN',
+                  'assets/images/news2.jpg',
                   'https://surabayakota.bnn.go.id/bnn-surabaya-di-podcast-memorandum-rumah-tangga-jadi-target-baru-peredaran-narkoba/',
                 ),
                 _buildNewsCard(
                   'BNN Kota Surabaya Perkuat Ketahanan Remaja Lewat Sosialisasi Napza dan Rokok',
-                  'https://via.placeholder.com/258x130?text=Sosialisasi+Remaja',
-                  'https://surabayakota.bnn.go.id/bnn-kota-surabaya-perkuat-ketahanan-remaja-lewat-sosialisasi-napza-dan-rokok/',
+                  'assets/images/news3.jpg',
+                  'https://surabayakota.bnn.go.id/bnn-kota-surabaya-gencarkan-sosialisasi-bahaya-narkoba-di-sejumlah-sekolah-saat-mpls/',
                 ),
                 _buildNewsCard(
-                  'BNN Kota Surabaya Gencarkan Sosialisasi Bahaya Narkoba di Sejumlah Sekolah Saat MPLS',
-                  'https://via.placeholder.com/258x130?text=MPLS+Sekolah',
+                  'BNN Kota Surabaya Berikan Sosialisasi P4GN dan Pembinaan kepada Peserta Abdi Yasa Dishub',
+                  'assets/images/news4.jpg',
                   'https://surabayakota.bnn.go.id/bnn-kota-surabaya-gencarkan-sosialisasi-bahaya-narkoba-di-sejumlah-sekolah-saat-mpls/',
                 ),
               ],
