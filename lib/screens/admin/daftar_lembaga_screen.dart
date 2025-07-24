@@ -16,160 +16,107 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
 
   final List<Map<String, dynamic>> allLembaga = [
     {
+      'name': 'Klinik Pratama BNN Kota Surabaya',
+      'location': 'Surabaya Selatan',
+      'capacity': '17 orang',
+      'alamatLengkap': 'Jl. ngagel Madya V no. 22 Surabaya',
+      'nomorTelepon': '081231878822',
+      'jamOperasional': '09.00 - 17.00 WIB',
+      'image': 'assets/images/klinik_pratama.jpeg',
+      'email': 'rehab.bnnksby@gmail.com',
+    },
+    {
       'name': 'Yayasan Rumah Kita Surabaya',
       'location': 'Surabaya Timur',
       'type': 'Rawat Inap',
-      'capacity': '22 tempat tidur',
+      'capacity': '17 orang',
       'alamatLengkap': 'Jl. Ngagel Madya II / 9 Surabaya',
-      'nomorTelepon': '088102367299',
+      'nomorTelepon': '081230724211',
       'jamOperasional': '24 Jam',
-      'fasilitas': 'Ruang rawat inap, ruang terapi, konseling',
       'image': 'assets/images/yayasan_rumah_kita.jpeg',
-      'deskripsi':
-          'Yayasan Rumah Kita adalah salah satu lembaga rehabilitasi narkoba terbaik di Surabaya yang telah berpengalaman dalam membantu para korban narkoba untuk sembuh total.',
-      'layanan': [
-        'Rehabilitasi Rawat Inap',
-        'Terapi Kelompok',
-        'Konseling Individual',
-        'Program Reintegrasi Sosial',
-        'Pendampingan Keluarga',
-      ],
-      'email': 'info@rumahkita.org',
+      'email': 'rumahkitasby86@gmail.com',
     },
     {
       'name': 'Yayasan Orbit Surabaya',
       'location': 'Surabaya Timur',
-      'type': 'Rawat Inap',
-      'capacity': '50 tempat tidur',
+      'capacity': '24 orang',
       'alamatLengkap':
           'Jl. BarataJaya XII A No.6, RT.001/RW.004, Baratajaya, Kec. Gubeng, Surabaya',
-      'nomorTelepon': '(031) 5928587',
-      'jamOperasional': '24 Jam',
-      'fasilitas': 'Ruang rawat inap, ruang terapi, laboratorium, apotek',
-      'image': 'assets/images/yayasan_orbit_surabaya.jpeg',
-      'deskripsi':
-          'Yayasan Orbit Surabaya berkomitmen memberikan layanan rehabilitasi narkoba yang komprehensif dengan fasilitas modern dan tenaga profesional berpengalaman.',
-      'layanan': [
-        'Rehabilitasi Rawat Inap',
-        'Detoksifikasi Medis',
-        'Terapi Kelompok',
-        'Konseling Psikologi',
-        'Program Vocational Training',
-      ],
-      'email': 'info@orbitsurabaya.org',
+      'nomorTelepon': '082245948605',
+      'jamOperasional': '09.00 - 17.00 WIB',
+      'image': 'assets/images/yayasan_orbit.jpeg',
+      'email': 'orbit.foundation@yahoo.com',
     },
     {
       'name': 'Yayasan Plato Surabaya',
       'location': 'Surabaya Timur',
-      'type': 'Rawat Jalan',
-      'capacity': '25 tempat tidur',
+      'capacity': '24 orang',
       'alamatLengkap':
           'Jl. Cipta Mananggal v No. 16, RT 011 RW 005, Kelurahan Menanggal, Kecamatan Gayungan',
-      'nomorTelepon': '(031) 5947890',
+      'nomorTelepon': '081330351599',
       'jamOperasional': '08.00 - 16.00 WIB',
-      'fasilitas': 'Poliklinik umum, ruang konseling, farmasi',
       'image': 'assets/images/yayasan_plato_surabaya.jpeg',
-      'deskripsi':
-          'Yayasan Plato Surabaya mengkhususkan diri dalam layanan rawat jalan dengan pendekatan terapi yang inovatif dan personal untuk setiap pasien.',
-      'layanan': [
-        'Rehabilitasi Rawat Jalan',
-        'Konseling Individual dan Keluarga',
-        'Terapi Kelompok',
-        'Program Relapse Prevention',
-        'Konsultasi Medis',
-      ],
-      'email': 'contact@platosurabaya.org',
+      'email': 'plato.found@gmail.com',
     },
     {
       'name': 'Yayasan LRPPN-BI Surabaya',
       'location': 'Surabaya Selatan',
-      'type': 'Rawat Inap & Jalan',
-      'capacity': '35 tempat tidur',
+      'capacity': '20 orang',
       'alamatLengkap':
           'Jl. Khairil Anwar No.23, Darmo, Kec. Wonokromo, Surabaya',
-      'nomorTelepon': '0889-8900-7635',
-      'jamOperasional': '09.00 - 17.00 WIB',
-      'fasilitas':
-          'Ruang rawat inap, poliklinik, terapi kelompok, konseling individu',
-      'image': 'assets/images/yayasan_lrppn_surabaya.jpeg',
-      'deskripsi':
-          'Yayasan LRPPN-BI Surabaya menyediakan layanan rehabilitasi komprehensif untuk korban narkoba dengan program rawat inap dan rawat jalan.',
-      'layanan': [
-        'Rehabilitasi Rawat Inap & Jalan',
-        'Terapi Kelompok',
-        'Konseling Individual',
-        'Program Reintegrasi Sosial',
-        'Poliklinik Umum',
-      ],
-      'email': 'info@lrppnsurabaya.org',
+      'nomorTelepon': '08123263524',
+      'jamOperasional': '08.00 - 20.00 WIB',
+      'image': 'assets/images/yayasan_lrppn.jpeg',
+      'email': 'pantilrppnsurabaya@gmail.com',
     },
     {
       'name': 'Yayasan Rumah Merah Putih Surabaya',
-      'location': 'Sidoarjo',
-      'type': 'Rawat Jalan',
-      'capacity': '15 tempat tidur',
+      'location': 'Waru',
+      'capacity': '25 orang',
       'alamatLengkap': 'Jl. Blimbing I No.18, Ngipa, Wadungasri, Kec. Waru',
-      'nomorTelepon': 'Tidak tersedia',
+      'nomorTelepon': '085853125026',
       'jamOperasional': '09.00 - 15.00 WIB',
-      'fasilitas': 'Konseling, terapi kelompok, program rehabilitasi sosial',
       'image': 'assets/images/yayasan_rumah_merah_putih.jpeg',
-      'deskripsi':
-          'Yayasan Rumah Merah Putih fokus pada program rehabilitasi sosial dengan pendekatan komunitas untuk membantu pemulihan korban narkoba.',
-      'layanan': [
-        'Rehabilitasi Rawat Jalan',
-        'Konseling Psikologi',
-        'Terapi Kelompok',
-        'Program Rehabilitasi Sosial',
-        'Pendampingan Keluarga',
-      ],
-      'email': 'info@rumahmerahputih.org',
+      'email': 'Mako2rungkut@gmail.com',
     },
     {
       'name': 'Yayasan Griya Ashefa Pusaka Surabaya',
       'location': 'Surabaya',
-      'type': 'Rawat Inap',
-      'capacity': 'Coming Soon',
-      'alamatLengkap': 'Coming Soon',
-      'nomorTelepon': 'Coming Soon',
-      'jamOperasional': 'Coming Soon',
-      'fasilitas': 'Coming Soon',
-      'image': 'assets/images/placeholder.jpeg',
-      'deskripsi': 'Yayasan Griya Ashefa Pusaka akan segera hadir di Surabaya.',
-      'layanan': ['Coming Soon'],
-      'email': 'info@ashefasurabaya.org',
+      'capacity': '20 orang',
+      'alamatLengkap': 'Jl Kutisari XIA no 1 RT 08 RW 05 Surabaya',
+      'nomorTelepon': '085959591822',
+      'jamOperasional': '09.00 - 17.00 WIB',
+      'image': 'assets/images/yayasan_ashefa_griya_pusaka.jpeg',
+      'email': 'fpratiwisuryaningrums@gmail.com',
     },
     {
       'name': 'RS Menur Surabaya',
       'location': 'Surabaya Pusat',
-      'type': 'Rawat Jalan',
-      'capacity': '20 tempat tidur',
-      'alamatLengkap':
-          'Jl.Raya Menur No.120, Kelurahan Kertajaya, Kecamatan Airlagga, Kota Surabaya',
-      'nomorTelepon': '0811-3633-120',
+      'capacity': '42 orang',
+      'alamatLengkap': 'Jl. Raya Menur No. 120 Surabaya',
+      'nomorTelepon': '081330305585',
       'jamOperasional': 'Buka 24 jam',
-      'fasilitas': 'Konseling, terapi seni, program rehabilitasi keluarga',
-      'image': 'assets/images/rs_menur_surabaya.jpeg',
-      'deskripsi':
-          'RS Menur Surabaya menyediakan layanan medis dan rehabilitasi dengan pendekatan holistik untuk pemulihan korban narkoba.',
-      'layanan': [
-        'Rehabilitasi Rawat Jalan',
-        'Konseling Individual dan Keluarga',
-        'Terapi Seni',
-        'Program Rehabilitasi Keluarga',
-        'Layanan Medis 24 Jam',
-      ],
-      'email': 'info@rsmenur.co.id',
+      'image': 'assets/images/rs_menur.jpeg',
+      'email': 'rsj.menur@gmail.com',
     },
     {
       'name': 'Omah Sehat Bersinar',
       'location': 'Surabaya Pusat',
-      'type': 'Rawat Inap',
-      'capacity': '30 tempat tidur',
+      'capacity': '30 orang',
       'alamatLengkap': 'Jl. Jemur Andayani No.50 Surabaya',
       'nomorTelepon': 'Tidak tersedia',
       'jamOperasional': '08.00 - 17.00 WIB',
-      'fasilitas': 'Ruang rawat inap, ruang terapi, konseling keluarga',
       'image': 'assets/images/yayasan_omah_sehat_bersinar.jpeg',
+    },
+    {
+      'name': 'Subdirektorat Mitigasi Crisis Center Unesa',
+      'location': 'Surabaya Barat',
+      'type': 'Rawat Jalan',
+      'capacity': '20 orang',
+      'alamatLengkap': 'Kampus Unesa Lidah Wetan, Surabaya',
+      'nomorTelepon': '0812-3456-7890',
+      'jamOperasional': '09.00 - 16.00 WIB',
+      'image': 'assets/images/smcc_unesa.jpeg',
     },
   ];
 
@@ -224,7 +171,6 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
                       child: Column(
                         children: [
                           _buildSearchAndFilter(),
-                          _buildStatistics(),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 100),
@@ -389,76 +335,6 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildStatistics() {
-    final filteredCount = filteredLembaga.length;
-    final totalCount = allLembaga.length;
-    final rawatInapCount = allLembaga
-        .where((l) => (l['type'] ?? '').contains('Rawat Inap'))
-        .length;
-    final rawatJalanCount = allLembaga
-        .where((l) => (l['type'] ?? '').contains('Rawat Jalan'))
-        .length;
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            const Color(0xFF0050FF).withOpacity(0.1),
-            const Color(0xFF00AEEF).withOpacity(0.1),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: const Color(0xFF0050FF).withOpacity(0.2)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildStatItem('Total', totalCount.toString(), Icons.business),
-          _buildStatItem(
-            'Rawat Inap',
-            rawatInapCount.toString(),
-            Icons.local_hospital,
-          ),
-          _buildStatItem(
-            'Rawat Jalan',
-            rawatJalanCount.toString(),
-            Icons.medical_services,
-          ),
-          _buildStatItem('Ditemukan', filteredCount.toString(), Icons.search),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatItem(String label, String value, IconData icon) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: const Color(0xFF0050FF).withOpacity(0.1),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Icon(icon, color: const Color(0xFF0050FF), size: 20),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF0050FF),
-          ),
-        ),
-        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
-      ],
     );
   }
 
@@ -645,37 +521,8 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
                 ),
                 const SizedBox(height: 12),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF22C55E).withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Icon(
-                            Icons.phone,
-                            size: 16,
-                            color: Color(0xFF22C55E),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF3B82F6).withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Icon(
-                            Icons.location_on,
-                            size: 16,
-                            color: Color(0xFF3B82F6),
-                          ),
-                        ),
-                      ],
-                    ),
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(
