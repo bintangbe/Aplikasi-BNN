@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'admin_ajukan_rehab_screen.dart';
-import 'admin_riwayat_screen.dart';
+import 'riwayat_pengajuan_screen.dart';
 import 'detail_lembaga_screen.dart';
 import 'daftar_lembaga_screen.dart';
 import 'profile_screen.dart';
 import 'unified_bottom_navigation.dart';
-import '../../widgets/responsive_wrapper.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
@@ -17,48 +16,60 @@ class AdminDashboardScreen extends StatelessWidget {
       canPop: false,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: ResponsiveWrapper(
-          child: Stack(
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
-                  ),
+        body: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
                 ),
               ),
-              SafeArea(
-                bottom: false,
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.only(
-                    left: 24,
-                    right: 24,
-                    top: 24,
-                    bottom: 100,
+            ),
+            SafeArea(
+              bottom: false,
+              child: Column(
+                children: [
+                  _buildHeader(context),
+                  Expanded(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFEFEFEF),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(35),
+                          topRight: Radius.circular(35),
+                        ),
+                      ),
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.only(
+                          left: 24,
+                          right: 24,
+                          top: 24,
+                          bottom: 100,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildActionButtons(context),
+                            const SizedBox(height: 24),
+                            _buildLembagaSection(context),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildHeader(context),
-                      const SizedBox(height: 16),
-                      _buildActionButtons(context),
-                      const SizedBox(height: 24),
-                      _buildLembagaSection(context),
-                    ],
-                  ),
-                ),
+                ],
               ),
-              // Bottom Navigation
-              const Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: UnifiedBottomNavigation(currentIndex: 0),
-              ),
-            ],
-          ),
+            ),
+            // Bottom Navigation
+            const Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: UnifiedBottomNavigation(currentIndex: 0),
+            ),
+          ],
         ),
       ),
     );
@@ -177,13 +188,15 @@ class AdminDashboardScreen extends StatelessWidget {
         const SizedBox(width: 16),
         Expanded(
           child: _buildActionCard(
-            title: 'Riwayat\nRehab',
+            title: 'Update\nPengajuan',
             color: const Color(0xFF22C55E),
-            icon: Icons.history,
+            icon: Icons.edit_document,
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const AdminRiwayatScreen()),
+                MaterialPageRoute(
+                  builder: (_) => const RiwayatPengajuanScreen(),
+                ),
               );
             },
           ),
@@ -241,31 +254,69 @@ class AdminDashboardScreen extends StatelessWidget {
   Widget _buildLembagaSection(BuildContext context) {
     final lembagaList = [
       {
-        'name': 'Klinik Pratama BNN Kota Surabaya',
-        'location': 'Surabaya Selatan',
-        'capacity': '100 orang',
-        'alamatLengkap': 'Jl. ngagel Madya V no. 22 Surabaya',
-        'nomorTelepon': '081231878822',
-        'jamOperasional': '08.00 - 16.00 WIB',
-        'image': 'assets/images/klinik_pratama1.jpg',
-      },
-      {
         'name': 'Yayasan Rumah Kita Surabaya',
         'location': 'Surabaya Timur',
-        'capacity': '17 orang',
+        'type': 'Rawat Inap',
+        'capacity': '22 tempat tidur',
         'alamatLengkap': 'Jl. Ngagel Madya II / 9 Surabaya',
-        'nomorTelepon': '081230724211',
-        'jamOperasional': '08.00 - 20.00 WIB',
+        'nomorTelepon': '088102367299',
+        'jamOperasional': '24 Jam',
+        'fasilitas': 'Ruang rawat inap, ruang terapi, konseling',
         'image': 'assets/images/yayasan_rumah_kita.jpeg',
+        'deskripsi':
+            'Yayasan Rumah Kita adalah salah satu lembaga rehabilitasi narkoba terbaik di Surabaya yang telah berpengalaman dalam membantu para korban narkoba untuk sembuh total.',
+        'layanan': [
+          'Rehabilitasi Rawat Inap',
+          'Terapi Kelompok',
+          'Konseling Individual',
+          'Program Reintegrasi Sosial',
+          'Pendampingan Keluarga',
+        ],
+        'email': 'info@rumahkita.org',
       },
       {
         'name': 'Yayasan Orbit Surabaya',
         'location': 'Surabaya Timur',
-        'capacity': '24 orang',
-        'alamatLengkap': 'Jl. Margorejo Indah Utara Blok B-922, Surabaya',
-        'nomorTelepon': '081233563815',
-        'jamOperasional': '09.00 - 21.00 WIB',
+        'type': 'Rawat Inap',
+        'capacity': '50 tempat tidur',
+        'alamatLengkap':
+            'Jl. BarataJaya XII A No.6, RT.001/RW.004, Baratajaya, Kec. Gubeng, Surabaya',
+        'nomorTelepon': '(031) 5928587',
+        'jamOperasional': '24 Jam',
+        'fasilitas': 'Ruang rawat inap, ruang terapi, laboratorium, apotek',
         'image': 'assets/images/yayasan_orbit_surabaya.jpeg',
+        'deskripsi':
+            'Yayasan Orbit Surabaya berkomitmen memberikan layanan rehabilitasi narkoba yang komprehensif dengan fasilitas modern dan tenaga profesional berpengalaman.',
+        'layanan': [
+          'Rehabilitasi Rawat Inap',
+          'Detoksifikasi Medis',
+          'Terapi Kelompok',
+          'Konseling Psikologi',
+          'Program Vocational Training',
+        ],
+        'email': 'info@orbitsurabaya.org',
+      },
+      {
+        'name': 'Yayasan Plato Surabaya',
+        'location': 'Surabaya Timur',
+        'type': 'Rawat Jalan',
+        'capacity': '25 tempat tidur',
+        'alamatLengkap':
+            'Jl. Cipta Mananggal v No. 16, RT 011 RW 005, Kelurahan Menanggal, Kecamatan Gayungan',
+        'nomorTelepon': '(031) 5947890',
+        'jamOperasional': '08.00 - 16.00 WIB',
+        'fasilitas': 'Poliklinik umum, ruang konseling, farmasi',
+        'image': 'assets/images/yayasan_plato_surabaya.jpeg',
+        'deskripsi':
+            'Yayasan Plato Surabaya mengkhususkan diri dalam layanan rawat jalan dengan pendekatan terapi yang inovatif dan personal untuk setiap pasien.',
+        'layanan': [
+          'Rehabilitasi Rawat Jalan',
+          'Konseling Individual dan Keluarga',
+          'Terapi Kelompok',
+          'Program Relapse Prevention',
+          'Konsultasi Medis',
+        ],
+        'email': 'contact@platosurabaya.org',
       },
     ];
 
@@ -327,7 +378,7 @@ class AdminDashboardScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    lembaga['name'] ?? 'Nama tidak tersedia',
+                    lembaga['name']!,
                     style: const TextStyle(
                       color: Color(0xFF1D4ED8),
                       fontSize: 16,
@@ -346,35 +397,20 @@ class AdminDashboardScreen extends StatelessWidget {
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text(
-                    lembaga['location'] ?? 'Lokasi tidak tersedia',
+                    lembaga['location']!,
                     style: const TextStyle(color: Colors.grey, fontSize: 14),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 4),
-            if (lembaga['capacity'] != null) ...[
-              Row(
-                children: [
-                  const Icon(Icons.people, size: 16, color: Colors.grey),
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: Text(
-                      lembaga['capacity']!,
-                      style: const TextStyle(color: Colors.grey, fontSize: 14),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-            ],
             Row(
               children: [
-                const Icon(Icons.access_time, size: 16, color: Colors.grey),
+                const Icon(Icons.people, size: 16, color: Colors.grey),
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text(
-                    lembaga['jamOperasional'] ?? 'Jam tidak tersedia',
+                    lembaga['capacity']!,
                     style: const TextStyle(color: Colors.grey, fontSize: 14),
                   ),
                 ),
