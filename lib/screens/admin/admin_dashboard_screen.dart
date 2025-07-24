@@ -254,69 +254,31 @@ class AdminDashboardScreen extends StatelessWidget {
   Widget _buildLembagaSection(BuildContext context) {
     final lembagaList = [
       {
+        'name': 'Klinik Pratama BNN Kota Surabaya',
+        'location': 'Surabaya Selatan',
+        'alamatLengkap': 'Jl. ngagel Madya V no. 22 Surabaya',
+        'nomorTelepon': '081231878822',
+        'jamOperasional': '08.00 - 16.00 WIB',
+        'image': 'assets/images/klinik_pratama.jpeg',
+      },
+      {
         'name': 'Yayasan Rumah Kita Surabaya',
         'location': 'Surabaya Timur',
-        'type': 'Rawat Inap',
-        'capacity': '22 tempat tidur',
+        'capacity': '17 orang',
         'alamatLengkap': 'Jl. Ngagel Madya II / 9 Surabaya',
         'nomorTelepon': '088102367299',
-        'jamOperasional': '24 Jam',
-        'fasilitas': 'Ruang rawat inap, ruang terapi, konseling',
+        'jamOperasional': '08.00 - 20.00 WIB',
         'image': 'assets/images/yayasan_rumah_kita.jpeg',
-        'deskripsi':
-            'Yayasan Rumah Kita adalah salah satu lembaga rehabilitasi narkoba terbaik di Surabaya yang telah berpengalaman dalam membantu para korban narkoba untuk sembuh total.',
-        'layanan': [
-          'Rehabilitasi Rawat Inap',
-          'Terapi Kelompok',
-          'Konseling Individual',
-          'Program Reintegrasi Sosial',
-          'Pendampingan Keluarga',
-        ],
-        'email': 'info@rumahkita.org',
       },
       {
         'name': 'Yayasan Orbit Surabaya',
         'location': 'Surabaya Timur',
-        'type': 'Rawat Inap',
-        'capacity': '50 tempat tidur',
+        'capacity': '24 orang',
         'alamatLengkap':
             'Jl. BarataJaya XII A No.6, RT.001/RW.004, Baratajaya, Kec. Gubeng, Surabaya',
-        'nomorTelepon': '(031) 5928587',
-        'jamOperasional': '24 Jam',
-        'fasilitas': 'Ruang rawat inap, ruang terapi, laboratorium, apotek',
+        'nomorTelepon': '082245948605',
+        'jamOperasional': '09.00 - 17.00 WIB',
         'image': 'assets/images/yayasan_orbit_surabaya.jpeg',
-        'deskripsi':
-            'Yayasan Orbit Surabaya berkomitmen memberikan layanan rehabilitasi narkoba yang komprehensif dengan fasilitas modern dan tenaga profesional berpengalaman.',
-        'layanan': [
-          'Rehabilitasi Rawat Inap',
-          'Detoksifikasi Medis',
-          'Terapi Kelompok',
-          'Konseling Psikologi',
-          'Program Vocational Training',
-        ],
-        'email': 'info@orbitsurabaya.org',
-      },
-      {
-        'name': 'Yayasan Plato Surabaya',
-        'location': 'Surabaya Timur',
-        'type': 'Rawat Jalan',
-        'capacity': '25 tempat tidur',
-        'alamatLengkap':
-            'Jl. Cipta Mananggal v No. 16, RT 011 RW 005, Kelurahan Menanggal, Kecamatan Gayungan',
-        'nomorTelepon': '(031) 5947890',
-        'jamOperasional': '08.00 - 16.00 WIB',
-        'fasilitas': 'Poliklinik umum, ruang konseling, farmasi',
-        'image': 'assets/images/yayasan_plato_surabaya.jpeg',
-        'deskripsi':
-            'Yayasan Plato Surabaya mengkhususkan diri dalam layanan rawat jalan dengan pendekatan terapi yang inovatif dan personal untuk setiap pasien.',
-        'layanan': [
-          'Rehabilitasi Rawat Jalan',
-          'Konseling Individual dan Keluarga',
-          'Terapi Kelompok',
-          'Program Relapse Prevention',
-          'Konsultasi Medis',
-        ],
-        'email': 'contact@platosurabaya.org',
       },
     ];
 
@@ -378,7 +340,7 @@ class AdminDashboardScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    lembaga['name']!,
+                    lembaga['name'] ?? 'Nama tidak tersedia',
                     style: const TextStyle(
                       color: Color(0xFF1D4ED8),
                       fontSize: 16,
@@ -397,20 +359,35 @@ class AdminDashboardScreen extends StatelessWidget {
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text(
-                    lembaga['location']!,
+                    lembaga['location'] ?? 'Lokasi tidak tersedia',
                     style: const TextStyle(color: Colors.grey, fontSize: 14),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 4),
+            if (lembaga['capacity'] != null) ...[
+              Row(
+                children: [
+                  const Icon(Icons.people, size: 16, color: Colors.grey),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: Text(
+                      lembaga['capacity']!,
+                      style: const TextStyle(color: Colors.grey, fontSize: 14),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+            ],
             Row(
               children: [
-                const Icon(Icons.people, size: 16, color: Colors.grey),
+                const Icon(Icons.access_time, size: 16, color: Colors.grey),
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text(
-                    lembaga['capacity']!,
+                    lembaga['jamOperasional'] ?? 'Jam tidak tersedia',
                     style: const TextStyle(color: Colors.grey, fontSize: 14),
                   ),
                 ),
