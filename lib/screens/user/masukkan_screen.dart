@@ -4,6 +4,9 @@ import 'persebaran_screen.dart';
 import 'ebook_screen.dart';
 import 'akun_screen.dart';
 import 'beranda_user.dart';
+import '../../models/masukkan_model.dart';
+import '../../services/masukkan_service.dart';
+import '../shared/detail_percakapan_screen.dart';
 
 class MasukkanScreen extends StatefulWidget {
   const MasukkanScreen({super.key});
@@ -13,8 +16,9 @@ class MasukkanScreen extends StatefulWidget {
 }
 
 class _MasukkanScreenState extends State<MasukkanScreen> {
-  final _namaController = TextEditingController();
-  final _keteranganController = TextEditingController();
+  final TextEditingController _judulController = TextEditingController();
+  final TextEditingController _pesanController = TextEditingController();
+  final MasukkanService _masukkanService = MasukkanService();
 
   @override
   Widget build(BuildContext context) {
@@ -42,22 +46,45 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
                       topRight: Radius.circular(35),
                     ),
                   ),
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(24),
+                  child: DefaultTabController(
+                    length: 2,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Masukkan',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 28,
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w700,
+                        const TabBar(
+                          labelColor: Color(0xFF063CA8),
+                          unselectedLabelColor: Colors.grey,
+                          indicatorColor: Color(0xFF063CA8),
+                          tabs: [
+                            Tab(text: 'Buat Masukkan'),
+                            Tab(text: 'Riwayat Masukkan'),
+                          ],
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              SingleChildScrollView(
+                                padding: const EdgeInsets.all(24),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Masukkan',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 28,
+                                        fontFamily: 'Inter',
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 24),
+                                    _buildSimpleForm(),
+                                  ],
+                                ),
+                              ),
+                              _buildRiwayatMasukkan(),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 24),
-                        _buildSimpleForm(),
                       ],
                     ),
                   ),
@@ -277,7 +304,7 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
             border: Border.all(color: Colors.grey[300]!),
           ),
           child: TextField(
-            controller: _namaController,
+            controller: _judulController,
             decoration: const InputDecoration(
               hintText: 'Judul Masukkan',
               hintStyle: TextStyle(
@@ -307,7 +334,7 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
             border: Border.all(color: Colors.grey[300]!),
           ),
           child: TextField(
-            controller: _keteranganController,
+            controller: _pesanController,
             maxLines: 8,
             decoration: const InputDecoration(
               hintText: 'Tulis isi masukkan...',
@@ -333,7 +360,7 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
           width: double.infinity,
           height: 50,
           child: ElevatedButton(
-            onPressed: _handleSubmit,
+            onPressed: _kirimMasukkan,
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF2563EB),
               shape: RoundedRectangleBorder(
@@ -356,8 +383,8 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
     );
   }
 
-  void _handleSubmit() {
-    if (_namaController.text.isEmpty || _keteranganController.text.isEmpty) {
+  void _kirimMasukkan() {
+    if (_judulController.text.isEmpty || _pesanController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Mohon lengkapi judul dan isi masukkan'),
@@ -367,7 +394,20 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
       return;
     }
 
-    // TODO: Implement actual submission logic
+    // Buat masukkan baru menggunakan service
+    final masukkanBaru = MasukkanModel(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      nama: 'User', // Nama default untuk sekarang
+      email: 'user@example.com', // Email default untuk sekarang
+      judul: _judulController.text,
+      isi: _pesanController.text,
+      tanggal: DateTime.now(),
+      status: 'Terkirim',
+      percakapan: [],
+    );
+    
+    _masukkanService.tambahMasukkan(masukkanBaru);
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Masukkan berhasil dikirim!'),
@@ -376,15 +416,153 @@ class _MasukkanScreenState extends State<MasukkanScreen> {
       ),
     );
 
-    // Clear form
-    _namaController.clear();
-    _keteranganController.clear();
+    // Clear form dan refresh state
+    _judulController.clear();
+    _pesanController.clear();
+    setState(() {});
+  }
+
+  Widget _buildRiwayatMasukkan() {
+    final daftarMasukkan = _masukkanService.daftarMasukkan;
+    
+    return daftarMasukkan.isEmpty
+        ? const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.forum_outlined,
+                  size: 80,
+                  color: Colors.grey,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Belum ada masukkan',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Kirim masukkan pertama Anda!',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          )
+        : ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: daftarMasukkan.length,
+            itemBuilder: (context, index) {
+              final masukkan = daftarMasukkan[index];
+              return Card(
+                margin: const EdgeInsets.only(bottom: 12),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(16),
+                  title: Text(
+                    masukkan.judul,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 8),
+                      Text(
+                        masukkan.isi,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.access_time,
+                            size: 14,
+                            color: Colors.grey[600],
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            _formatTanggal(masukkan.tanggal),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                          const Spacer(),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: masukkan.percakapan.isEmpty
+                                  ? Colors.orange[100]
+                                  : Colors.green[100],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              masukkan.percakapan.isEmpty
+                                  ? 'Menunggu Balasan'
+                                  : '${masukkan.percakapan.length} Balasan',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: masukkan.percakapan.isEmpty
+                                    ? Colors.orange[800]
+                                    : Colors.green[800],
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailPercakapanScreen(
+                          masukkan: masukkan,
+                          isAdmin: false,
+                          currentUserName: 'User',
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+          );
+  }
+
+  String _formatTanggal(DateTime tanggal) {
+    final now = DateTime.now();
+    final difference = now.difference(tanggal);
+    
+    if (difference.inDays == 0) {
+      return 'Hari ini';
+    } else if (difference.inDays == 1) {
+      return 'Kemarin';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} hari lalu';
+    } else {
+      return '${tanggal.day}/${tanggal.month}/${tanggal.year}';
+    }
   }
 
   @override
   void dispose() {
-    _namaController.dispose();
-    _keteranganController.dispose();
+    _judulController.dispose();
+    _pesanController.dispose();
     super.dispose();
   }
 }
