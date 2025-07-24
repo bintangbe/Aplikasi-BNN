@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'masukkan_screen.dart';
+import 'profile_screen.dart';
 
 class BalasScreen extends StatefulWidget {
   final String nama;
@@ -94,7 +94,7 @@ class _BalasScreenState extends State<BalasScreen> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const MasukkanScreen(),
+                                  builder: (context) => const ProfileScreen(),
                                 ),
                               );
                             },

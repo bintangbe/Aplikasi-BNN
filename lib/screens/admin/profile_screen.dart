@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-// import 'masukkan_screen.dart';
-// import 'admin_forgot_password_screen.dart';
 import '../login_screen.dart';
 import 'notifikasi_admin_screen.dart';
 import 'ubah_password_admin_screen.dart';
 import 'unified_bottom_navigation.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../widgets/admin_header.dart';
+import '../../services/masukkan_service.dart';
+import '../shared/detail_percakapan_screen.dart';
 
 
 class ProfileScreen extends StatefulWidget {
@@ -17,6 +16,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final MasukkanService _masukkanService = MasukkanService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,12 +45,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       topRight: Radius.circular(35),
                     ),
                   ),
-                  child: SingleChildScrollView(
+                  child: DefaultTabController(
+                    length: 3,
                     child: Column(
                       children: [
-                        _buildProfileSection(),
-                        _buildMenuSection(),
-                        _buildContactSection(),
+                        const TabBar(
+                          labelColor: Color(0xFF063CA8),
+                          unselectedLabelColor: Colors.grey,
+                          indicatorColor: Color(0xFF063CA8),
+                          tabs: [
+                            Tab(text: 'Profile'),
+                            Tab(text: 'Kelola Masukkan'),
+                            Tab(text: 'Riwayat Masukkan'),
+                          ],
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    _buildProfileSection(),
+                                    _buildMenuSection(),
+                                    _buildContactSection(),
+                                  ],
+                                ),
+                              ),
+                              _buildKelolaCallback(),
+                              _buildRiwayatMasukkan(),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -59,7 +85,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
-      // Footer as in admin_dashboard_screen.dart
       bottomNavigationBar: const UnifiedBottomNavigation(currentIndex: 4),
     );
   }
@@ -78,7 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             spreadRadius: 1,
             blurRadius: 4,
             offset: const Offset(0, 2),
@@ -225,7 +250,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               spreadRadius: 1,
               blurRadius: 4,
               offset: const Offset(0, 2),
@@ -239,8 +264,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: 48,
               decoration: BoxDecoration(
                 color: isLogout
-                    ? const Color(0xFFEF4444).withOpacity(0.1)
-                    : const Color(0xFF3B82F6).withOpacity(0.1),
+                    ? const Color(0xFFEF4444).withValues(alpha: 0.1)
+                    : const Color(0xFF3B82F6).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -354,6 +379,307 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ],
     );
+  }
+
+  Widget _buildKelolaCallback() {
+    final daftarMasukkan = _masukkanService.daftarMasukkan;
+    
+    return daftarMasukkan.isEmpty
+        ? const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.forum_outlined,
+                  size: 80,
+                  color: Colors.grey,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Belum ada masukkan dari user',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Tunggu masukkan dari user',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          )
+        : ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: daftarMasukkan.length,
+            itemBuilder: (context, index) {
+              final masukkan = daftarMasukkan[index];
+              return Card(
+                margin: const EdgeInsets.only(bottom: 12),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(16),
+                  leading: CircleAvatar(
+                    backgroundColor: const Color(0xFF063CA8),
+                    child: Text(
+                      masukkan.nama[0].toUpperCase(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        masukkan.nama,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        masukkan.judul,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 8),
+                      Text(
+                        masukkan.isi,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.access_time,
+                            size: 14,
+                            color: Colors.grey[600],
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            _formatTanggal(masukkan.tanggal),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                          const Spacer(),
+                          // Indikator pesan baru dari user
+                          if (masukkan.percakapan.isNotEmpty && 
+                              masukkan.percakapan.last.pengirim == 'user')
+                            Container(
+                              width: 8,
+                              height: 8,
+                              margin: const EdgeInsets.only(right: 8),
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: _masukkanService.getStatusDinamis(masukkan) == 'Menunggu Balasan' ||
+                                     _masukkanService.getStatusDinamis(masukkan) == 'Menunggu Balasan Admin'
+                                  ? Colors.orange[100]
+                                  : Colors.green[100],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              _masukkanService.getStatusDinamis(masukkan),
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: _masukkanService.getStatusDinamis(masukkan) == 'Menunggu Balasan' ||
+                                       _masukkanService.getStatusDinamis(masukkan) == 'Menunggu Balasan Admin'
+                                    ? Colors.orange[800]
+                                    : Colors.green[800],
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailPercakapanScreen(
+                          masukkan: masukkan,
+                          isAdmin: true,
+                          currentUserName: 'Admin BNN',
+                        ),
+                      ),
+                    ).then((_) => setState(() {}));
+                  },
+                ),
+              );
+            },
+          );
+  }
+
+  Widget _buildRiwayatMasukkan() {
+    final daftarMasukkan = _masukkanService.daftarMasukkan
+        .where((masukkan) => masukkan.percakapan.isNotEmpty)
+        .toList();
+    
+    return daftarMasukkan.isEmpty
+        ? const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.history,
+                  size: 80,
+                  color: Colors.grey,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Belum ada riwayat percakapan',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Balasan akan muncul disini',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          )
+        : ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: daftarMasukkan.length,
+            itemBuilder: (context, index) {
+              final masukkan = daftarMasukkan[index];
+              final totalPesan = masukkan.percakapan.length;
+              final pesanTerakhir = masukkan.percakapan.last;
+              
+              return Card(
+                margin: const EdgeInsets.only(bottom: 12),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(16),
+                  leading: CircleAvatar(
+                    backgroundColor: const Color(0xFF063CA8),
+                    child: Text(
+                      masukkan.nama[0].toUpperCase(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                    masukkan.judul,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 4),
+                      Text(
+                        'Dengan: ${masukkan.nama}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Pesan terakhir: ${pesanTerakhir.pesan}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.chat_bubble_outline,
+                            size: 14,
+                            color: Colors.grey[600],
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            '$totalPesan pesan',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            _formatTanggal(pesanTerakhir.waktu),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailPercakapanScreen(
+                          masukkan: masukkan,
+                          isAdmin: true,
+                          currentUserName: 'Admin BNN',
+                        ),
+                      ),
+                    ).then((_) => setState(() {}));
+                  },
+                ),
+              );
+            },
+          );
+  }
+
+  String _formatTanggal(DateTime tanggal) {
+    final now = DateTime.now();
+    final difference = now.difference(tanggal);
+    
+    if (difference.inDays == 0) {
+      return 'Hari ini';
+    } else if (difference.inDays == 1) {
+      return 'Kemarin';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} hari lalu';
+    } else {
+      return '${tanggal.day}/${tanggal.month}/${tanggal.year}';
+    }
   }
 
 

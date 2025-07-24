@@ -42,7 +42,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen> {
       'nama': 'Bintang Azis Satrio Wibowo',
       'nik': '35020783942963',
       'status': 'Rawat Jalan',
-      'alamat': 'Gresik',
+      'alamat': 'Jalan Kertajaya',
       'jenisKelamin': 'Laki-laki',
       'lembagaRehab': 'Yayasan Plato',
       'tanggalMasuk': '15 Agustus 2024',
