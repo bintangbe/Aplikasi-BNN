@@ -228,9 +228,26 @@ class _DaftarLembagaUserScreenState extends State<DaftarLembagaUserScreen> {
   Widget _buildLembagaCard(Map<String, dynamic> lembaga) {
     final name = lembaga['name'] ?? 'Nama tidak tersedia';
     final location = lembaga['location'] ?? 'Lokasi tidak tersedia';
-    final capacity = lembaga['capacity'] ?? 'Kapasitas tidak tersedia';
     final jamOperasional = lembaga['jamOperasional'] ?? 'Jam tidak tersedia';
     final image = lembaga['image'] ?? 'assets/images/placeholder.jpeg';
+
+    // Get integrated capacity information
+    final kapasitasLaki = lembaga['kapasitasLaki'] ?? 0;
+    final kapasitasPerempuan = lembaga['kapasitasPerempuan'] ?? 0;
+    final rawatInapLaki = lembaga['rawatInapLaki'] ?? 0;
+    final rawatInapPerempuan = lembaga['rawatInapPerempuan'] ?? 0;
+
+    // Calculate capacity display
+    String capacityDisplay;
+    if (kapasitasLaki > 0 || kapasitasPerempuan > 0) {
+      final totalKapasitas = kapasitasLaki + kapasitasPerempuan;
+      final totalTerisi = rawatInapLaki + rawatInapPerempuan;
+      final sisaKapasitas = totalKapasitas - totalTerisi;
+      capacityDisplay = '$sisaKapasitas / $totalKapasitas tersedia';
+    } else {
+      // Fallback to old capacity structure
+      capacityDisplay = lembaga['capacity'] ?? 'Kapasitas tidak tersedia';
+    }
 
     return Container(
       decoration: BoxDecoration(
@@ -321,7 +338,11 @@ class _DaftarLembagaUserScreenState extends State<DaftarLembagaUserScreen> {
                   const Color(0xFF059669),
                 ),
                 const SizedBox(height: 8),
-                _buildInfoRow(Icons.people, capacity, const Color(0xFF2563EB)),
+                _buildInfoRow(
+                  Icons.people,
+                  capacityDisplay,
+                  const Color(0xFF2563EB),
+                ),
                 const SizedBox(height: 8),
                 _buildInfoRow(
                   Icons.access_time,
