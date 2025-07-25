@@ -39,7 +39,7 @@ class LembagaService {
       'capacityWanita': '0 orang',
       'alamatLengkap': 'Jl. Ngagel Madya II / 9 Surabaya',
       'nomorTelepon': '081230724211',
-      'jamOperasional': '24 Jam',
+      'jamOperasional': '09.00 - 16.00 WIB',
       'image': 'assets/images/yayasan_rumah_kita.jpeg',
       'email': 'rumahkitasby86@gmail.com',
       // Detailed capacity data
@@ -203,7 +203,7 @@ class LembagaService {
           'SMCC di Gedung rektorat unesa lantai 4. Jl. Lidah Wetan, Lidah Wetan, Kec. Lakarsantri, Surabaya',
       'nomorTelepon': '0812-3456-7890',
       'jamOperasional': '09.00 - 15.00 WIB',
-      'image': 'assets/images/smcc_unesa.jpeg',
+      'image': 'assets/images/yayasan_unesa.jpeg',
       // Detailed capacity data
       'rawatInapLaki': 2,
       'rawatInapPerempuan': 1,

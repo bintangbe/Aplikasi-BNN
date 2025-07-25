@@ -16,8 +16,10 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
   final _nomorTATController = TextEditingController();
   final _alamatController = TextEditingController();
   final _keteranganController = TextEditingController();
+  final _tanggalMasukController = TextEditingController();
   String? _selectedLembaga;
   String? _selectedKecamatan;
+  DateTime? _selectedDate;
   bool _isLoading = false;
 
   final List<String> _lembagaOptions = [
@@ -150,6 +152,11 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
                                 hintText: 'Masukkan nomor TAT',
                                 keyboardType: TextInputType.text,
                               ),
+
+                              const SizedBox(height: 16),
+
+                              // Date Picker Field
+                              _buildDatePickerField(),
 
                               const SizedBox(height: 16),
 
@@ -385,6 +392,90 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
     );
   }
 
+  Widget _buildDatePickerField() {
+    return GestureDetector(
+      onTap: () async {
+        final DateTime? picked = await showDatePicker(
+          context: context,
+          initialDate: _selectedDate ?? DateTime.now(),
+          firstDate: DateTime(2000),
+          lastDate: DateTime.now().add(const Duration(days: 365)),
+          builder: (context, child) {
+            return Theme(
+              data: Theme.of(context).copyWith(
+                colorScheme: const ColorScheme.light(
+                  primary: Color(0xFF063CA8),
+                  onPrimary: Colors.white,
+                  surface: Colors.white,
+                  onSurface: Colors.black,
+                ),
+              ),
+              child: child!,
+            );
+          },
+        );
+        if (picked != null && picked != _selectedDate) {
+          setState(() {
+            _selectedDate = picked;
+            _tanggalMasukController.text =
+                "${picked.day.toString().padLeft(2, '0')}/"
+                "${picked.month.toString().padLeft(2, '0')}/"
+                "${picked.year}";
+          });
+        }
+      },
+      child: AbsorbPointer(
+        child: TextField(
+          controller: _tanggalMasukController,
+          decoration: InputDecoration(
+            labelText: 'Tanggal Masuk Pasien',
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
+            labelStyle: const TextStyle(
+              color: Color(0xFF063CA8),
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+            ),
+            hintText: 'Pilih tanggal masuk',
+            hintStyle: const TextStyle(
+              color: Color(0xFF9CA3AF),
+              fontSize: 15,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w400,
+            ),
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(width: 1, color: Color(0xFFD1D5DB)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(width: 3, color: Color(0xFF063CA8)),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 17,
+              vertical: 18,
+            ),
+            suffixIcon: const Icon(
+              Icons.calendar_today,
+              color: Color(0xFF063CA8),
+            ),
+          ),
+          style: const TextStyle(
+            color: Color(0xFF1F2937),
+            fontSize: 16,
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildDropdownField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -414,6 +505,7 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
           ),
           child: DropdownButtonFormField<String>(
             value: _selectedLembaga,
+            isExpanded: true,
             decoration: InputDecoration(
               hintText: 'Pilih lembaga',
               hintStyle: const TextStyle(
@@ -442,6 +534,8 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
                   ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
               );
             }).toList(),
@@ -536,6 +630,16 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
 
     if (_nomorIdentitasController.text.isEmpty) {
       _showErrorSnackBar('Nomor identitas tidak boleh kosong');
+      return;
+    }
+
+    if (_nomorTATController.text.isEmpty) {
+      _showErrorSnackBar('Nomor TAT tidak boleh kosong');
+      return;
+    }
+
+    if (_selectedDate == null) {
+      _showErrorSnackBar('Silakan pilih tanggal masuk pasien');
       return;
     }
 
@@ -649,7 +753,10 @@ class _AdminAjukanRehabScreenState extends State<AdminAjukanRehabScreen> {
   void dispose() {
     _namaController.dispose();
     _nomorIdentitasController.dispose();
+    _nomorTATController.dispose();
+    _tanggalMasukController.dispose();
     _alamatController.dispose();
+    _keteranganController.dispose();
     super.dispose();
   }
 }

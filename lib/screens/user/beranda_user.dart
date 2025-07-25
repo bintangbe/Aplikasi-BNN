@@ -64,6 +64,9 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
                     ),
                   ),
                   child: SingleChildScrollView(
+                    padding: const EdgeInsets.only(
+                      bottom: 120,
+                    ), // Add bottom padding for navigation
                     child: Column(
                       children: [
                         _buildQuickSearchSection(),
@@ -340,32 +343,52 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
   Widget _buildRehabCard(Map<String, dynamic> lembaga) {
     final name = lembaga['name'] ?? 'Nama tidak tersedia';
     final location = lembaga['location'] ?? 'Lokasi tidak tersedia';
+    final jamOperasional = lembaga['jamOperasional'] ?? 'Jam tidak tersedia';
     final image = lembaga['image'] ?? 'assets/images/placeholder.jpeg';
+
+    // Get integrated capacity information
+    final kapasitasLaki = lembaga['kapasitasLaki'] ?? 0;
+    final kapasitasPerempuan = lembaga['kapasitasPerempuan'] ?? 0;
+    final rawatInapLaki = lembaga['rawatInapLaki'] ?? 0;
+    final rawatInapPerempuan = lembaga['rawatInapPerempuan'] ?? 0;
+
+    // Calculate capacity display
+    String capacityDisplay;
+    if (kapasitasLaki > 0 || kapasitasPerempuan > 0) {
+      final totalKapasitas = kapasitasLaki + kapasitasPerempuan;
+      final totalTerisi = rawatInapLaki + rawatInapPerempuan;
+      final sisaKapasitas = totalKapasitas - totalTerisi;
+      capacityDisplay = '$sisaKapasitas / $totalKapasitas tersedia';
+    } else {
+      // Fallback to old capacity structure
+      capacityDisplay = lembaga['capacity'] ?? 'Kapasitas tidak tersedia';
+    }
 
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0x19000000),
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
             blurRadius: 15,
             offset: const Offset(0, 5),
-            spreadRadius: 0,
           ),
         ],
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Image Section
           Container(
-            height: 120,
+            height: 140,
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
               ),
               color: Colors.grey[200],
             ),
@@ -373,8 +396,8 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
               children: [
                 ClipRRect(
                   borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
                   ),
                   child: Container(
                     width: double.infinity,
@@ -393,8 +416,8 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     ),
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
@@ -415,54 +438,35 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        name,
-                        style: const TextStyle(
-                          color: Color(0xFF1D4ED8),
-                          fontSize: 16,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w700,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF2563EB).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Icon(
-                        Icons.local_hospital,
-                        color: Color(0xFF2563EB),
-                        size: 18,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Icon(Icons.location_on, size: 16, color: Colors.grey[600]),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Text(
-                        location,
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 14,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                  ],
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1F2937),
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 12),
+                _buildInfoRow(
+                  Icons.location_on,
+                  location,
+                  const Color(0xFF059669),
+                ),
+                const SizedBox(height: 8),
+                _buildInfoRow(
+                  Icons.people,
+                  capacityDisplay,
+                  const Color(0xFF2563EB),
+                ),
+                const SizedBox(height: 8),
+                _buildInfoRow(
+                  Icons.access_time,
+                  jamOperasional,
+                  const Color(0xFFF59E0B),
+                ),
+                const SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -478,9 +482,9 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF2563EB),
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       elevation: 0,
                     ),
@@ -488,7 +492,6 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
                       'Lihat Detail',
                       style: TextStyle(
                         fontSize: 14,
-                        fontFamily: 'Inter',
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -499,6 +502,30 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildInfoRow(IconData icon, String text, Color color) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(icon, size: 16, color: color),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(color: Colors.grey[600], fontSize: 14),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
     );
   }
 
@@ -552,7 +579,9 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(
+            height: 24,
+          ), // Reduced since we added padding to SingleChildScrollView
         ],
       ),
     );

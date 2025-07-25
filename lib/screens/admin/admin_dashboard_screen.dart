@@ -6,9 +6,39 @@ import 'detail_lembaga_screen.dart';
 import 'daftar_lembaga_screen.dart';
 import 'profile_screen.dart';
 import 'unified_bottom_navigation.dart';
+import '../../services/lembaga_service.dart';
 
-class AdminDashboardScreen extends StatelessWidget {
+class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
+
+  @override
+  State<AdminDashboardScreen> createState() => _AdminDashboardScreenState();
+}
+
+class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
+  List<Map<String, dynamic>> topLembaga = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLembagaData();
+  }
+
+  Future<void> _loadLembagaData() async {
+    try {
+      final allLembaga = await LembagaService.instance.getAllLembaga();
+      setState(() {
+        // Get top 3 institutions for dashboard
+        topLembaga = allLembaga.take(3).toList();
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +53,7 @@ class AdminDashboardScreen extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
+                  colors: [Color(0xFF063CA8), Color(0xFF2563EB)],
                 ),
               ),
             ),
@@ -35,10 +65,10 @@ class AdminDashboardScreen extends StatelessWidget {
                   Expanded(
                     child: Container(
                       decoration: const BoxDecoration(
-                        color: Color(0xFFEFEFEF),
+                        color: Color(0xFFF8FAFC),
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(35),
-                          topRight: Radius.circular(35),
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
                         ),
                       ),
                       child: SingleChildScrollView(
@@ -188,9 +218,9 @@ class AdminDashboardScreen extends StatelessWidget {
         const SizedBox(width: 16),
         Expanded(
           child: _buildActionCard(
-            title: 'Update\nPengajuan',
+            title: 'Riwayat\nRehab',
             color: const Color(0xFF22C55E),
-            icon: Icons.edit_document,
+            icon: Icons.history,
             onTap: () {
               Navigator.push(
                 context,
@@ -252,74 +282,6 @@ class AdminDashboardScreen extends StatelessWidget {
   }
 
   Widget _buildLembagaSection(BuildContext context) {
-    final lembagaList = [
-      {
-        'name': 'Yayasan Rumah Kita Surabaya',
-        'location': 'Surabaya Timur',
-        'type': 'Rawat Inap',
-        'capacity': '22 tempat tidur',
-        'alamatLengkap': 'Jl. Ngagel Madya II / 9 Surabaya',
-        'nomorTelepon': '088102367299',
-        'jamOperasional': '24 Jam',
-        'fasilitas': 'Ruang rawat inap, ruang terapi, konseling',
-        'image': 'assets/images/yayasan_rumah_kita.jpeg',
-        'deskripsi':
-            'Yayasan Rumah Kita adalah salah satu lembaga rehabilitasi narkoba terbaik di Surabaya yang telah berpengalaman dalam membantu para korban narkoba untuk sembuh total.',
-        'layanan': [
-          'Rehabilitasi Rawat Inap',
-          'Terapi Kelompok',
-          'Konseling Individual',
-          'Program Reintegrasi Sosial',
-          'Pendampingan Keluarga',
-        ],
-        'email': 'info@rumahkita.org',
-      },
-      {
-        'name': 'Yayasan Orbit Surabaya',
-        'location': 'Surabaya Timur',
-        'type': 'Rawat Inap',
-        'capacity': '50 tempat tidur',
-        'alamatLengkap':
-            'Jl. BarataJaya XII A No.6, RT.001/RW.004, Baratajaya, Kec. Gubeng, Surabaya',
-        'nomorTelepon': '(031) 5928587',
-        'jamOperasional': '24 Jam',
-        'fasilitas': 'Ruang rawat inap, ruang terapi, laboratorium, apotek',
-        'image': 'assets/images/yayasan_orbit_surabaya.jpeg',
-        'deskripsi':
-            'Yayasan Orbit Surabaya berkomitmen memberikan layanan rehabilitasi narkoba yang komprehensif dengan fasilitas modern dan tenaga profesional berpengalaman.',
-        'layanan': [
-          'Rehabilitasi Rawat Inap',
-          'Detoksifikasi Medis',
-          'Terapi Kelompok',
-          'Konseling Psikologi',
-          'Program Vocational Training',
-        ],
-        'email': 'info@orbitsurabaya.org',
-      },
-      {
-        'name': 'Yayasan Plato Surabaya',
-        'location': 'Surabaya Timur',
-        'type': 'Rawat Jalan',
-        'capacity': '25 tempat tidur',
-        'alamatLengkap':
-            'Jl. Cipta Mananggal v No. 16, RT 011 RW 005, Kelurahan Menanggal, Kecamatan Gayungan',
-        'nomorTelepon': '(031) 5947890',
-        'jamOperasional': '08.00 - 16.00 WIB',
-        'fasilitas': 'Poliklinik umum, ruang konseling, farmasi',
-        'image': 'assets/images/yayasan_plato_surabaya.jpeg',
-        'deskripsi':
-            'Yayasan Plato Surabaya mengkhususkan diri dalam layanan rawat jalan dengan pendekatan terapi yang inovatif dan personal untuk setiap pasien.',
-        'layanan': [
-          'Rehabilitasi Rawat Jalan',
-          'Konseling Individual dan Keluarga',
-          'Terapi Kelompok',
-          'Program Relapse Prevention',
-          'Konsultasi Medis',
-        ],
-        'email': 'contact@platosurabaya.org',
-      },
-    ];
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -328,7 +290,11 @@ class AdminDashboardScreen extends StatelessWidget {
           children: [
             const Text(
               'Daftar Lembaga Rehabilitasi',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF1A1A1A),
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -342,7 +308,7 @@ class AdminDashboardScreen extends StatelessWidget {
               child: const Text(
                 'Lihat Semua',
                 style: TextStyle(
-                  color: Color(0xFF0050FF),
+                  color: Color(0xFF2563EB),
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),
@@ -351,102 +317,262 @@ class AdminDashboardScreen extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        ...lembagaList.map(
-          (lembaga) => Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: _buildLembagaItem(context, lembaga),
+        if (isLoading)
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: CircularProgressIndicator(color: Color(0xFF2563EB)),
+            ),
+          )
+        else if (topLembaga.isEmpty)
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                'Tidak ada data lembaga',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            ),
+          )
+        else
+          ...topLembaga.map(
+            (lembaga) => Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: _buildLembagaCard(context, lembaga),
+            ),
           ),
-        ),
       ],
     );
   }
 
-  Widget _buildLembagaItem(BuildContext context, Map<String, dynamic> lembaga) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: Colors.white,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    lembaga['name']!,
-                    style: const TextStyle(
-                      color: Color(0xFF1D4ED8),
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
+  Widget _buildLembagaCard(BuildContext context, Map<String, dynamic> lembaga) {
+    final name = lembaga['name'] ?? 'Nama tidak tersedia';
+    final location = lembaga['location'] ?? 'Lokasi tidak tersedia';
+    final jamOperasional = lembaga['jamOperasional'] ?? 'Jam tidak tersedia';
+    final image = lembaga['image'] ?? 'assets/images/placeholder.jpeg';
+
+    // Get integrated capacity information
+    final kapasitasLaki = lembaga['kapasitasLaki'] ?? 0;
+    final kapasitasPerempuan = lembaga['kapasitasPerempuan'] ?? 0;
+    final rawatInapLaki = lembaga['rawatInapLaki'] ?? 0;
+    final rawatInapPerempuan = lembaga['rawatInapPerempuan'] ?? 0;
+
+    // Calculate capacity display
+    String capacityDisplay;
+    if (kapasitasLaki > 0 || kapasitasPerempuan > 0) {
+      final totalKapasitas = kapasitasLaki + kapasitasPerempuan;
+      final totalTerisi = rawatInapLaki + rawatInapPerempuan;
+      final sisaKapasitas = totalKapasitas - totalTerisi;
+      capacityDisplay = '$sisaKapasitas / $totalKapasitas tersedia';
+    } else {
+      // Fallback to old capacity structure
+      capacityDisplay = lembaga['capacity'] ?? 'Kapasitas tidak tersedia';
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Image Header
+          Container(
+            height: 140,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+              color: Colors.grey[200],
+            ),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+              child: Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(image),
+                        fit: BoxFit.cover,
+                        onError: (exception, stackTrace) => Container(
+                          color: Colors.grey[300],
+                          child: const Icon(
+                            Icons.broken_image,
+                            size: 50,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                const Icon(Icons.location_on, size: 16, color: Colors.grey),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: Text(
-                    lembaga['location']!,
-                    style: const TextStyle(color: Colors.grey, fontSize: 14),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                const Icon(Icons.people, size: 16, color: Colors.grey),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: Text(
-                    lembaga['capacity']!,
-                    style: const TextStyle(color: Colors.grey, fontSize: 14),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => DetailLembagaScreen(lembagaData: lembaga),
+                  // Gradient overlay
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withOpacity(0.3),
+                        ],
+                      ),
                     ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF3B82F6),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: const Text(
-                  'Lihat Detail',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+
+          // Content
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Name and Location
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1F2937),
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.location_on_outlined,
+                      size: 16,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        location,
+                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 12),
+
+                // Capacity and Time Info
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF2563EB).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.people_outline,
+                              size: 16,
+                              color: Color(0xFF2563EB),
+                            ),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                capacityDisplay,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Color(0xFF2563EB),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 8),
+
+                // Operating Hours
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.access_time_outlined,
+                      size: 16,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        jamOperasional,
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 16),
+
+                // Detail Button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              DetailLembagaScreen(lembagaData: lembaga),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF2563EB),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: const Text(
+                      'Lihat Detail',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
