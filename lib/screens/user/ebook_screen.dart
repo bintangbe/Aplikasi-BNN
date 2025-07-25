@@ -30,22 +30,18 @@ class _EbookScreenState extends State<EbookScreen> {
       'author': 'BNN Republik Indonesia',
       'category': 'Pencegahan',
       'image': 'assets/images/BK0338.jpg',
-      'url':
-          'https://ekatalogperpustakaan.bnn.go.id/flipbooks/BK0338_2022_Pedoman_Pelaksanaan_Reformasi_Birokrasi/index.html',
-      'pdfUrl':
-          'https://perpustakaan.bnn.go.id/sites/default/files/Buku_Digital_2023-08/BK0338_2022_Pedoman_Pelaksanaan_Reformasi_Birokrasi.pdf',
-      'description': 'Pedoman Pelaksanaan Reformasi Birokrasi.',
+      'url': 'https://ekatalogperpustakaan.bnn.go.id/flipbooks/BK0338_2022_Pedoman_Pelaksanaan_Reformasi_Birokrasi/index.html',
+      'pdfUrl': 'https://perpustakaan.bnn.go.id/sites/default/files/Buku_Digital_2023-08/BK0338_2022_Pedoman_Pelaksanaan_Reformasi_Birokrasi.pdf',
+      'description':
+          'Pedoman Pelaksanaan Reformasi Birokrasi.',
     },
     {
-      'title':
-          'Layanan Telerehabilitasi Narkoba Di Lingkungan Badan Narkotika Nasional Republik Indonesia',
+      'title': 'Layanan Telerehabilitasi Narkoba Di Lingkungan Badan Narkotika Nasional Republik Indonesia',
       'author': 'Tim Penyusun BNN',
       'category': 'Rehabilitasi',
       'image': 'assets/images/Cover.jpg',
-      'url':
-          'https://ekatalogperpustakaan.bnn.go.id/flipbooks/BK0339_2022_Petunjuk_Teknis_Layanan_Telerehabilitasi_Narkoba_di_Lingkungan_BNN/index.html',
-      'pdfUrl':
-          'https://perpustakaan.bnn.go.id/sites/default/files/Buku_Digital_2023-08/BK0339_2022_Petunjuk_Teknis_Layanan_Telerehabilitasi_Narkoba_di_Lingkungan_BNN.pdf',
+      'url': 'https://ekatalogperpustakaan.bnn.go.id/flipbooks/BK0339_2022_Petunjuk_Teknis_Layanan_Telerehabilitasi_Narkoba_di_Lingkungan_BNN/index.html',
+      'pdfUrl': 'https://perpustakaan.bnn.go.id/sites/default/files/Buku_Digital_2023-08/BK0339_2022_Petunjuk_Teknis_Layanan_Telerehabilitasi_Narkoba_di_Lingkungan_BNN.pdf',
       'description':
           'Petunjuk Teknis ini memuat berbagai informasi yang rinci mengenai pelaksanaan layanan TREN yang akan diselenggarakan di klinik BNNP/K dan Unit Pelaksana Teknis Rehabilitasi milik BNN RI. Secara umum, buku ini tersusun dari 6 (enam) bab, meliputi pendahuluan, pelaksanaan pelayanan TREN, pengembangan pelayanan TREN, pemanfaatan teknologi dalam layanan TREN, monitoring dan evaluasi pelayanan TREN, dan penutup.',
     },
@@ -54,10 +50,8 @@ class _EbookScreenState extends State<EbookScreen> {
       'author': 'Kementerian Hukum dan HAM',
       'category': 'Hukum',
       'image': 'assets/images/Himpunan.jpg',
-      'url':
-          'https://ekatalogperpustakaan.bnn.go.id/flipbooks/BK0248_2018_Himpunan_Peraturan_Perundang_undangan_Tindak_Pidana_Narkotik/index.html',
-      'pdfUrl':
-          'https://perpustakaan.bnn.go.id/sites/default/files/Buku_Digital_2021-10/BK0248_2018_Himpunan_Peraturan_Perundang_undangan_Tindak_Pidana_Narkotika.pdf',
+      'url': 'https://ekatalogperpustakaan.bnn.go.id/flipbooks/BK0248_2018_Himpunan_Peraturan_Perundang_undangan_Tindak_Pidana_Narkotik/index.html',
+      'pdfUrl': 'https://perpustakaan.bnn.go.id/sites/default/files/Buku_Digital_2021-10/BK0248_2018_Himpunan_Peraturan_Perundang_undangan_Tindak_Pidana_Narkotika.pdf',
       'description':
           'Kompilasi lengkap peraturan perundang-undangan terkait narkotika dan psikotropika.',
     },
@@ -67,28 +61,23 @@ class _EbookScreenState extends State<EbookScreen> {
       'category': 'Edukasi',
       'pages': 32,
       'downloadCount': 1780,
-      'image': 'assets/images/edukasi.jpeg',
-      'url':
-          'https://perpustakaan.bnn.go.id/sites/default/files/Buku_Digital_2020-08/Modul_Pendidikan_Anti_Narkoba_bagi_Kalangan_Keluarga.pdf',
-      'pdfUrl':
-          'https://perpustakaan.bnn.go.id/sites/default/files/Buku_Digital_2020-08/Modul_Pendidikan_Anti_Narkoba_bagi_Kalangan_Keluarga.pdf',
+      'image': 'https://via.placeholder.com/120x160?text=Edukasi',
+      'url': 'https://bnn.go.id/edukasi-bahaya-narkoba',
+      'pdfUrl': 'https://bnn.go.id/download/edukasi-bahaya-narkoba.pdf',
       'description':
           'Materi edukasi tentang jenis-jenis narkoba dan dampaknya bagi kesehatan.',
     },
     {
-      'title':
-          'STANDAR PELAYANAN REHABILITASI BAGI PECANDU DAN KORBAN PENYALAHGUNAAN NARKOBA ',
+      'title': 'Modul Pembelajaran Rehabilitasi dan Konseling Dasar bagi Pecandu dan Korban Penyalahgunaan Narkotika Pada Layanan Rawat Jalan',
       'author': 'BNN Kota Surabaya',
       'category': 'Pencegahan',
       'pages': 28,
       'downloadCount': 945,
-      'image': 'assets/images/CEGAHAN.jpeg',
-      'url':
-          'https://perpustakaan.bnn.go.id/sites/default/files/Buku_Digital_2020-08/Standar_Pelayanan_Rehabilitasi_Bagi_Pecandu_dan_Korban_Penyalahgunaan_Narkoba.pdf',
-      'pdfUrl':
-          'https://perpustakaan.bnn.go.id/sites/default/files/Buku_Digital_2020-08/Standar_Pelayanan_Rehabilitasi_Bagi_Pecandu_dan_Korban_Penyalahgunaan_Narkoba.pdf',
+      'image': 'assets/images/Cover_2.jpg',
+      'url': 'https://bnn.go.id/modul-konseling-surabaya',
+      'pdfUrl': 'https://bnn.go.id/download/modul-konseling-surabaya.pdf',
       'description':
-          'Modul ini berisi panduan bagi orangtua untuk memperluas pengetahuan tentang jenis-jenis narkoba dan bahayanya, bentuk edukasi parenting yang dapat mencegah anak ke dalam penyalahgunaan narkoba, tanda-tanda anak yang rentan akan penyalahgunaan narkoba, hingga panduan apa yang bisa dilakukan oleh orangtua saat mendapati anaknya terpapar narkoba.',
+          'Modul Pembelajaran Rehabilitasi dan Konseling Dasar bagi Pecandu dan Korban Penyalahgunaan Narkotika Pada Layanan Rawat Jalan.',
     },
     {
       'title': 'Deteksi Dini Penyalahgunaan Narkoba',
@@ -96,7 +85,7 @@ class _EbookScreenState extends State<EbookScreen> {
       'category': 'Edukasi',
       'pages': 52,
       'downloadCount': 1340,
-      'image': 'assets/images/deteksi.jpg',
+      'image': 'https://via.placeholder.com/120x160?text=Deteksi+Dini',
       'url': 'https://bnn.go.id/deteksi-dini-narkoba',
       'pdfUrl': 'https://bnn.go.id/download/deteksi-dini-narkoba.pdf',
       'description':
@@ -378,99 +367,99 @@ class _EbookScreenState extends State<EbookScreen> {
           ],
         ),
         child: Row(
-          children: [
-            Container(
-              width: 80,
-              height: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
-                  image: NetworkImage(ebook['image']),
-                  fit: BoxFit.cover,
+        children: [
+          Container(
+            width: 80,
+            height: 100,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              image: DecorationImage(
+                image: NetworkImage(ebook['image']),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  ebook['title'],
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w700,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    ebook['title'],
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w700,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                const SizedBox(height: 4),
+                Text(
+                  ebook['author'],
+                  style: const TextStyle(
+                    color: Colors.black54,
+                    fontSize: 14,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    ebook['author'],
-                    style: const TextStyle(
-                      color: Colors.black54,
-                      fontSize: 14,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF3B82F6).withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          ebook['category'],
-                          style: const TextStyle(
-                            color: Color(0xFF3B82F6),
-                            fontSize: 12,
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w500,
-                          ),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF3B82F6).withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        ebook['category'],
+                        style: const TextStyle(
+                          color: Color(0xFF3B82F6),
+                          fontSize: 12,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      const Spacer(),
-                      ElevatedButton(
-                        onPressed: () => _launchURL(ebook['url']),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF2563EB),
-                          minimumSize: const Size(80, 32),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text(
-                          'Baca',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w600,
-                          ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    const Spacer(),
+                    ElevatedButton(
+                      onPressed: () => _launchURL(ebook['url']),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF2563EB),
+                        minimumSize: const Size(80, 32),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                      child: const Text(
+                        'Baca',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
+    ),
     );
   }
 
