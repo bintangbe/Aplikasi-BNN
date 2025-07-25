@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'detail_lembaga_screen.dart';
 import 'tambah_lembaga_screen.dart';
 import 'edit_lembaga_screen.dart';
+import 'detail_lembaga_screen.dart';
 import 'unified_bottom_navigation.dart';
 import '../../services/lembaga_service.dart';
 
@@ -605,7 +605,7 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
   }
 
   String _getCapacityDisplay(Map<String, dynamic> lembaga) {
-    // Check if we have detailed capacity data from the edit form
+    // Check if we have detailed capacity data
     if (lembaga.containsKey('kapasitasLaki') &&
         lembaga.containsKey('kapasitasPerempuan')) {
       int kapasitasLaki = lembaga['kapasitasLaki'] ?? 0;
@@ -615,8 +615,9 @@ class _DaftarLembagaScreenState extends State<DaftarLembagaScreen> {
       int terisiLaki = lembaga['rawatInapLaki'] ?? 0;
       int terisiPerempuan = lembaga['rawatInapPerempuan'] ?? 0;
       int totalTerisi = terisiLaki + terisiPerempuan;
+      int sisaKapasitas = totalKapasitas - totalTerisi;
 
-      return '$totalTerisi / $totalKapasitas orang';
+      return '$sisaKapasitas / $totalKapasitas tersedia';
     }
 
     // Fallback to old capacity format

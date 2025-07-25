@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'unified_bottom_navigation.dart';
-import 'profile_screen.dart';
 import 'edit_lembaga_screen.dart';
 
 class DetailLembagaScreen extends StatefulWidget {
@@ -29,245 +27,75 @@ class _DetailLembagaScreenState extends State<DetailLembagaScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
+            colors: [Color(0xFF063CA8), Color(0xFF2563EB)],
           ),
         ),
-        child: Column(
-          children: [
-            // Header
-            _buildHeader(context),
-
-            // Main Content
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Color(0xFFEFEFEF),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(35),
-                    topRight: Radius.circular(35),
+        child: SafeArea(
+          child: Column(
+            children: [
+              _buildHeader(context),
+              Expanded(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFF8FAFC),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    ),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        _buildImageSection(),
+                        _buildDetailContent(),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
                   ),
                 ),
-                child: Column(
-                  children: [
-                    // Scrollable Content
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            // Content Header with Back Button
-                            _buildContentHeader(context),
-
-                            // Lembaga Info Card
-                            _buildLembagaInfoCard(),
-
-                            // Detail Kapasitas
-                            _buildDetailKapasitasCard(),
-
-                            // Extra space at bottom
-                            const SizedBox(height: 20),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    // Bottom Navigation
-                    UnifiedBottomNavigation(
-                      currentIndex: -1, // No active item for detail page
-                    ),
-                  ],
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildHeader(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        child: Row(
-          children: [
-            // Logo BNN
-            Container(
-              width: 86,
-              height: 86,
-              child: Image.asset(
-                'assets/images/logo_bnn.png',
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'BNN',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF063CA8),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(width: 16),
-
-            // Kota Surabaya
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: const Text(
-                  'KOTA\nSURABAYA',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.2,
-                    height: 1.2,
-                  ),
-                ),
-              ),
-            ),
-
-            // Admin Profile
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ProfileScreen(),
-                  ),
-                );
-              },
-              child: Container(
-                width: 140,
-                height: 70,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 16),
-                      child: Text(
-                        'Admin',
-                        style: TextStyle(
-                          color: Color(0xFF0540B0),
-                          fontSize: 16,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    const Spacer(),
-                    Container(
-                      margin: const EdgeInsets.only(right: 12),
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
-                        ),
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      child: const Icon(
-                        Icons.person,
-                        color: Colors.white,
-                        size: 24,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildContentHeader(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
+    return Padding(
+      padding: const EdgeInsets.all(20),
       child: Row(
         children: [
-          // Back Button
-          GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: const Icon(
-                Icons.arrow_back_ios_new,
-                color: Color(0xFF063CA8),
-                size: 20,
-              ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
             ),
           ),
           const SizedBox(width: 16),
-
-          // Title
           const Expanded(
             child: Text(
-              'Detail Lembaga Rehabilitasi',
+              'Detail Lembaga',
               style: TextStyle(
-                color: Color(0xFF1A1A1A),
-                fontSize: 20,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w700,
-                height: 1.3,
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
-
           // Edit Button
-          GestureDetector(
-            onTap: () => _navigateToEdit(context),
-            child: Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
-                ),
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: const Icon(Icons.edit, color: Colors.white, size: 20),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: IconButton(
+              onPressed: () => _navigateToEdit(context),
+              icon: const Icon(Icons.edit, color: Colors.white),
             ),
           ),
         ],
@@ -275,315 +103,270 @@ class _DetailLembagaScreenState extends State<DetailLembagaScreen> {
     );
   }
 
-  Widget _buildLembagaInfoCard() {
+  Widget _buildImageSection() {
+    final image =
+        currentLembagaData['image'] ?? 'assets/images/placeholder.jpeg';
+
+    return Container(
+      margin: const EdgeInsets.all(20),
+      height: 200,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(image),
+                  fit: BoxFit.cover,
+                  onError: (exception, stackTrace) =>
+                      const Icon(Icons.broken_image),
+                ),
+              ),
+            ),
+          ),
+          // Gradient overlay
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.transparent, Colors.black.withOpacity(0.4)],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailContent() {
+    final name = currentLembagaData['name'] ?? 'Nama tidak tersedia';
+    final location = currentLembagaData['location'] ?? 'Lokasi tidak tersedia';
+    final alamatLengkap =
+        currentLembagaData['alamatLengkap'] ?? 'Alamat tidak tersedia';
+    final nomorTelepon =
+        currentLembagaData['nomorTelepon'] ?? 'Nomor tidak tersedia';
+    final jamOperasional =
+        currentLembagaData['jamOperasional'] ?? 'Jam tidak tersedia';
+    final email = currentLembagaData['email'] ?? 'Email tidak tersedia';
+
+    // Get detailed capacity information
+    final kapasitasLaki = currentLembagaData['kapasitasLaki'] ?? 0;
+    final kapasitasPerempuan = currentLembagaData['kapasitasPerempuan'] ?? 0;
+    final rawatInapLaki = currentLembagaData['rawatInapLaki'] ?? 0;
+    final rawatInapPerempuan = currentLembagaData['rawatInapPerempuan'] ?? 0;
+    final rawatJalan = currentLembagaData['rawatJalan'] ?? 0;
+    final pascaRehab = currentLembagaData['pascaRehab'] ?? 0;
+
+    // Calculate total capacity and remaining slots
+    final totalKapasitas = kapasitasLaki + kapasitasPerempuan;
+    final totalTerisi = rawatInapLaki + rawatInapPerempuan;
+    final sisaKapasitas = totalKapasitas - totalTerisi;
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 10,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Lembaga Info
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Yayasan Image
-              Container(
-                width: 90,
-                height: 90,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.15),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.asset(
-                    currentLembagaData['image'] ??
-                        'assets/images/placeholder.jpeg',
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      // Fallback icon if image fails to load
-                      return Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              const Color(0xFF063CA8).withOpacity(0.1),
-                              const Color(0xFF00AEEF).withOpacity(0.1),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: const Icon(
-                          Icons.home_work,
-                          color: Color(0xFF063CA8),
-                          size: 36,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16),
-
-              // Lembaga Details
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      currentLembagaData['name'] ?? 'Nama Lembaga',
-                      style: const TextStyle(
-                        color: Color(0xFF1A1A1A),
-                        fontSize: 16,
-                        fontFamily: 'Mulish',
-                        fontWeight: FontWeight.w800,
-                        height: 1.3,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.location_on_outlined,
-                          size: 16,
-                          color: Color(0xFF666666),
-                        ),
-                        const SizedBox(width: 4),
-                        Expanded(
-                          child: Text(
-                            currentLembagaData['alamatLengkap'] ??
-                                'Alamat tidak tersedia',
-                            style: const TextStyle(
-                              color: Color(0xFF666666),
-                              fontSize: 12,
-                              fontFamily: 'Mulish',
-                              fontWeight: FontWeight.w600,
-                              height: 1.4,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.phone_outlined,
-                          size: 16,
-                          color: Color(0xFF666666),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          currentLembagaData['nomorTelepon'] ??
-                              'Tidak tersedia',
-                          style: const TextStyle(
-                            color: Color(0xFF666666),
-                            fontSize: 12,
-                            fontFamily: 'Mulish',
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.access_time_outlined,
-                          size: 16,
-                          color: Color(0xFF666666),
-                        ),
-                        const SizedBox(width: 4),
-                        Expanded(
-                          child: Text(
-                            currentLembagaData['jamOperasional'] ??
-                                'Jam operasional tidak tersedia',
-                            style: const TextStyle(
-                              color: Color(0xFF666666),
-                              fontSize: 12,
-                              fontFamily: 'Mulish',
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          // Title
+          Text(
+            name,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF1F2937),
+            ),
           ),
-
+          const SizedBox(height: 8),
+          Text(
+            location,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[600],
+              fontWeight: FontWeight.w500,
+            ),
+          ),
           const SizedBox(height: 20),
 
-          // Divider
-          Container(
-            height: 1,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.transparent,
-                  const Color(0xFFDFDFDF),
-                  Colors.transparent,
-                ],
-              ),
+          // Informasi Umum
+          _buildDetailCard('Informasi Umum', [
+            _buildDetailRow(
+              Icons.location_on_outlined,
+              'Alamat Lengkap',
+              alamatLengkap,
+              const Color(0xFF059669),
             ),
-          ),
+            _buildDetailRow(
+              Icons.access_time_outlined,
+              'Jam Operasional',
+              jamOperasional,
+              const Color(0xFFF59E0B),
+            ),
+          ]),
 
           const SizedBox(height: 16),
 
-          // Kapasitas Info with improved styling
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  const Color(0xFF063CA8).withOpacity(0.05),
-                  const Color(0xFF00AEEF).withOpacity(0.05),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(8),
+          // Kontak
+          _buildDetailCard('Kontak', [
+            _buildDetailRow(
+              Icons.phone_outlined,
+              'Nomor Telepon',
+              nomorTelepon,
+              const Color(0xFF059669),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Kapasitas Total: ${_getKapasitasTotal()}',
-                  style: const TextStyle(
-                    color: Color(0xFF063CA8),
-                    fontSize: 12,
-                    fontFamily: 'Mulish',
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                Text(
-                  'Sisa: ${_getSisaKapasitas()}',
-                  style: const TextStyle(
-                    color: Color(0xFF00AEEF),
-                    fontSize: 12,
-                    fontFamily: 'Mulish',
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
+            _buildDetailRow(
+              Icons.email_outlined,
+              'Email',
+              email,
+              const Color(0xFF2563EB),
             ),
-          ),
+          ]),
+
+          const SizedBox(height: 16),
+
+          // Kapasitas Rehabilitasi
+          _buildDetailCard('Kapasitas Rehabilitasi', [
+            _buildDetailRow(
+              Icons.analytics_outlined,
+              'Kapasitas Total',
+              '$totalKapasitas orang',
+              const Color(0xFF063CA8),
+            ),
+            _buildDetailRow(
+              Icons.person_outline,
+              'Sisa Kapasitas',
+              '$sisaKapasitas orang',
+              const Color(0xFF00AEEF),
+            ),
+          ]),
+
+          const SizedBox(height: 16),
+
+          // Detail Kapasitas per Kategori
+          _buildDetailCard('Detail Kapasitas', [
+            _buildCapacityDetailRow(
+              'Rawat Inap Laki-laki',
+              rawatInapLaki,
+              kapasitasLaki,
+              const Color(0xFF2563EB),
+            ),
+            _buildCapacityDetailRow(
+              'Rawat Inap Perempuan',
+              rawatInapPerempuan,
+              kapasitasPerempuan,
+              const Color(0xFFEC4899),
+            ),
+            _buildDetailRow(
+              Icons.local_hospital_outlined,
+              'Rawat Jalan',
+              '$rawatJalan pasien',
+              const Color(0xFF059669),
+            ),
+            _buildDetailRow(
+              Icons.timeline_outlined,
+              'Pasca Rehabilitasi',
+              '$pascaRehab peserta',
+              const Color(0xFFF59E0B),
+            ),
+          ]),
         ],
       ),
     );
   }
 
-  Widget _buildDetailKapasitasCard() {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
+  Widget _buildDetailCard(String title, List<Widget> children) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF1F2937),
           ),
-        ],
-      ),
-      child: Column(
+        ),
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF8FAFC),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade200),
+          ),
+          child: Column(children: children),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDetailRow(
+    IconData icon,
+    String label,
+    String value,
+    Color iconColor,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Title with icon
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF063CA8), Color(0xFF00AEEF)],
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(
-                  Icons.analytics_outlined,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 12),
-              const Text(
-                'Detail Kapasitas Rehab',
-                style: TextStyle(
-                  color: Color(0xFF1A1A1A),
-                  fontSize: 16,
-                  fontFamily: 'Mulish',
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 24),
-
-          // Keterangan
-          const Text(
-            'Keterangan Kapasitas:',
-            style: TextStyle(
-              color: Color(0xFF666666),
-              fontSize: 14,
-              fontFamily: 'Mulish',
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          // Kapasitas Details with better styling
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: const Color(0xFFF8F9FA),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFFE9ECEF), width: 1),
+              color: iconColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
             ),
+            child: Icon(icon, color: iconColor, size: 20),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildKapasitasRow(
-                  'Rawat Inap Laki-laki',
-                  '${currentLembagaData['rawatInapLaki'] ?? 3} / ${currentLembagaData['kapasitasLaki'] ?? 17}',
-                  true,
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey[700],
+                  ),
                 ),
-                const SizedBox(height: 12),
-                _buildKapasitasRow(
-                  'Rawat Inap Perempuan',
-                  '${currentLembagaData['rawatInapPerempuan'] ?? 1} / ${currentLembagaData['kapasitasPerempuan'] ?? 5}',
-                  true,
-                ),
-                const SizedBox(height: 12),
-                _buildKapasitasRow(
-                  'Rawat Jalan',
-                  '${currentLembagaData['rawatJalan'] ?? 2}',
-                  false,
-                ),
-                const SizedBox(height: 12),
-                _buildKapasitasRow(
-                  'Pasca Rehab',
-                  '${currentLembagaData['pascaRehab'] ?? 2}',
-                  false,
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFF1F2937),
+                  ),
                 ),
               ],
             ),
@@ -593,74 +376,80 @@ class _DetailLembagaScreenState extends State<DetailLembagaScreen> {
     );
   }
 
-  Widget _buildKapasitasRow(
+  Widget _buildCapacityDetailRow(
     String label,
-    String value, [
-    bool hasCapacity = false,
-  ]) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFE9ECEF), width: 0.5),
-      ),
+    int current,
+    int capacity,
+    Color iconColor,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Text(
-              label,
-              style: const TextStyle(
-                color: Color(0xFF1A1A1A),
-                fontSize: 13,
-                fontFamily: 'Mulish',
-                fontWeight: FontWeight.w600,
-              ),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: iconColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              current > capacity * 0.8 ? Icons.warning : Icons.bed_outlined,
+              color: current > capacity * 0.8 ? Colors.orange : iconColor,
+              size: 20,
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: hasCapacity
-                  ? const Color(0xFF063CA8).withOpacity(0.1)
-                  : const Color(0xFF00AEEF).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Text(
-              value,
-              style: TextStyle(
-                color: hasCapacity
-                    ? const Color(0xFF063CA8)
-                    : const Color(0xFF00AEEF),
-                fontSize: 13,
-                fontFamily: 'Mulish',
-                fontWeight: FontWeight.w700,
-              ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey[700],
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Text(
+                      '$current / $capacity',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFF1F2937),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: LinearProgressIndicator(
+                        value: capacity > 0 ? current / capacity : 0,
+                        backgroundColor: Colors.grey[300],
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          current > capacity * 0.8 ? Colors.orange : iconColor,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '${capacity > 0 ? ((current / capacity) * 100).toInt() : 0}%',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[600],
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],
       ),
     );
-  }
-
-  // Helper methods untuk data
-  String _getKapasitasTotal() {
-    int kapasitasLaki = currentLembagaData['kapasitasLaki'] ?? 17;
-    int kapasitasPerempuan = currentLembagaData['kapasitasPerempuan'] ?? 5;
-    return (kapasitasLaki + kapasitasPerempuan).toString();
-  }
-
-  String _getSisaKapasitas() {
-    int kapasitasLaki = currentLembagaData['kapasitasLaki'] ?? 17;
-    int kapasitasPerempuan = currentLembagaData['kapasitasPerempuan'] ?? 5;
-    int terisiLaki = currentLembagaData['rawatInapLaki'] ?? 3;
-    int terisiPerempuan = currentLembagaData['rawatInapPerempuan'] ?? 1;
-
-    int totalKapasitas = kapasitasLaki + kapasitasPerempuan;
-    int totalTerisi = terisiLaki + terisiPerempuan;
-
-    return (totalKapasitas - totalTerisi).toString();
   }
 
   void _navigateToEdit(BuildContext context) async {
