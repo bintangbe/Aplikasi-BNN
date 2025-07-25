@@ -19,7 +19,7 @@ class ProfilBNNKScreen extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: Image.asset(
-                  'assets/images/map_surabaya.png',
+                  'assets/images/bnn.png',
                   width: 300,
                   height: 180,
                   fit: BoxFit.cover,

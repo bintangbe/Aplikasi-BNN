@@ -64,6 +64,7 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
                     ),
                   ),
                   child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.only(
                       bottom: 120,
                     ), // Add bottom padding for navigation
@@ -539,13 +540,15 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Berita Terbaru',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w700,
+              const Flexible(
+                child: Text(
+                  'Berita Terbaru',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ],
@@ -555,6 +558,7 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
             height: 200,
             child: ListView(
               scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
               children: [
                 _buildNewsCard(
                   'BNN Kota Surabaya Gencarkan Edukasi Bahaya Narkoba dan Deklarasi Pelajar Anti Narkoba di SMA Khadijah',
@@ -595,7 +599,7 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
         if (newsUrl != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Membuka: ${title.substring(0, 30)}...'),
+              content: Text('Membuka: ${title.length > 30 ? title.substring(0, 30) : title}...'),
               duration: const Duration(seconds: 2),
               backgroundColor: const Color(0xFF2563EB),
               behavior: SnackBarBehavior.floating,
@@ -699,19 +703,21 @@ class _BerandaUserScreenState extends State<BerandaUserScreen> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Text(
-                title,
-                style: const TextStyle(
-                  color: Color(0xFF1F2937),
-                  fontSize: 14,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w600,
-                  height: 1.4,
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    color: Color(0xFF1F2937),
+                    fontSize: 14,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
+                    height: 1.4,
+                  ),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
