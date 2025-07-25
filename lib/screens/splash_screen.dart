@@ -98,48 +98,51 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: AppColors.background,
       body: ResponsiveWrapper(
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // SEMANGGI Logo - Real Asset atau Fallback (diperbesar)
-                  _buildLogo(),
-                  const SizedBox(height: 40),
-                  // SEMANGGI Text
-                  const Text(
-                    'Semangat Menggapai Asa untuk Memulai Rehabilitasi',
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Spacer(flex: 2),
+                // SEMANGGI Logo - Real Asset atau Fallback (diperbesar)
+                _buildLogo(),
+                const SizedBox(height: 40),
+                // SEMANGGI Text
+                const Text(
+                  'Semangat Menggapai Asa untuk Memulai Rehabilitasi',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.textPrimary,
+                    letterSpacing: 2,
+                  ),
+                ),
+                const SizedBox(height: 60),
+                // Welcome Text
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: const Text(
+                    'Selamat datang di aplikasi Semanggi',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w900,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.textPrimary,
-                      letterSpacing: 2,
+                      height: 1.4,
                     ),
                   ),
-                  const SizedBox(height: 60),
-                  // Welcome Text
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: const Text(
-                      'Selamat datang di aplikasi Semanggi',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary,
-                        height: 1.4,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  // Loading indicator
-                  const CircularProgressIndicator(
-                    color: AppColors.logoBlue,
-                    strokeWidth: 3,
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 40),
+                // Loading indicator
+                const CircularProgressIndicator(
+                  color: AppColors.logoBlue,
+                  strokeWidth: 3,
+                ),
+                const Spacer(flex: 3),
+              ],
             ),
           ),
         ),

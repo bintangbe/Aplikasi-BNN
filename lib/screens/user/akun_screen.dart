@@ -183,8 +183,8 @@ class _AkunScreenState extends State<AkunScreen> {
 
   Widget _buildProfileSection() {
     // Dummy data, ganti dengan data user dari backend jika ada
-    const String namaUser = 'Oktavian';
-    const String emailUser = 'oktavian@gmail.com';
+    const String namaUser = 'Nava';
+    const String emailUser = 'Nava@gmail.com';
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.all(24),

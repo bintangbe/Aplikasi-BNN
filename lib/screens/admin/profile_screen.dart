@@ -223,8 +223,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // ...existing code...
 
   Widget _buildProfileSection() {
-    const String namaUser = 'Oktavian';
-    const String emailUser = 'oktavian@email.com';
+    const String namaUser = 'Nadya';
+    const String emailUser = 'nadya@email.com';
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

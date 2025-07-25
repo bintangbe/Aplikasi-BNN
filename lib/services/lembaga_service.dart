@@ -123,7 +123,7 @@ class LembagaService {
           'Jl. Rungkut Mananggal Blok X-19 Rt.009 Rw.004 Kel.Rungkut Mananggal Kec. Gunung Anyar, Surabaya',
       'nomorTelepon': '085853125026',
       'jamOperasional': '09.00 - 15.00 WIB',
-      'image': 'assets/images/yayasan_rumah_merah_putih.jpeg',
+      'image': 'assets/images/yayasan_rumah_merah_putih_2.jpg',
       'email': 'Mako2rungkut@gmail.com',
       // Detailed capacity data
       'rawatInapLaki': 4,
