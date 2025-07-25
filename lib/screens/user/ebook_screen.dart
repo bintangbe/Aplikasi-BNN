@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'beranda_user.dart';
-import 'persebaran_screen.dart';
-import 'masukkan_screen.dart';
 import 'akun_screen.dart';
 import 'unified_bottom_navigation_user.dart';
 
@@ -15,6 +12,8 @@ class EbookScreen extends StatefulWidget {
 
 class _EbookScreenState extends State<EbookScreen> {
   String _selectedCategory = 'Semua';
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
   final List<String> _categories = [
     'Semua',
@@ -105,12 +104,32 @@ class _EbookScreenState extends State<EbookScreen> {
   ];
 
   List<Map<String, dynamic>> get _filteredEbooks {
-    if (_selectedCategory == 'Semua') {
-      return _ebooks;
+    List<Map<String, dynamic>> filtered = _ebooks;
+    
+    // Filter by category
+    if (_selectedCategory != 'Semua') {
+      filtered = filtered
+          .where((ebook) => ebook['category'] == _selectedCategory)
+          .toList();
     }
-    return _ebooks
-        .where((ebook) => ebook['category'] == _selectedCategory)
-        .toList();
+    
+    // Filter by search query
+    if (_searchQuery.isNotEmpty) {
+      filtered = filtered
+          .where((ebook) =>
+              ebook['title'].toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              ebook['author'].toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              ebook['category'].toLowerCase().contains(_searchQuery.toLowerCase()))
+          .toList();
+    }
+    
+    return filtered;
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   Future<void> _launchURL(String url) async {
@@ -158,6 +177,7 @@ class _EbookScreenState extends State<EbookScreen> {
                   ),
                   child: Column(
                     children: [
+                      _buildEbookTitle(),
                       _buildCategoryFilter(),
                       Expanded(child: _buildEbookList()),
                     ],
@@ -172,126 +192,234 @@ class _EbookScreenState extends State<EbookScreen> {
     );
   }
 
-  // ...existing code...
-
-  Widget _buildNavItem(IconData icon, String label, int index) {
-    bool isSelected = index == 3; // E-Book is selected
-    return GestureDetector(
-      onTap: () {
-        // Navigate to different screens based on index
-        switch (index) {
-          case 0:
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const BerandaUserScreen(),
+  Widget _buildEbookTitle() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'E-Book Anti Narkoba',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 24,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2563EB).withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.library_books,
+                      color: Color(0xFF2563EB),
+                      size: 16,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      '${_ebooks.length} E-Book',
+                      style: const TextStyle(
+                        color: Color(0xFF2563EB),
+                        fontSize: 14,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            );
-            break;
-          case 1:
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const PersebaranScreen()),
-            );
-            break;
-          case 2:
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const MasukkanScreen()),
-            );
-            break;
-          case 3:
-            // Already on E-Book, do nothing
-            break;
-          case 4:
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const AkunScreen()),
-            );
-            break;
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF062766) : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: Colors.white, size: 20),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
+            ],
+          ),
+          const SizedBox(height: 16),
+          // Search Field
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 10,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            child: TextField(
+              controller: _searchController,
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
+              decoration: InputDecoration(
+                hintText: 'Cari berdasarkan judul e-book...',
+                hintStyle: TextStyle(color: Colors.grey[400]),
+                prefixIcon: Container(
+                  padding: const EdgeInsets.all(12),
+                  child: Icon(Icons.search, color: Colors.grey[400]),
+                ),
+                suffixIcon: _searchQuery.isNotEmpty
+                    ? IconButton(
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() {
+                            _searchQuery = '';
+                          });
+                        },
+                        icon: const Icon(Icons.clear, color: Colors.grey),
+                      )
+                    : Container(
+                        margin: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF2563EB),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(Icons.auto_stories, color: Colors.white, size: 16),
+                      ),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
+  // ...existing code...
+
   Widget _buildHeader() {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.all(24),
       child: Row(
         children: [
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Container(
-              width: 40,
-              height: 40,
+          // Logo BNN
+          GestureDetector(
+            onTap: () async {
+              // Open BNN website
+              const String bnnUrl = 'https://surabayakota.bnn.go.id/';
+              final Uri uri = Uri.parse(bnnUrl);
+              
+              try {
+                if (await canLaunchUrl(uri)) {
+                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                } else {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Tidak dapat membuka website BNN'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                }
+              } catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Error membuka website'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              }
+            },
+            child: Container(
+              width: 60,
+              height: 60,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(12),
+                shape: BoxShape.circle,
+                color: Colors.white.withValues(alpha: 0.9),
               ),
-              child: const Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-                size: 20,
+              child: Image.asset(
+                'assets/images/logo_bnn.png',
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Center(
+                    child: Text(
+                      'BNN',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF063CA8),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ),
           const SizedBox(width: 16),
+          // Kota Surabaya
           const Expanded(
             child: Text(
-              'E-Book Edukasi\nAnti Narkoba',
+              'KOTA\nSURABAYA',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 16,
                 fontFamily: 'Inter',
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w500,
                 height: 1.2,
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.library_books, color: Colors.white, size: 16),
-                const SizedBox(width: 4),
-                Text(
-                  '${_ebooks.length}',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
+          // User Profile
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AkunScreen()),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'User',
+                    style: TextStyle(
+                      color: Color(0xFF063CA8),
+                      fontSize: 16,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 35,
+                    height: 35,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF063CA8),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.person,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -349,11 +477,45 @@ class _EbookScreenState extends State<EbookScreen> {
   }
 
   Widget _buildEbookList() {
+    final filteredBooks = _filteredEbooks;
+    
+    if (filteredBooks.isEmpty && _searchQuery.isNotEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.search_off,
+              size: 64,
+              color: Colors.grey[400],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Tidak ada e-book yang ditemukan',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Coba kata kunci lain atau lihat semua kategori',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[500],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 24),
-      itemCount: _filteredEbooks.length,
+      itemCount: filteredBooks.length,
       itemBuilder: (context, index) {
-        final ebook = _filteredEbooks[index];
+        final ebook = filteredBooks[index];
         return _buildEbookCard(ebook);
       },
     );
